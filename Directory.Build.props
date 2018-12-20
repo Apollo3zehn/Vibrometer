@@ -1,0 +1,10 @@
+<Project>
+
+  <Import Project="./build/Vibrometer.props" />
+
+  <PropertyGroup>
+    <PackageLicenseUrl Condition="$(LicenseUrl) == ''">https://github.com/Vibrometer/Vibrometer/blob/master/LICENSE.md</PackageLicenseUrl>
+    <PackageProjectUrl Condition="$(ProjectUrl) == ''">https://github.com/Vibrometer/Vibrometer</PackageProjectUrl>
+  </PropertyGroup>
+
+</Project>

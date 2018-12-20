@@ -1,0 +1,10 @@
+.vs/
+artifacts/
+
+**/node_modules
+**/*.cache
+**/ip
+**/ui
+
+*.suo
+*.user

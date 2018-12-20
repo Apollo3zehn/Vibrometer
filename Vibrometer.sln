@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.168
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vibrometer.WebServer", "src\Vibrometer.WebServer\Vibrometer.WebServer.csproj", "{8914417F-C188-486B-9319-B378B9C1D538}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vibrometer.WebClient", "src\Vibrometer.WebClient\Vibrometer.WebClient.csproj", "{2FA9109D-20F1-4289-A16E-F1A345E49423}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8914417F-C188-486B-9319-B378B9C1D538}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8914417F-C188-486B-9319-B378B9C1D538}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8914417F-C188-486B-9319-B378B9C1D538}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8914417F-C188-486B-9319-B378B9C1D538}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FA9109D-20F1-4289-A16E-F1A345E49423}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FA9109D-20F1-4289-A16E-F1A345E49423}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FA9109D-20F1-4289-A16E-F1A345E49423}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FA9109D-20F1-4289-A16E-F1A345E49423}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9CD868FB-9881-413B-8201-7630A1C393F6}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,62 @@
+﻿@using Vibrometer.WebClient.Model
+@using Microsoft.AspNetCore.Blazor.Services
+
+@inject IUriHelper UriHelper
+
+<li class="nav-item @((this.IsSelected ? "active" : string.Empty))">
+
+    @if (PageDescription.PageDescriptionSet.Any())
+    {
+        <a class="nav-link" data-toggle="collapse" href="#@PageDescription.PageDescriptionSet.First().Route">
+
+            <i class="material-icons">@PageDescription.IconName</i>
+
+            <p>
+                @PageDescription.DisplayName
+                <b class="caret"></b>
+            </p>
+
+        </a>
+    }
+    else
+    {
+        <a class="nav-link" href="@PageDescription.Route">
+            <i class="material-icons">@PageDescription.IconName</i>
+            <p>@PageDescription.DisplayName</p>
+        </a>
+    }
+
+    @if (PageDescription.PageDescriptionSet.Any())
+    {
+        <div class="collapse" id="@PageDescription.PageDescriptionSet.First().Route">
+            <ul class="nav">
+                @foreach (var subPageDescription in PageDescription.PageDescriptionSet)
+                {
+                    <NavItem PageDescription="subPageDescription" />
+                }
+            </ul>
+        </div>
+    }
+
+</li>
+
+@functions {
+
+    private string _routeAbsolute;
+
+    bool IsSelected { get; set; }
+    [Parameter] PageDescription PageDescription { get; set; }
+
+    protected override void OnInit()
+    {
+        this.UriHelper.OnLocationChanged += UriHelper_OnLocationChanged;
+        _routeAbsolute = this.UriHelper.ToAbsoluteUri(this.PageDescription.Route).AbsoluteUri;
+    }
+
+    private void UriHelper_OnLocationChanged(object sender, string e)
+    {
+        this.IsSelected = e == _routeAbsolute;
+        this.StateHasChanged();
+    }
+
+}

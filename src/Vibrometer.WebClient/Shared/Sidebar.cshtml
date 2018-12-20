@@ -1,0 +1,61 @@
+﻿@using Vibrometer.WebClient.Model
+@inject AppState state
+
+<div class="sidebar" data-color="rose" data-background-color="black" data-image="./img/sidebar-1.jpg">
+
+    <div class="logo">
+        <a class="simple-text logo-mini">
+            
+        </a>
+
+        <a class="simple-text logo-normal">
+            Vibrometer
+        </a>
+    </div>
+
+    <div class="sidebar-wrapper">
+
+        <div class="user">
+            <div class="photo">
+                <img src="../img/faces/avatar.jpg" />
+            </div>
+            <div class="user-info">
+                <a data-toggle="collapse" href="#collapseExample" class="username">
+                    <span>
+                        N.N
+                        <b class="caret"></b>
+                    </span>
+                </a>
+                <div class="collapse" id="collapseExample">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <span class="sidebar-mini"> MP </span>
+                                <span class="sidebar-normal"> My Profile </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <span class="sidebar-mini"> EP </span>
+                                <span class="sidebar-normal"> Edit Profile </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <span class="sidebar-mini"> S </span>
+                                <span class="sidebar-normal"> Settings </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <ul class="nav">
+            @foreach (var pageDescription in state.PageDescriptionSet)
+            {
+                <NavItem PageDescription="pageDescription"/>
+            }
+        </ul>
+    </div>
+</div>
