@@ -80,7 +80,7 @@ module axis_averager #
             data            <= {(BRAM_DATA_WIDTH){1'b0}};
             is_writable     <= 1'b0;
             is_finished     <= 1'b0;
-            state           <= 3'd0;
+            state           <= reset;
         end
         else begin
             address_A       <= address_A_next;
