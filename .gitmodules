@@ -1,0 +1,3 @@
+[submodule "fpga/red-pitaya-notes"]
+	path = fpga/red-pitaya-notes
+	url = https://github.com/pavel-demin/red-pitaya-notes
