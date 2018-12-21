@@ -10,10 +10,10 @@ module extremum_finder #
     input  wire                         SYS_aresetn,
     
     // EF signals
-    input  wire[31:0]                   EF_log_count,
-    input  wire[5:0]                    EF_log_shift,
-    output wire[31:0]                   EF_upper_treshold,
-    output wire[31:0]                   EF_lower_treshold,
+    input  wire[4:0]                    EF_log_count,
+    input  wire[2:0]                    EF_log_shift,
+    output wire[AXIS_TDATA_WIDTH-1:0]   EF_upper_treshold,
+    output wire[AXIS_TDATA_WIDTH-1:0]   EF_lower_treshold,
     
     // axis slave
     input  wire                         S_AXIS_tvalid,
@@ -30,12 +30,13 @@ module extremum_finder #
 
     reg [AXIS_TDATA_WIDTH-1:0]          min,            min_next;
     reg [AXIS_TDATA_WIDTH-1:0]          max,            max_next;
-    reg [1:0]                           state,          state_next;
     reg [31:0]                          count,          count_next;
+    reg [1:0]                           state,          state_next;
     
     reg [AXIS_TDATA_WIDTH-1:0]          tmp_min;
     reg [AXIS_TDATA_WIDTH-1:0]          tmp_max;
-    wire [AXIS_TDATA_WIDTH-1:0]         max_count;
+    
+    wire [31:0]                         max_count;
 
     assign S_AXIS_tready                = 1'b1;
     assign M_AXIS_tvalid                = S_AXIS_tvalid;
