@@ -12,8 +12,8 @@ module extremum_finder #
     // EF signals
     input  wire[4:0]                    EF_log_count,
     input  wire[2:0]                    EF_log_shift,
-    output wire[AXIS_TDATA_WIDTH-1:0]   EF_upper_treshold,
     output wire[AXIS_TDATA_WIDTH-1:0]   EF_lower_treshold,
+    output wire[AXIS_TDATA_WIDTH-1:0]   EF_upper_treshold,
     
     // axis slave
     input  wire                         S_AXIS_tvalid,

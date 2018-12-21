@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="position_tracker_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="position_tracker_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="10000000fs"></ZoomStartTime>
+      <ZoomEndTime time="47120911fs"></ZoomEndTime>
+      <Cursor1Time time="116000000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="175"></NameColumnWidth>
+      <ValueColumnWidth column_width="98"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="8" />
+   <wvobject fp_name="/position_tracker_tb/ptracker/SYS_aclk" type="logic">
+      <obj_property name="ElementShortName">SYS_aclk</obj_property>
+      <obj_property name="ObjectShortName">SYS_aclk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/position_tracker_tb/SYS_aresetn" type="logic">
+      <obj_property name="ElementShortName">SYS_aresetn</obj_property>
+      <obj_property name="ObjectShortName">SYS_aresetn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/position_tracker_tb/ptracker/FC_sign" type="logic">
+      <obj_property name="ElementShortName">FC_sign</obj_property>
+      <obj_property name="ObjectShortName">FC_sign</obj_property>
+   </wvobject>
+   <wvobject fp_name="/position_tracker_tb/ptracker/FC_lower_treshold" type="array">
+      <obj_property name="ElementShortName">FC_lower_treshold[31:0]</obj_property>
+      <obj_property name="ObjectShortName">FC_lower_treshold[31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/position_tracker_tb/ptracker/FC_upper_treshold" type="array">
+      <obj_property name="ElementShortName">FC_upper_treshold[31:0]</obj_property>
+      <obj_property name="ObjectShortName">FC_upper_treshold[31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/position_tracker_tb/ptracker/S_AXIS_tdata" type="array">
+      <obj_property name="ElementShortName">S_AXIS_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">S_AXIS_tdata[31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/position_tracker_tb/ptracker/position" type="array">
+      <obj_property name="ElementShortName">position[31:0]</obj_property>
+      <obj_property name="ObjectShortName">position[31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/position_tracker_tb/ptracker/state" type="array">
+      <obj_property name="ElementShortName">state[1:0]</obj_property>
+      <obj_property name="ObjectShortName">state[1:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+</wave_config>

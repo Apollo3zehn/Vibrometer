@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module frequency_counter #
+module position_tracker #
 (
     parameter integer                   AXIS_TDATA_WIDTH    = 32
 )
@@ -11,8 +11,8 @@ module frequency_counter #
     
     // FC signals
     input  wire                         FC_sign,
-    input  wire[AXIS_TDATA_WIDTH-1:0]   FC_upper_treshold,
     input  wire[AXIS_TDATA_WIDTH-1:0]   FC_lower_treshold,
+    input  wire[AXIS_TDATA_WIDTH-1:0]   FC_upper_treshold,
     
     // axis slave
     input  wire                         S_AXIS_tvalid,
@@ -29,9 +29,7 @@ module frequency_counter #
                                         high            = 2'b10;
 
     reg [AXIS_TDATA_WIDTH-1:0]          position,       position_next;
-    reg [1:0]                           state,          state_next;
-
-    wire [31:0]                         max_count;                   
+    reg [1:0]                           state,          state_next;                
 
     assign S_AXIS_tready                = 1'b1;
     assign M_AXIS_tvalid                = 1'b1;
