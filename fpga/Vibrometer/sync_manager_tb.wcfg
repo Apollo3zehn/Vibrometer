@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="sync_manager_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="sync_manager_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="39710002fs"></ZoomEndTime>
+      <Cursor1Time time="0fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="175"></NameColumnWidth>
+      <ValueColumnWidth column_width="74"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="13" />
+   <wvobject fp_name="/sync_manager_tb/SYS_aclk" type="logic">
+      <obj_property name="ElementShortName">SYS_aclk</obj_property>
+      <obj_property name="ObjectShortName">SYS_aclk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/sync_manager_tb/smanager/count" type="array">
+      <obj_property name="ElementShortName">count[31:0]</obj_property>
+      <obj_property name="ObjectShortName">count[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/sync_manager_tb/smanager/length" type="array">
+      <obj_property name="ElementShortName">length[31:0]</obj_property>
+      <obj_property name="ObjectShortName">length[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/sync_manager_tb/smanager/SM_log_length" type="array">
+      <obj_property name="ElementShortName">SM_log_length[4:0]</obj_property>
+      <obj_property name="ObjectShortName">SM_log_length[4:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/sync_manager_tb/smanager/SM_address" type="array">
+      <obj_property name="ElementShortName">SM_address[31:0]</obj_property>
+      <obj_property name="ObjectShortName">SM_address[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/sync_manager_tb/smanager/SM_request" type="logic">
+      <obj_property name="ElementShortName">SM_request</obj_property>
+      <obj_property name="ObjectShortName">SM_request</obj_property>
+   </wvobject>
+   <wvobject fp_name="/sync_manager_tb/smanager/state_write" type="array">
+      <obj_property name="ElementShortName">state_write[1:0]</obj_property>
+      <obj_property name="ObjectShortName">state_write[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/sync_manager_tb/smanager/write" type="array">
+      <obj_property name="ElementShortName">write[31:0]</obj_property>
+      <obj_property name="ObjectShortName">write[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/sync_manager_tb/smanager/state_full" type="array">
+      <obj_property name="ElementShortName">state_full[1:0]</obj_property>
+      <obj_property name="ObjectShortName">state_full[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/sync_manager_tb/smanager/read" type="array">
+      <obj_property name="ElementShortName">read[31:0]</obj_property>
+      <obj_property name="ObjectShortName">read[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/sync_manager_tb/smanager/tvalid" type="logic">
+      <obj_property name="ElementShortName">tvalid</obj_property>
+      <obj_property name="ObjectShortName">tvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/sync_manager_tb/smanager/lock" type="logic">
+      <obj_property name="ElementShortName">lock</obj_property>
+      <obj_property name="ObjectShortName">lock</obj_property>
+   </wvobject>
+   <wvobject fp_name="/sync_manager_tb/smanager/M_AXIS_tdata" type="array">
+      <obj_property name="ElementShortName">M_AXIS_tdata[78:0]</obj_property>
+      <obj_property name="ObjectShortName">M_AXIS_tdata[78:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+</wave_config>

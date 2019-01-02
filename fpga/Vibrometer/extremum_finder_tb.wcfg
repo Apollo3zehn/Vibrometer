@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="14678720fs"></ZoomStartTime>
-      <ZoomEndTime time="28558721fs"></ZoomEndTime>
-      <Cursor1Time time="28000000fs"></Cursor1Time>
+      <ZoomStartTime time="4819949fs"></ZoomStartTime>
+      <ZoomEndTime time="19436011fs"></ZoomEndTime>
+      <Cursor1Time time="17000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="175"></NameColumnWidth>
-      <ValueColumnWidth column_width="106"></ValueColumnWidth>
+      <ValueColumnWidth column_width="102"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="16" />
+   <WVObjectSize size="17" />
    <wvobject fp_name="/extremum_finder_tb/SYS_aclk" type="logic">
       <obj_property name="ElementShortName">SYS_aclk</obj_property>
       <obj_property name="ObjectShortName">SYS_aclk</obj_property>
@@ -38,43 +38,48 @@
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/extremum_finder_tb/efinder/EF_lower_treshold" type="array">
-      <obj_property name="ElementShortName">EF_lower_treshold[31:0]</obj_property>
-      <obj_property name="ObjectShortName">EF_lower_treshold[31:0]</obj_property>
+      <obj_property name="ElementShortName">EF_lower_treshold[15:0]</obj_property>
+      <obj_property name="ObjectShortName">EF_lower_treshold[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/extremum_finder_tb/efinder/min" type="array">
-      <obj_property name="ElementShortName">min[31:0]</obj_property>
-      <obj_property name="ObjectShortName">min[31:0]</obj_property>
+      <obj_property name="ElementShortName">min[15:0]</obj_property>
+      <obj_property name="ObjectShortName">min[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/extremum_finder_tb/efinder/min_next" type="array">
-      <obj_property name="ElementShortName">min_next[31:0]</obj_property>
-      <obj_property name="ObjectShortName">min_next[31:0]</obj_property>
+      <obj_property name="ElementShortName">min_next[15:0]</obj_property>
+      <obj_property name="ObjectShortName">min_next[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/extremum_finder_tb/efinder/tmp_min" type="array">
-      <obj_property name="ElementShortName">tmp_min[31:0]</obj_property>
-      <obj_property name="ObjectShortName">tmp_min[31:0]</obj_property>
+      <obj_property name="ElementShortName">tmp_min[15:0]</obj_property>
+      <obj_property name="ObjectShortName">tmp_min[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/extremum_finder_tb/efinder/EF_upper_treshold" type="array">
-      <obj_property name="ElementShortName">EF_upper_treshold[31:0]</obj_property>
-      <obj_property name="ObjectShortName">EF_upper_treshold[31:0]</obj_property>
+      <obj_property name="ElementShortName">EF_upper_treshold[15:0]</obj_property>
+      <obj_property name="ObjectShortName">EF_upper_treshold[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/extremum_finder_tb/efinder/max" type="array">
-      <obj_property name="ElementShortName">max[31:0]</obj_property>
-      <obj_property name="ObjectShortName">max[31:0]</obj_property>
+      <obj_property name="ElementShortName">max[15:0]</obj_property>
+      <obj_property name="ObjectShortName">max[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/extremum_finder_tb/efinder/max_next" type="array">
-      <obj_property name="ElementShortName">max_next[31:0]</obj_property>
-      <obj_property name="ObjectShortName">max_next[31:0]</obj_property>
+      <obj_property name="ElementShortName">max_next[15:0]</obj_property>
+      <obj_property name="ObjectShortName">max_next[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/extremum_finder_tb/efinder/tmp_max" type="array">
-      <obj_property name="ElementShortName">tmp_max[31:0]</obj_property>
-      <obj_property name="ObjectShortName">tmp_max[31:0]</obj_property>
+      <obj_property name="ElementShortName">tmp_max[15:0]</obj_property>
+      <obj_property name="ObjectShortName">tmp_max[15:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/extremum_finder_tb/efinder/tmp_center" type="array">
+      <obj_property name="ElementShortName">tmp_center[15:0]</obj_property>
+      <obj_property name="ObjectShortName">tmp_center[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/extremum_finder_tb/efinder/count" type="array">

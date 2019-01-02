@@ -2,49 +2,48 @@
 
 module extremum_finder #
 (
-    parameter integer                   AXIS_TDATA_WIDTH    = 32
+    parameter integer                       AXIS_TDATA_WIDTH    = 32
 )
 (
     // system signals
-    input  wire                         SYS_aclk,
-    input  wire                         SYS_aresetn,
+    input  wire                             SYS_aclk,
+    input  wire                             SYS_aresetn,
     
     // EF signals
-    input  wire[4:0]                    EF_log_count,
-    input  wire[2:0]                    EF_log_shift,
-    output wire[AXIS_TDATA_WIDTH-1:0]   EF_lower_treshold,
-    output wire[AXIS_TDATA_WIDTH-1:0]   EF_upper_treshold,
+    input  wire [4:0]                       EF_log_count,
+    input  wire [2:0]                       EF_log_shift,
+    output wire [(AXIS_TDATA_WIDTH/2)-1:0]  EF_lower_treshold,
+    output wire [(AXIS_TDATA_WIDTH/2)-1:0]  EF_upper_treshold,
     
     // axis slave
-    input  wire                         S_AXIS_tvalid,
-    input  wire [AXIS_TDATA_WIDTH-1:0]  S_AXIS_tdata,
-    output wire                         S_AXIS_tready,
-    
-    // axis master
-    output wire                         M_AXIS_tvalid,
-    output wire [AXIS_TDATA_WIDTH-1:0]  M_AXIS_tdata
+    input  wire                             S_AXIS_tvalid,
+    input  wire [AXIS_TDATA_WIDTH-1:0]      S_AXIS_tdata,
+    output wire                             S_AXIS_tready
 );
 
-    localparam                          idle            = 2'b00, 
-                                        measure         = 2'b01;
+    localparam                              idle            = 2'b00, 
+                                            measure         = 2'b01;
 
-    reg [AXIS_TDATA_WIDTH-1:0]          min,            min_next;
-    reg [AXIS_TDATA_WIDTH-1:0]          max,            max_next;
-    reg [31:0]                          count,          count_next;
-    reg [1:0]                           state,          state_next;
+    reg  [(AXIS_TDATA_WIDTH/2)-1:0]         min,            min_next;
+    reg  [(AXIS_TDATA_WIDTH/2)-1:0]         max,            max_next;
+    reg  [31:0]                             count,          count_next;
+    reg  [1:0]                              state,          state_next;
     
-    reg [AXIS_TDATA_WIDTH-1:0]          tmp_min;
-    reg [AXIS_TDATA_WIDTH-1:0]          tmp_max;
+    reg  [(AXIS_TDATA_WIDTH/2)-1:0]         tmp_center;
+    reg  [(AXIS_TDATA_WIDTH/2)-1:0]         tmp_min;
+    reg  [(AXIS_TDATA_WIDTH/2)-1:0]         tmp_max;
     
-    wire [31:0]                         max_count;
+    wire [(AXIS_TDATA_WIDTH/2)-1:0]         signal_a;
+    wire [(AXIS_TDATA_WIDTH/2)-1:0]         signal_b; 
+    wire [31:0]                             max_count;
 
-    assign S_AXIS_tready                = 1'b1;
-    assign M_AXIS_tvalid                = S_AXIS_tvalid;
-    assign M_AXIS_tdata                 = S_AXIS_tdata;
-    assign EF_lower_treshold            = min;
-    assign EF_upper_treshold            = max;
+    assign S_AXIS_tready                    = 1'b1;
+    assign EF_lower_treshold                = min;
+    assign EF_upper_treshold                = max;
 
-    assign max_count                    = 1 << EF_log_count;
+    assign signal_a                         = S_AXIS_tdata[(AXIS_TDATA_WIDTH/2)-1:0];
+    assign signal_b                         = S_AXIS_tdata[AXIS_TDATA_WIDTH-1:AXIS_TDATA_WIDTH/2];
+    assign max_count                        = 1 << EF_log_count;
 
     always @(posedge SYS_aclk) begin
             if (~SYS_aresetn) begin
@@ -77,15 +76,16 @@ module extremum_finder #
                 end
                     
                 measure: begin
-                    if ($signed(S_AXIS_tdata) < $signed(tmp_min))
-                        tmp_min     <= S_AXIS_tdata;
+                    if ($signed(signal_a) < $signed(tmp_min))
+                        tmp_min     <= signal_a;
 
-                    if ($signed(S_AXIS_tdata) > $signed(tmp_max))
-                        tmp_max     <= S_AXIS_tdata;
+                    if ($signed(signal_a) > $signed(tmp_max))
+                        tmp_max     <= signal_a;
                         
                     if (count == max_count - 1) begin
-                        min_next    <= $signed(tmp_min) >>> EF_log_shift;
-                        max_next    <= $signed(tmp_max) >>> EF_log_shift;
+                        tmp_center   = (($signed(tmp_max) + $signed(tmp_min)) >>> 1);
+                        min_next    <= (($signed(tmp_min) - $signed(tmp_center)) >>> EF_log_shift) + $signed(tmp_center);
+                        max_next    <= (($signed(tmp_max) - $signed(tmp_center)) >>> EF_log_shift) + $signed(tmp_center);
                         state_next  <= idle;
                     end
                         

@@ -25,7 +25,7 @@ module extremum_finder_tb #
         SYS_aclk = 0;
         SYS_aresetn = 0;
         EF_log_count = 3;
-        EF_log_shift = 1;
+        EF_log_shift = 3;
         S_AXIS_tvalid = 1;
 
         // 1        
