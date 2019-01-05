@@ -11,7 +11,7 @@ module extremum_finder #
     
     // EF signals
     input  wire [4:0]                       EF_log_count,
-    input  wire [2:0]                       EF_log_shift,
+    input  wire [2:0]                       EF_shift,
     output wire [(AXIS_TDATA_WIDTH/2)-1:0]  EF_lower_treshold,
     output wire [(AXIS_TDATA_WIDTH/2)-1:0]  EF_upper_treshold,
     
@@ -84,8 +84,8 @@ module extremum_finder #
                         
                     if (count == max_count - 1) begin
                         tmp_center   = (($signed(tmp_max) + $signed(tmp_min)) >>> 1);
-                        min_next    <= (($signed(tmp_min) - $signed(tmp_center)) >>> EF_log_shift) + $signed(tmp_center);
-                        max_next    <= (($signed(tmp_max) - $signed(tmp_center)) >>> EF_log_shift) + $signed(tmp_center);
+                        min_next    <= (($signed(tmp_min) - $signed(tmp_center)) >>> EF_shift) + $signed(tmp_center);
+                        max_next    <= (($signed(tmp_max) - $signed(tmp_center)) >>> EF_shift) + $signed(tmp_center);
                         state_next  <= idle;
                     end
                         

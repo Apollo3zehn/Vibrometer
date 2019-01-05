@@ -19,6 +19,7 @@ module position_tracker #
     output wire                             S_AXIS_tready,
     
     // axis master
+    input  wire                             M_AXIS_tready,
     output wire                             M_AXIS_tvalid,
     output wire [(AXIS_TDATA_WIDTH/2)-1:0]  M_AXIS_tdata
 );

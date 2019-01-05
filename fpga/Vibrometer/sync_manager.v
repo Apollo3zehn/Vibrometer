@@ -16,8 +16,9 @@ module sync_manager #
     output wire [MM_ADDR_WIDTH-1:0]         SM_read_buffer,
     
     // axis master
+    input  wire                             M_AXIS_tready,
     output wire                             M_AXIS_tvalid,
-    output wire [MM_ADDR_WIDTH+47-1:0]      M_AXIS_tdata
+    output wire [MM_ADDR_WIDTH+47-8:0]      M_AXIS_tdata
 );
 
     localparam                              buffer_1            = 2'b00, 
@@ -32,22 +33,23 @@ module sync_manager #
     reg                                     tvalid,             tvalid_next;
     reg                                     lock,               lock_next;
     
-    wire [MM_ADDR_WIDTH-1:0]                length;
+    wire [22:0]                             length;
 
     assign SM_read_buffer                   = read;
+    assign M_AXIS_tvalid                    = 1'b1;
     assign length                           = 1 << SM_log_length;
 
     assign M_AXIS_tdata                     = {
-                                                4'b0,                                       // xCACHE
-                                                4'b0,                                       // xUSER
-                                                4'b0,                                       // RSVD
-                                                4'b0,                                       // TAG
-                                                write,                                      // ADDR
-                                                1'b0,                                       // DRR
-                                                1'b0,                                       // EOF
-                                                6'b0,                                       // DSA
-                                                1'b1,                                       // Type
-                                                length                                      // BTT
+                                                // 4'b0,              // xCACHE
+                                                // 4'b0,              // xUSER
+                                                4'b0,              // RSVD
+                                                4'b0,              // TAG
+                                                write,             // ADDR
+                                                1'b0,              // DRR
+                                                1'b0,              // EOF
+                                                6'b0,              // DSA
+                                                1'b1,              // Type
+                                                length             // BTT
                                                };
 
     always @(posedge SYS_aclk) begin

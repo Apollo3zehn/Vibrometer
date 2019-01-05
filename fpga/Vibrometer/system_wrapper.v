@@ -1,7 +1,7 @@
 //Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2018.3 (win64) Build 2405991 Thu Dec  6 23:38:27 MST 2018
-//Date        : Wed Dec 19 12:55:04 2018
+//Date        : Fri Jan  4 15:11:42 2019
 //Host        : ID5052 running 64-bit major release  (build 9200)
 //Command     : generate_target system_wrapper.bd
 //Design      : system_wrapper
@@ -36,7 +36,11 @@ module system_wrapper
     adc_clk_p_i,
     adc_dat_a_i,
     adc_dat_b_i,
-    led_o);
+    dac_clk_o,
+    dac_dat_o,
+    dac_rst_o,
+    dac_sel_o,
+    dac_wrt_o);
   inout [14:0]DDR_addr;
   inout [2:0]DDR_ba;
   inout DDR_cas_n;
@@ -63,7 +67,11 @@ module system_wrapper
   input adc_clk_p_i;
   input [13:0]adc_dat_a_i;
   input [13:0]adc_dat_b_i;
-  output [7:0]led_o;
+  output dac_clk_o;
+  output [13:0]dac_dat_o;
+  output [0:0]dac_rst_o;
+  output dac_sel_o;
+  output dac_wrt_o;
 
   wire [14:0]DDR_addr;
   wire [2:0]DDR_ba;
@@ -91,7 +99,11 @@ module system_wrapper
   wire adc_clk_p_i;
   wire [13:0]adc_dat_a_i;
   wire [13:0]adc_dat_b_i;
-  wire [7:0]led_o;
+  wire dac_clk_o;
+  wire [13:0]dac_dat_o;
+  wire [0:0]dac_rst_o;
+  wire dac_sel_o;
+  wire dac_wrt_o;
 
   system system_i
        (.DDR_addr(DDR_addr),
@@ -120,5 +132,9 @@ module system_wrapper
         .adc_clk_p_i(adc_clk_p_i),
         .adc_dat_a_i(adc_dat_a_i),
         .adc_dat_b_i(adc_dat_b_i),
-        .led_o(led_o));
+        .dac_clk_o(dac_clk_o),
+        .dac_dat_o(dac_dat_o),
+        .dac_rst_o(dac_rst_o),
+        .dac_sel_o(dac_sel_o),
+        .dac_wrt_o(dac_wrt_o));
 endmodule

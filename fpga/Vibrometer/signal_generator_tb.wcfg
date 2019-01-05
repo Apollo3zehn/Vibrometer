@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="signal_generator_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="signal_generator_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="142000001fs"></ZoomEndTime>
+      <Cursor1Time time="47620125000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="175"></NameColumnWidth>
+      <ValueColumnWidth column_width="90"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="7" />
+   <wvobject fp_name="/signal_generator_tb/sgenerator/aclk" type="logic">
+      <obj_property name="ElementShortName">aclk</obj_property>
+      <obj_property name="ObjectShortName">aclk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/signal_generator_tb/sgenerator/clk_wiz/locked" type="logic">
+      <obj_property name="ElementShortName">locked</obj_property>
+      <obj_property name="ObjectShortName">locked</obj_property>
+   </wvobject>
+   <wvobject fp_name="/signal_generator_tb/sgenerator/dac_clk" type="logic">
+      <obj_property name="ElementShortName">dac_clk</obj_property>
+      <obj_property name="ObjectShortName">dac_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/signal_generator_tb/GPIO_sg" type="array">
+      <obj_property name="ElementShortName">GPIO_sg[13:0]</obj_property>
+      <obj_property name="ObjectShortName">GPIO_sg[13:0]</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/signal_generator_tb/sgenerator/dds_compiler_0_M_AXIS_DATA_TDATA" type="array">
+      <obj_property name="ElementShortName">dds_compiler_0_M_AXIS_DATA_TDATA[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dds_compiler_0_M_AXIS_DATA_TDATA[31:0]</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/signal_generator_tb/sgenerator/dds_compiler/s_axis_phase_tdata" type="array">
+      <obj_property name="ElementShortName">s_axis_phase_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_phase_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/signal_generator_tb/sgenerator/axis_red_pitaya_dac_0_dac_dat" type="array">
+      <obj_property name="ElementShortName">axis_red_pitaya_dac_0_dac_dat[13:0]</obj_property>
+      <obj_property name="ObjectShortName">axis_red_pitaya_dac_0_dac_dat[13:0]</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+</wave_config>
