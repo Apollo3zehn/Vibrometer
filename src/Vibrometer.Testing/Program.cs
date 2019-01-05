@@ -288,28 +288,83 @@ namespace Vibrometer.Testing
         private static void RW_Get_ReadBuffer()
         {
             uint address;
-            int address1;
-            int address2;
+            uint address1;
+            uint address2;
 
-            unsafe
-            {
-                address1 = *(int*)(_GPIO_1 + 0);
-            }
+            Int16 iaddress1;
+            Int16 iaddress2;
 
-            Console.Clear();
-            Console.WriteLine($"Current read buffer address is: { address1 } | { (short)((address1 & 0xFFFF0000) >> 16) } | { (short)(address1 & 0x0000FFFF) }, HEX: {((address1 & 0xFFFF0000) >> 16):X} | {(address1 & 0x0000FFFF):X}");
-            Console.ReadKey(true);
+            //unsafe
+            //{
+            //    address1 = *(int*)(_GPIO_1 + 0);
+            //}
 
+            //Console.Clear();
+            //Console.WriteLine($"Current read buffer address is: { address1 } | { (short)((address1 & 0xFFFF0000) >> 16) } | { (short)(address1 & 0x0000FFFF) }, HEX: {((address1 & 0xFFFF0000) >> 16):X} | {(address1 & 0x0000FFFF):X}");
+            //Console.ReadKey(true);
+
+            // adc:
             while (true)
             {
                 unsafe
                 {
                     address = *(uint*)(_GPIO_1 + 0);
                 }
-                address2 = (int)((address << 2) & ~0xFFFF0000);
-                address2 ^= (1 << 15); 
-                address1 = (int)(address >> 15);
-                Console.WriteLine($"hex: {address,8:X}, high: { ~address1,10 }, low: { ~address2, 10 }");
+
+                address2 = (address & ~0xFFFF0000);
+                address1 = (address >> 16);
+
+                iaddress1 = unchecked((Int16)address1);
+                iaddress2 = unchecked((Int16)address2);
+
+                Console.WriteLine($"hex: {address,8:X}, high: { iaddress1,10 }, low: { iaddress2,10 }");
+
+                Thread.Sleep(50);
+            }
+
+            // raw:
+            while (true)
+            {
+                unsafe
+                {
+                    address = *(uint*)(_GPIO_1 + 0);
+                }
+
+                address2 = (address & ~0xFFFF0000);
+
+                if ((address2 & (1u << 13)) == 0)
+                {
+                    address2 |= (1U << 13);
+                    address2 |= (1U << 14);
+                    address2 |= (1U << 15);
+                }
+                else
+                {
+                    address2 &= ~(1U << 13);
+                    address2 &= ~(1U << 14);
+                    address2 &= ~(1U << 15);
+                }
+
+                address1 = (address >> 16);
+
+                if ((address1 & (1u << 13)) == 0)
+                {
+                    address1 |= (1U << 13);
+                    address1 |= (1U << 14);
+                    address1 |= (1U << 15);
+                }
+                else
+                {
+                    address1 &= ~(1U << 13);
+                    address1 &= ~(1U << 14);
+                    address1 &= ~(1U << 15);
+                }
+
+                iaddress1 = unchecked((Int16)address1);
+                iaddress2 = unchecked((Int16)address2);
+
+                Console.WriteLine($"hex: {address,8:X}, high: { iaddress1,10 }, low: { iaddress2, 10 }");
+
                 Thread.Sleep(50);
             }
         }
