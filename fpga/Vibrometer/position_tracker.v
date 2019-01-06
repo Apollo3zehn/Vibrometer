@@ -75,9 +75,9 @@ module position_tracker #
                         center = (($signed(FC_upper_treshold) + $signed(FC_lower_treshold)) >>> 1);
                     
                         if ($signed(signal_b) > $signed(center))
-                            position_next <= position + 1;
+                            position_next <= $signed(position) + 1;
                         else
-                            position_next <= position - 1;
+                            position_next <= $signed(position) - 1;
                             
                         state_next  <= low;             
                     end

@@ -8,7 +8,7 @@ module extremum_finder_tb #
     reg                         SYS_aclk;
     reg                         SYS_aresetn;
     reg [31:0]                  EF_log_count;
-    reg [5:0]                   EF_log_shift;
+    reg [5:0]                   EF_shift;
     reg [AXIS_TDATA_WIDTH-1:0]  S_AXIS_tdata;
     reg                         S_AXIS_tvalid;
  
@@ -16,7 +16,7 @@ module extremum_finder_tb #
         .SYS_aclk(SYS_aclk),
         .SYS_aresetn(SYS_aresetn),
         .EF_log_count(EF_log_count),
-        .EF_log_shift(EF_log_shift),
+        .EF_shift(EF_shift),
         .S_AXIS_tdata(S_AXIS_tdata),
         .S_AXIS_tvalid(S_AXIS_tvalid)
     );
@@ -24,8 +24,8 @@ module extremum_finder_tb #
     initial begin
         SYS_aclk = 0;
         SYS_aresetn = 0;
-        EF_log_count = 3;
-        EF_log_shift = 3;
+        EF_log_count = 0;
+        EF_shift = 0;
         S_AXIS_tvalid = 1;
 
         // 1        
@@ -49,16 +49,18 @@ module extremum_finder_tb #
         S_AXIS_tdata = 10;
         #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;
         
+        // start
+        EF_log_count = 1;
         S_AXIS_tdata = -10;
         #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;
         
         S_AXIS_tdata = -30;
         #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;
         
-        S_AXIS_tdata = -20;
+        S_AXIS_tdata = -8000;
         #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;
         
-        S_AXIS_tdata = -10;
+        S_AXIS_tdata = +8000;
         #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;
         
         S_AXIS_tdata = 10;

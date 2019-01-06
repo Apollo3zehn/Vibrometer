@@ -15,8 +15,14 @@
 ### ADC
 
 # ADC data
-set_property IOSTANDARD LVCMOS18 [get_ports {adc_dat_*_i[*]}]
-set_property IOB TRUE [get_ports {adc_dat_*_i[*]}]
+#set_property IOSTANDARD LVCMOS18 [get_ports {adc_dat_*_i[*]}]
+#set_property IOB TRUE [get_ports {adc_dat_*_i[*]}]
+
+set_property IOSTANDARD LVCMOS18 [get_ports {adc_dat_a_i[*]}]
+set_property IOB TRUE [get_ports {adc_dat_a_i[*]}]
+
+set_property IOSTANDARD LVCMOS18 [get_ports {adc_dat_b_i[*]}]
+set_property IOB TRUE [get_ports {adc_dat_b_i[*]}]
 
 # ADC 0 data
 # set_property PACKAGE_PIN V17 [get_ports {adc_dat_a_i[0]}]
