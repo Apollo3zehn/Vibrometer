@@ -1,6 +1,7 @@
 ﻿using Mono.Unix.Native;
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -25,6 +26,7 @@ namespace Vibrometer.Testing
         static uint _gpio_ram_writer;
 
         static IntPtr _GPIO;
+        static IntPtr _read_buffer;
 
         static void Main(string[] args)
         {
@@ -34,6 +36,7 @@ namespace Vibrometer.Testing
             {
                 Console.Clear();
                 Console.WriteLine($"GPIO memory map: 0x{(uint)_GPIO,8:X}");
+                Console.WriteLine($"Read buffer:     0x{(uint)_read_buffer,8:X}");
                 Console.WriteLine("[L] - Load FPGA image");
                 Console.WriteLine("[0] - GE_Get_Position");
                 Console.WriteLine("[1] - SG_Set_Phase");
@@ -112,6 +115,7 @@ namespace Vibrometer.Testing
             }
 
             Syscall.munmap(_GPIO, (ulong)Syscall.sysconf(SysconfName._SC_PAGESIZE));
+            // TODO: free AlloHGlobal
         }
 
         private static void MemoryMap()
@@ -145,7 +149,7 @@ namespace Vibrometer.Testing
         private static void GE_Get_Position()
         {
             Task task;
-            uint position;
+            int position;
             CancellationTokenSource cts;
 
             cts = new CancellationTokenSource();
@@ -158,10 +162,10 @@ namespace Vibrometer.Testing
                 {
                     unsafe
                     {
-                        position = *(uint*)(_GPIO + GPIO_BASE);
+                        position = *(int*)(_GPIO + GPIO_GENERAL);
                     }
 
-                    Console.WriteLine(position);
+                    Console.WriteLine($"{position,8:X}");
                     Thread.Sleep(100);
                 }
             }, cts.Token);
@@ -200,31 +204,6 @@ namespace Vibrometer.Testing
             {
                 *(uint*)(_GPIO + GPIO_SIGNAL_GENERATOR) = _gpio_signal_generator;
             }
-
-            //unsafe
-            //{
-            //    _gpio_signal_generator = *(uint*)(_GPIO + GPIO_SIGNAL_GENERATOR);
-            //}
-
-            //max_value = CLOCK_RATE;
-            //value = _gpio_signal_generator / Math.Pow(2, 28) * CLOCK_RATE;
-
-            //Console.Clear();
-            //Console.WriteLine($"Current: {value:F2} Hz, max: 0 <= value <= { max_value } Hz");
-            //Console.WriteLine($"Please enter the desired signal generator frequency:");
-            //Console.WriteLine();
-
-            //while (!double.TryParse(Console.ReadLine(), out value) || value > max_value)
-            //{
-            //    //
-            //}
-
-            //_gpio_signal_generator = (uint)(value * Math.Pow(2, 28) / CLOCK_RATE);
-
-            //unsafe
-            //{
-            //    *(uint*)(_GPIO + GPIO_SIGNAL_GENERATOR) = _gpio_signal_generator;
-            //}
         }
 
         private static void DA_Set_SwitchEnable()
@@ -271,7 +250,7 @@ namespace Vibrometer.Testing
                     a = unchecked((short)(raw & ~0xFFFF0000));
                     b = unchecked((short)(raw >> 16));
 
-                    Console.WriteLine($"hex: {raw,8:X}, high: {b,10}, low: {a,10}");
+                    Console.WriteLine($"hex: {raw,8:X}, a: {a,10}, b: {b,10}");
                     Thread.Sleep(100);
                 }
             }, cts.Token);
@@ -347,9 +326,9 @@ namespace Vibrometer.Testing
 
         private static void PT_Get_Threshold()
         {
-            int a;
-            int b;
             uint raw;
+            short a;
+            short b;
             Task task;
             CancellationTokenSource cts;
 
@@ -433,12 +412,18 @@ namespace Vibrometer.Testing
 
         private static void RW_Set_Address()
         {
-            throw new NotImplementedException();
+            _read_buffer = Marshal.AllocHGlobal(1024);
+
+            unsafe
+            {
+                *(uint*)(_GPIO + GPIO_RAM_WRITER + 0x08) = (uint)_read_buffer.ToPointer();
+            }
         }
 
         private static void RW_Get_ReadBuffer()
         {
             uint address;
+            uint data;
 
             Console.Clear();
 
@@ -447,7 +432,25 @@ namespace Vibrometer.Testing
                 address = *(uint*)(_GPIO + GPIO_RAM_WRITER + 0x08);
             }
 
-            Console.WriteLine(address);
+            Console.WriteLine($"0x{address,8:X}");
+            Console.WriteLine();
+
+            unsafe
+            {
+                data = *(uint*)(address + 0x0000);
+                Console.WriteLine($"{ data }");
+                data = *(uint*)(address + 0x0001);
+                Console.WriteLine($"{ data }");
+                data = *(uint*)(address + 0x0010);
+                Console.WriteLine($"{ data }");
+                data = *(uint*)(address + 0x0011);
+                Console.WriteLine($"{ data }");
+                data = *(uint*)(address + 0x0100);
+                Console.WriteLine($"{ data }");
+                data = *(uint*)(address + 0x0101);
+                Console.WriteLine($"{ data }");
+            }
+
             Console.ReadKey(true);
         }     
     }

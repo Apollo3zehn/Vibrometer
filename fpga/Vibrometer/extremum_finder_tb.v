@@ -7,8 +7,8 @@ module extremum_finder_tb #
 
     reg                         SYS_aclk;
     reg                         SYS_aresetn;
-    reg [31:0]                  EF_log_count;
-    reg [5:0]                   EF_shift;
+    reg [4:0]                   EF_log_count;
+    reg [2:0]                   EF_shift;
     reg [AXIS_TDATA_WIDTH-1:0]  S_AXIS_tdata;
     reg                         S_AXIS_tvalid;
  
@@ -31,50 +31,70 @@ module extremum_finder_tb #
         // 1        
         S_AXIS_tdata = 0;
         SYS_aresetn = 0;
-        #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;
+        #8;
                     
         S_AXIS_tdata = -20;
         SYS_aresetn = 1;
-        #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;
+        #8;
         
         S_AXIS_tdata = -10;
-        #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;
+        #8;
         
         S_AXIS_tdata = 10;
-        #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;
+        #8;
 
         S_AXIS_tdata = 20;
-        #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;        
+        #8;
         
         S_AXIS_tdata = 10;
-        #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;
+        #8;
         
         // start
-        EF_log_count = 1;
+        EF_log_count = 3;
         S_AXIS_tdata = -10;
-        #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;
+        #8;
         
         S_AXIS_tdata = -30;
-        #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;
+        #8;
         
-        S_AXIS_tdata = -8000;
-        #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;
+        S_AXIS_tdata = -40;
+        #8;
         
-        S_AXIS_tdata = +8000;
-        #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;
+        S_AXIS_tdata = -20;
+        #8;
         
         S_AXIS_tdata = 10;
-        #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;
+        #8;
         
-        S_AXIS_tdata = 20;
-        #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;
+        S_AXIS_tdata = 20;       
+        #8;
         
-        #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;
-        #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;
-        #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;
-        #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;
+        S_AXIS_tdata = 30;
+        #8;
+                
+        S_AXIS_tdata = 40;
+        #8;
+        
+        S_AXIS_tdata = 50;
+        #8;
+        
+        S_AXIS_tdata = 60;
+        #8;
+
+        S_AXIS_tdata = 50;
+        #8;
+
+        S_AXIS_tdata = 40;
+        #8;
         
         forever #1 SYS_aclk = ~SYS_aclk;
     end
+
+    always 
+        #4 SYS_aclk = !SYS_aclk;
+        
+    initial
+        #200
+        $finish;
 
 endmodule

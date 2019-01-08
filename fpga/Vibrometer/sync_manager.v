@@ -74,89 +74,89 @@ module sync_manager #
         end
       
         always @* begin
-            state_write_next    <= state_write;
-            state_full_next     <= state_full;
-            write_next          <= write;
-            read_next           <= read;
-            count_next          <= count + 1;
-            tvalid_next         <= tvalid;
-            lock_next           <= SM_request;
+            state_write_next    = state_write;
+            state_full_next     = state_full;
+            write_next          = write;
+            read_next           = read;
+            count_next          = count + 1;
+            tvalid_next         = tvalid;
+            lock_next           = SM_request;
         
             if (SM_request) begin
                 if (~lock) begin
                     if (state_full == buffer_1)
-                        read_next <= SM_address * 1;
+                        read_next = SM_address + length * 0;
                     else if (state_full == buffer_2)
-                        read_next <= SM_address * 2;
+                        read_next = SM_address + length * 1;
                     else if (state_full == buffer_3)
-                        read_next <= SM_address * 3;
+                        read_next = SM_address + length * 2;
                     else
-                        read_next <= 0;
+                        read_next = 0;
                 end
             end
             else begin
-                read_next       <= 0;
+                read_next       = 0;
             end            
             
             if (count == length - 1)
-                count_next <= 0;
+                count_next = 0;
         
             case(state_write)
                        
                 buffer_1: begin                   
                     if (count == length - 1) begin
                         if (state_full == buffer_3) begin
-                            state_write_next <= buffer_2;
-                            write_next <= SM_address * 2;
+                            state_write_next = buffer_2;
+                            write_next = SM_address + length * 1;
                         end
                         else begin
-                            state_write_next <= buffer_3;
-                            write_next <= SM_address * 3;
+                            state_write_next = buffer_3;
+                            write_next = SM_address + length * 2;
                         end
 
-                        state_full_next <= buffer_1;                   
-                        tvalid_next  <= 1;  
+                        state_full_next = buffer_1;                   
+                        tvalid_next = 1;  
                     end
                     else begin
-                        tvalid_next <= 0; 
+                        tvalid_next = 0; 
                     end
                 end
                    
                 buffer_2: begin
                     if (count == length - 1) begin
                         if (state_full == buffer_3) begin
-                            state_write_next <= buffer_1;
-                            write_next <= SM_address * 1;
+                            state_write_next = buffer_1;
+                            write_next = SM_address + length * 0;
                         end
                         else begin
-                            state_write_next <= buffer_3;
-                            write_next <= SM_address * 3;
+                            state_write_next = buffer_3;
+                            write_next = SM_address + length * 2;
                         end
                         
-                        state_full_next <= buffer_2;                             
-                        tvalid_next  <= 1;   
+                        state_full_next = buffer_2;                             
+                        tvalid_next = 1;   
                     end
                     else begin
-                        tvalid_next <= 0; 
+                        tvalid_next = 0; 
                     end                
                 end
                 
                 buffer_3: begin
                    if (count == length - 1) begin
                         if (state_full == buffer_1) begin
-                            state_write_next <= buffer_2;
-                            write_next <= SM_address * 2;
+                            state_write_next = buffer_2;
+                            write_next = SM_address + length * 1;
                         end
                         else begin
-                            state_write_next <= buffer_1;
-                            write_next <= SM_address * 1;
+                            state_write_next = buffer_1;
+                            write_next = SM_address + length * 0;
                         end
                             
-                        state_full_next <= buffer_3;
-                        tvalid_next  <= 1;  
+                        state_full_next = buffer_3;
+                        tvalid_next = 1;  
                     end
                     else begin
-                        tvalid_next <= 0; 
+                        tvalid_next = 0; 
                     end             
                 end
                                  

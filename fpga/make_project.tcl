@@ -13,4 +13,7 @@ if { $argc != 1 } {
     cd ./../artifacts/fpga
 
     source $location/$project_name/block_design.tcl
+
+    make_wrapper -files [get_files $location/$project_name/system.bd] -top
+    add_files -norecurse $location/$project_name/system_wrapper.v
 }

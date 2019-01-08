@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="4819949fs"></ZoomStartTime>
-      <ZoomEndTime time="19436011fs"></ZoomEndTime>
-      <Cursor1Time time="17000000fs"></Cursor1Time>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="35300001fs"></ZoomEndTime>
+      <Cursor1Time time="15000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="175"></NameColumnWidth>
-      <ValueColumnWidth column_width="102"></ValueColumnWidth>
+      <ValueColumnWidth column_width="94"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="17" />
+   <WVObjectSize size="15" />
    <wvobject fp_name="/extremum_finder_tb/SYS_aclk" type="logic">
       <obj_property name="ElementShortName">SYS_aclk</obj_property>
       <obj_property name="ObjectShortName">SYS_aclk</obj_property>
@@ -28,18 +28,13 @@
       <obj_property name="ElementShortName">SYS_aresetn</obj_property>
       <obj_property name="ObjectShortName">SYS_aresetn</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/efinder/state" type="array">
-      <obj_property name="ElementShortName">state[1:0]</obj_property>
-      <obj_property name="ObjectShortName">state[1:0]</obj_property>
+   <wvobject fp_name="/extremum_finder_tb/efinder/state" type="logic">
+      <obj_property name="ElementShortName">state</obj_property>
+      <obj_property name="ObjectShortName">state</obj_property>
    </wvobject>
    <wvobject fp_name="/extremum_finder_tb/S_AXIS_tdata" type="array">
       <obj_property name="ElementShortName">S_AXIS_tdata[31:0]</obj_property>
       <obj_property name="ObjectShortName">S_AXIS_tdata[31:0]</obj_property>
-      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/efinder/EF_lower_treshold" type="array">
-      <obj_property name="ElementShortName">EF_lower_treshold[15:0]</obj_property>
-      <obj_property name="ObjectShortName">EF_lower_treshold[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/extremum_finder_tb/efinder/min" type="array">
@@ -57,9 +52,9 @@
       <obj_property name="ObjectShortName">tmp_min[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/efinder/EF_upper_treshold" type="array">
-      <obj_property name="ElementShortName">EF_upper_treshold[15:0]</obj_property>
-      <obj_property name="ObjectShortName">EF_upper_treshold[15:0]</obj_property>
+   <wvobject fp_name="/extremum_finder_tb/efinder/tmp_min_next" type="array">
+      <obj_property name="ElementShortName">tmp_min_next[15:0]</obj_property>
+      <obj_property name="ObjectShortName">tmp_min_next[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/extremum_finder_tb/efinder/max" type="array">
@@ -95,9 +90,5 @@
    <wvobject fp_name="/extremum_finder_tb/efinder/max_count" type="array">
       <obj_property name="ElementShortName">max_count[31:0]</obj_property>
       <obj_property name="ObjectShortName">max_count[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/efinder/state_next" type="array">
-      <obj_property name="ElementShortName">state_next[1:0]</obj_property>
-      <obj_property name="ObjectShortName">state_next[1:0]</obj_property>
    </wvobject>
 </wave_config>
