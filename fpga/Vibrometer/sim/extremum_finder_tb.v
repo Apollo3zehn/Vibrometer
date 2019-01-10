@@ -93,8 +93,9 @@ module extremum_finder_tb #
     always 
         #4 SYS_aclk = !SYS_aclk;
         
-    initial
+    initial begin
         #200
         $finish;
+    end
 
 endmodule

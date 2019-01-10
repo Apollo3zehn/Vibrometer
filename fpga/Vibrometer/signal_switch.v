@@ -6,7 +6,7 @@ module signal_switch #
 )
 (
     // system signals
-    input  wire                             SYS_aclk,
+    input  wire                             aclk,
     
     // FC signals
     input  wire                             switch,

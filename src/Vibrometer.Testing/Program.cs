@@ -46,11 +46,13 @@ namespace Vibrometer.Testing
                 Console.WriteLine("[5] - PT_Set_LogCountExtremum");
                 Console.WriteLine("[6] - PT_Set_ShiftExtremum");
                 Console.WriteLine("[7] - PT_Get_Threshold");
-                Console.WriteLine("[8] - RW_Set_LogLength");
-                Console.WriteLine("[9] - RW_Set_RequestEnable");
-                Console.WriteLine("[A] - RW_Set_RequestDisable");
-                Console.WriteLine("[B] - RW_Set_Address");
-                Console.WriteLine("[C] - RW_Get_ReadBuffer");
+                Console.WriteLine("[8] - RW_Set_Enable");
+                Console.WriteLine("[9] - RW_Set_Disable");
+                Console.WriteLine("[A] - RW_Set_RequestEnable");
+                Console.WriteLine("[B] - RW_Set_RequestDisable");
+                Console.WriteLine("[C] - RW_Set_LogLength");
+                Console.WriteLine("[D] - RW_Set_Address");
+                Console.WriteLine("[E] - RW_Get_ReadBuffer");
                 Console.WriteLine();
 
                 var keyInfo = Console.ReadKey();
@@ -94,19 +96,25 @@ namespace Vibrometer.Testing
                         break;
                     case ConsoleKey.NumPad8:
                     case ConsoleKey.D8:
-                        Program.RW_Set_LogLength();
+                        Program.RW_Set_Enable();
                         break;
                     case ConsoleKey.NumPad9:
                     case ConsoleKey.D9:
-                        Program.RW_Set_RequestEnable();
+                        Program.RW_Set_Disable();
                         break;
                     case ConsoleKey.A:
-                        Program.RW_Set_RequestDisable();
+                        Program.RW_Set_RequestEnable();
                         break;
                     case ConsoleKey.B:
-                        Program.RW_Set_Address();
+                        Program.RW_Set_RequestDisable();
                         break;
                     case ConsoleKey.C:
+                        Program.RW_Set_LogLength();
+                        break;
+                    case ConsoleKey.D:
+                        Program.RW_Set_Address();
+                        break;
+                    case ConsoleKey.E:
                         Program.RW_Get_ReadBuffer();
                         break;
                     default:
@@ -358,6 +366,46 @@ namespace Vibrometer.Testing
             task.Wait();
         }
 
+        private static void RW_Set_Enable()
+        {
+            _gpio_ram_writer |= (1U << 0);
+
+            unsafe
+            {
+                *(uint*)(_GPIO + GPIO_RAM_WRITER) = _gpio_ram_writer;
+            }
+        }
+
+        private static void RW_Set_Disable()
+        {
+            _gpio_ram_writer &= ~(1U << 0);
+
+            unsafe
+            {
+                *(uint*)(_GPIO + GPIO_RAM_WRITER) = _gpio_ram_writer;
+            }
+        }
+
+        private static void RW_Set_RequestEnable()
+        {
+            _gpio_ram_writer |= (1U << 1);
+
+            unsafe
+            {
+                *(uint*)(_GPIO + GPIO_RAM_WRITER) = _gpio_ram_writer;
+            }
+        }
+
+        private static void RW_Set_RequestDisable()
+        {
+            _gpio_ram_writer &= ~(1U << 1);
+
+            unsafe
+            {
+                *(uint*)(_GPIO + GPIO_RAM_WRITER) = _gpio_ram_writer;
+            }
+        }
+
         private static void RW_Set_LogLength()
         {
             uint value;
@@ -368,8 +416,8 @@ namespace Vibrometer.Testing
                 _gpio_ram_writer = *(uint*)(_GPIO + GPIO_RAM_WRITER);
             }
 
-            max_value = (uint)Math.Pow(2, 5) - 1;
-            value = (_gpio_ram_writer >> 1) & max_value;
+            max_value = 22;
+            value = (_gpio_ram_writer >> 2) & max_value;
 
             Console.Clear();
             Console.WriteLine($"Current: { value }, max: (0 <= value <= { max_value })");
@@ -381,28 +429,8 @@ namespace Vibrometer.Testing
                 //
             }
 
-            _gpio_ram_writer &= ~(max_value << 1);
-            _gpio_ram_writer |= (value << 1);
-
-            unsafe
-            {
-                *(uint*)(_GPIO + GPIO_RAM_WRITER) = _gpio_ram_writer;
-            }
-        }
-
-        private static void RW_Set_RequestEnable()
-        {
-            _gpio_ram_writer |= (1U << 0);
-
-            unsafe
-            {
-                *(uint*)(_GPIO + GPIO_RAM_WRITER) = _gpio_ram_writer;
-            }
-        }
-
-        private static void RW_Set_RequestDisable()
-        {
-            _gpio_ram_writer &= ~(1U << 0);
+            _gpio_ram_writer &= ~(max_value << 2);
+            _gpio_ram_writer |= (value << 2);
 
             unsafe
             {
@@ -412,11 +440,17 @@ namespace Vibrometer.Testing
 
         private static void RW_Set_Address()
         {
-            _read_buffer = Marshal.AllocHGlobal(1024);
+            Span<int> span;
+
+            // TODO: log length statt 1024
+            _read_buffer = Marshal.AllocHGlobal(1024 * 4);
 
             unsafe
             {
-                *(uint*)(_GPIO + GPIO_RAM_WRITER + 0x08) = (uint)_read_buffer.ToPointer();
+                span = new Span<int>(_read_buffer.ToPointer(), 1024);
+                span.Clear();
+
+                * (uint*)(_GPIO + GPIO_RAM_WRITER + 0x08) = (uint)_read_buffer.ToPointer();
             }
         }
 
@@ -438,17 +472,17 @@ namespace Vibrometer.Testing
             unsafe
             {
                 data = *(uint*)(address + 0x0000);
-                Console.WriteLine($"{ data }");
+                Console.WriteLine($"{data,8:X}");
                 data = *(uint*)(address + 0x0001);
-                Console.WriteLine($"{ data }");
+                Console.WriteLine($"{data,8:X}");
                 data = *(uint*)(address + 0x0010);
-                Console.WriteLine($"{ data }");
+                Console.WriteLine($"{data,8:X}");
                 data = *(uint*)(address + 0x0011);
-                Console.WriteLine($"{ data }");
+                Console.WriteLine($"{data,8:X}");
                 data = *(uint*)(address + 0x0100);
-                Console.WriteLine($"{ data }");
+                Console.WriteLine($"{data,8:X}");
                 data = *(uint*)(address + 0x0101);
-                Console.WriteLine($"{ data }");
+                Console.WriteLine($"{data,8:X}");
             }
 
             Console.ReadKey(true);

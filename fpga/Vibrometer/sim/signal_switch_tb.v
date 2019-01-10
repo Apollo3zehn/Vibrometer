@@ -23,20 +23,22 @@ module signal_switch_tb #
         a = 14;
         b = -29;
     
-        #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;
-        #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;
-        #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;
+        #24;
 
         switch = 1;
         
-        #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;
-        #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;
-        #1; SYS_aclk = ~SYS_aclk; #1; SYS_aclk = ~SYS_aclk;
+        #24;
         
         a = 7;
         b = 16;
+    end
+
+    always 
+        #4 SYS_aclk = !SYS_aclk;
         
-        forever #1 SYS_aclk = ~SYS_aclk;
+    initial begin
+        #200
+        $finish;
     end
 
 endmodule
