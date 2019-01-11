@@ -2,7 +2,8 @@
 
 module sync_manager #
 (
-    parameter integer                       MM_ADDR_WIDTH       = 32
+    parameter integer                       MM_ADDR_WIDTH       = 32,
+    parameter integer                       DATA_WIDTH          = 32
 )
 (
     // system signals
@@ -19,26 +20,25 @@ module sync_manager #
     output wire [MM_ADDR_WIDTH-1:0]         SM_write_buffer
 );
 
-    localparam                              buffer_1            = 2'b00, 
-                                            buffer_2            = 2'b01,
-                                            buffer_3            = 2'b10,
-                                            buffer_4            = 2'b11;
+    localparam                              buffer_1            = 4'b0001, 
+                                            buffer_2            = 4'b0010,
+                                            buffer_3            = 4'b0100,
+                                            buffer_4            = 4'b1000;
 
-    reg  [1:0]                              state_read,         state_read_next;
-    reg  [1:0]                              state_ready,        state_ready_next;
-    reg  [1:0]                              state_lock,         state_lock_next;
-    reg  [1:0]                              state_write,        state_write_next;
+    reg  [3:0]                              state_read,         state_read_next;
+    reg  [3:0]                              state_ready,        state_ready_next;
+    reg  [3:0]                              state_lock,         state_lock_next;
+    reg  [3:0]                              state_write,        state_write_next;
+    reg  [3:0]                              combination;
 
-    reg  [MM_ADDR_WIDTH-1:0]                address_write,      address_write_next;
-    reg  [MM_ADDR_WIDTH-1:0]                address_read,       address_read_next;
     reg  [MM_ADDR_WIDTH-1:0]                read_count,         read_count_next;
     reg  [MM_ADDR_WIDTH-1:0]                write_count,        write_count_next;
     reg                                     lock,               lock_next;
     
     wire [22:0]                             length;
 
-    assign SM_read_buffer                   = address_read;
-    assign SM_write_buffer                  = address_write;
+    assign SM_read_buffer                   = SM_base_address + length * state_read  * DATA_WIDTH / 8;
+    assign SM_write_buffer                  = SM_base_address + length * state_write * DATA_WIDTH / 8 + read_count;
     assign length                           = 1 << SM_log_length;
 
     always @(posedge SYS_aclk) begin
@@ -46,9 +46,7 @@ module sync_manager #
             state_read      <= buffer_1;
             state_ready     <= buffer_2;
             state_lock      <= buffer_3;
-            state_write     <= buffer_4;
-            address_read    <= 0;
-            address_write   <= 0;
+            state_write     <= buffer_3;
             read_count      <= 0;
             write_count     <= 0;
             lock            <= 0;
@@ -58,8 +56,6 @@ module sync_manager #
             state_ready     <= state_ready_next;
             state_lock      <= state_lock_next;
             state_write     <= state_write_next;
-            address_read    <= address_read_next;
-            address_write   <= address_write_next;
             read_count      <= read_count_next;
             write_count     <= write_count_next;
             lock            <= lock_next;
@@ -67,29 +63,21 @@ module sync_manager #
     end
 
     always @* begin
-        lock_next                   = SM_request;
-        state_read_next             = state_read;
-        address_read_next           = address_read;
-    
-        if (SM_request) begin
-            if (~lock) begin
-                state_read_next     = state_ready;
-                address_read_next   = SM_base_address + length * state_read_next;
-            end
-        end
-        else begin
-            address_read_next       = 0;
-        end            
-    end
-
-    always @* begin
+        lock_next               = SM_request;
         read_count_next         = read_count;
         write_count_next        = write_count;
-        state_write_next        = state_write;
-        state_lock_next         = state_lock;
+        state_read_next         = state_read;
         state_ready_next        = state_ready;
-        address_write_next      = address_write;
+        state_lock_next         = state_lock;
+        state_write_next        = state_write;
         
+        // if read request
+        if (SM_request) begin
+            if (~lock) begin
+                state_read_next = state_ready;
+            end
+        end
+
         // if s2mm read transfer was successful, increase read_count
         if (SM_reading) begin
             read_count_next     = read_count + 1;
@@ -98,11 +86,16 @@ module sync_manager #
         // if read_count has reached the maximum, assign a new buffer
         if (read_count >= length - 1) begin
             read_count_next     = 0;
+            combination         = state_read | state_ready | state_lock | state_write;
 
-            if (state_write + 1 == state_read)
-                state_write_next = state_write + 2;
+            if (combination[0] == 1'b0)
+                state_write_next = buffer_1;
+            else if (combination[1] == 1'b0)
+                state_write_next = buffer_2;
+            else if (combination[2] == 1'b0)
+                state_write_next = buffer_3;
             else
-                state_write_next = state_write + 1;
+                state_write_next = buffer_4;
         end
 
         // if s2mm write transfer was successful, increase write_count
@@ -114,18 +107,102 @@ module sync_manager #
         if (write_count >= length - 1) begin
             write_count_next    = 0;
 
-            if (state_lock + 1 == state_read)
-                state_lock_next = state_lock + 2;
-            else
-                state_lock_next = state_lock + 1;
-                
-            if (state_ready + 1 == state_read)
-                state_ready_next = state_ready + 2;
-            else
-                state_ready_next = state_ready + 1;
+            state_lock_next     = state_write;
+            state_ready_next    = state_lock;
         end
-
-        address_write_next      = SM_base_address + length * state_write_next;
     end
 
 endmodule
+
+// BUFFER MANAGEMENT
+// ===============================
+//
+//
+// Step 1 (initial):
+// ===============================
+// read         0001
+// ready        0010
+// lock         0100
+// write        0100
+// ===============================
+// free         1000
+//
+//
+// Step 2 (write changes to free):
+// ===============================
+// read         0001
+// ready        0010
+// lock         0100
+// write        1000
+// ===============================
+// free         <none>
+//
+//
+// Step 3 (lock & ready change):
+// ===============================
+// read         0001
+// ready        0100
+// lock         1000
+// write        1000
+// ===============================
+// free         0010
+//
+//
+// Step 4 (write changes to free):
+// ===============================
+// read         0001
+// ready        0100
+// lock         1000
+// write        0010
+// ===============================
+// free         <none>
+//
+//
+// Step 5 (lock & ready change):
+// ===============================
+// read         0001
+// ready        1000
+// lock         0010
+// write        0010
+// ===============================
+// free         <none>
+//
+//
+// Step 6 (read changes to ready):
+// ===============================
+// read         1000
+// ready        1000
+// lock         0010
+// write        0010
+// ===============================
+// free         0100 and 0001
+//
+//
+// Step 7 (write changes to free):
+// ===============================
+// read         1000
+// ready        1000
+// lock         0010
+// write        0001
+// ===============================
+// free         0001 and 0100
+//
+//
+// Step 8 (lock & ready change):
+// ===============================
+// read         1000
+// ready        0010
+// lock         0001
+// write        0001
+// ===============================
+// free         0100
+//
+//
+// Step 9 (read changes to ready):
+// ===============================
+// read         0010
+// ready        0010
+// lock         0001
+// write        0001
+// ===============================
+// free         0100 and 1000
