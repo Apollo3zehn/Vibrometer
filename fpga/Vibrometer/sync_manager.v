@@ -20,6 +20,19 @@ module sync_manager #
     output wire [MM_ADDR_WIDTH-1:0]         SM_write_buffer
 );
 
+    function [MM_ADDR_WIDTH-1:0] buffer_to_factor (input [3:0] value);
+        begin
+            if (value[0])
+                buffer_to_factor = 0;
+            else if (value[1])
+                buffer_to_factor = 1;
+            else if (value[2])
+                buffer_to_factor = 2;
+            else
+                buffer_to_factor = 3;
+        end
+    endfunction
+
     localparam                              buffer_1            = 4'b0001, 
                                             buffer_2            = 4'b0010,
                                             buffer_3            = 4'b0100,
@@ -34,11 +47,11 @@ module sync_manager #
     reg  [MM_ADDR_WIDTH-1:0]                read_count,         read_count_next;
     reg  [MM_ADDR_WIDTH-1:0]                write_count,        write_count_next;
     reg                                     lock,               lock_next;
-    
+
     wire [22:0]                             length;
 
-    assign SM_read_buffer                   = SM_base_address + length * state_read  * DATA_WIDTH / 8;
-    assign SM_write_buffer                  = SM_base_address + length * state_write * DATA_WIDTH / 8 + read_count;
+    assign SM_read_buffer                   = SM_base_address + length * buffer_to_factor(state_read)  * DATA_WIDTH / 8;
+    assign SM_write_buffer                  = SM_base_address + length * buffer_to_factor(state_write) * DATA_WIDTH / 8 + read_count * DATA_WIDTH / 8;
     assign length                           = 1 << SM_log_length;
 
     always @(posedge SYS_aclk) begin
@@ -84,7 +97,7 @@ module sync_manager #
         end
 
         // if read_count has reached the maximum, assign a new buffer
-        if (read_count >= length - 1) begin
+        if (read_count_next >= length) begin
             read_count_next     = 0;
             combination         = state_read | state_ready | state_lock | state_write;
 
