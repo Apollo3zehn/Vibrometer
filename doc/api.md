@@ -18,8 +18,8 @@ Position_Tracker    0x4123_0000
     [31:0]          threshold               RO      31_[max, min]_0
 
 RAM_Writer          0x4124_0000
-    [11:7]          throttle                RW      
-    [6:2]           log_length              RW      max = 1 << 22
+    [11:7]          log_throttle            RW      
+    [6:2]           log_length              RW
     [1:1]           request                 RW
     [0:0]           enable                  RW
     + 0x0008

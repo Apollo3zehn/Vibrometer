@@ -10,6 +10,7 @@ namespace Vibrometer.Testing
     class Program
     {
         const int CLOCK_RATE            = 125000000;
+        const int DATA_BASE             = 0x1E00_0000;
         const int GPIO_REG_COUNT        = 5;
         const int GPIO_REG_SIZE         = 65536;
         const int GPIO_BASE             = 0x4120_0000;
@@ -26,7 +27,7 @@ namespace Vibrometer.Testing
         static uint _gpio_ram_writer;
 
         static IntPtr _GPIO;
-        static IntPtr _read_buffer;
+        static IntPtr _DATA;
 
         static void Main(string[] args)
         {
@@ -35,8 +36,9 @@ namespace Vibrometer.Testing
             while (true)
             {
                 Console.Clear();
+                Console.WriteLine($"v2");
                 Console.WriteLine($"GPIO memory map: 0x{(uint)_GPIO,8:X}");
-                Console.WriteLine($"Read buffer:     0x{(uint)_read_buffer,8:X}");
+                Console.WriteLine($"DATA memory map: 0x{(uint)_DATA,8:X}");
                 Console.WriteLine("[L] - Load FPGA image");
                 Console.WriteLine("[0] - GE_Get_Position");
                 Console.WriteLine("[1] - SG_Set_Phase");
@@ -51,8 +53,9 @@ namespace Vibrometer.Testing
                 Console.WriteLine("[A] - RW_Set_RequestEnable");
                 Console.WriteLine("[B] - RW_Set_RequestDisable");
                 Console.WriteLine("[C] - RW_Set_LogLength");
-                Console.WriteLine("[D] - RW_Set_Address");
-                Console.WriteLine("[E] - RW_Get_ReadBuffer");
+                Console.WriteLine("[D] - RW_Set_LogThrottle");
+                Console.WriteLine("[E] - RW_Set_Address");
+                Console.WriteLine("[F] - RW_Get_ReadBuffer");
                 Console.WriteLine();
 
                 var keyInfo = Console.ReadKey();
@@ -112,9 +115,12 @@ namespace Vibrometer.Testing
                         Program.RW_Set_LogLength();
                         break;
                     case ConsoleKey.D:
-                        Program.RW_Set_Address();
+                        Program.RW_Set_LogThrottle();
                         break;
                     case ConsoleKey.E:
+                        Program.RW_Set_Address();
+                        break;
+                    case ConsoleKey.F:
                         Program.RW_Get_ReadBuffer();
                         break;
                     default:
@@ -123,13 +129,17 @@ namespace Vibrometer.Testing
             }
 
             Syscall.munmap(_GPIO, (ulong)Syscall.sysconf(SysconfName._SC_PAGESIZE));
+            Syscall.munmap(_DATA, (ulong)Syscall.sysconf(SysconfName._SC_PAGESIZE));
             // TODO: free AlloHGlobal
+            // TODO: close fd
+            // 32768
         }
 
         private static void MemoryMap()
         {
             var fd = Syscall.open("/dev/mem", OpenFlags.O_RDWR);
             _GPIO = Syscall.mmap(IntPtr.Zero, GPIO_REG_COUNT * GPIO_REG_SIZE, MmapProts.PROT_READ | MmapProts.PROT_WRITE, MmapFlags.MAP_SHARED, fd, GPIO_BASE);
+            _DATA = Syscall.mmap(IntPtr.Zero, 32768, MmapProts.PROT_READ | MmapProts.PROT_WRITE, MmapFlags.MAP_SHARED, fd, DATA_BASE);
         }
 
         private static void LoadFPGAImage()
@@ -416,7 +426,7 @@ namespace Vibrometer.Testing
                 _gpio_ram_writer = *(uint*)(_GPIO + GPIO_RAM_WRITER);
             }
 
-            max_value = 22;
+            max_value = (uint)Math.Pow(2, 5) - 1;
             value = (_gpio_ram_writer >> 2) & max_value;
 
             Console.Clear();
@@ -438,19 +448,43 @@ namespace Vibrometer.Testing
             }
         }
 
-        private static void RW_Set_Address()
+        private static void RW_Set_LogThrottle()
         {
-            Span<int> span;
-
-            // TODO: log length statt 1024
-            _read_buffer = Marshal.AllocHGlobal(1024 * 4);
+            uint value;
+            uint max_value;
 
             unsafe
             {
-                span = new Span<int>(_read_buffer.ToPointer(), 1024);
-                span.Clear();
+                _gpio_ram_writer = *(uint*)(_GPIO + GPIO_RAM_WRITER);
+            }
 
-                * (uint*)(_GPIO + GPIO_RAM_WRITER + 0x08) = (uint)_read_buffer.ToPointer();
+            max_value = (uint)Math.Pow(2, 5) - 1;
+            value = (_gpio_ram_writer >> 7) & max_value;
+
+            Console.Clear();
+            Console.WriteLine($"Current: { value }, max: (0 <= value <= { max_value })");
+            Console.WriteLine($"Please enter the desired log throttle:");
+            Console.WriteLine();
+
+            while (!uint.TryParse(Console.ReadLine(), out value) || value > max_value)
+            {
+                //
+            }
+
+            _gpio_ram_writer &= ~(max_value << 7);
+            _gpio_ram_writer |= (value << 7);
+
+            unsafe
+            {
+                *(uint*)(_GPIO + GPIO_RAM_WRITER) = _gpio_ram_writer;
+            }
+        }
+
+        private static void RW_Set_Address()
+        {
+            unsafe
+            {
+                * (uint*)(_GPIO + GPIO_RAM_WRITER + 0x08) = DATA_BASE;
             }
         }
 
@@ -471,17 +505,17 @@ namespace Vibrometer.Testing
 
             unsafe
             {
-                data = *(uint*)(address + 0x0000);
+                data = *(uint*)(_DATA + 0x0000);
                 Console.WriteLine($"{data,8:X}");
-                data = *(uint*)(address + 0x0001);
+                data = *(uint*)(_DATA + 0x0050);
                 Console.WriteLine($"{data,8:X}");
-                data = *(uint*)(address + 0x0010);
+                data = *(uint*)(_DATA + 0x0100);
                 Console.WriteLine($"{data,8:X}");
-                data = *(uint*)(address + 0x0011);
+                data = *(uint*)(_DATA + 0x0150);
                 Console.WriteLine($"{data,8:X}");
-                data = *(uint*)(address + 0x0100);
+                data = *(uint*)(_DATA + 0x0200);
                 Console.WriteLine($"{data,8:X}");
-                data = *(uint*)(address + 0x0101);
+                data = *(uint*)(_DATA + 0x0250);
                 Console.WriteLine($"{data,8:X}");
             }
 

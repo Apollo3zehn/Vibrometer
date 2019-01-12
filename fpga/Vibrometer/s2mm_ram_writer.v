@@ -45,7 +45,7 @@ module s2mm_ram_writer #
     output wire                         M_AXI_bready
 );
 
-    localparam [7:0]                    burst_size              = 16;
+    localparam  [7:0]                   burst_length            = 16;
 
     reg  [3:0]                          count,                  count_next;
     reg  [2:0]                          count_rst,              count_rst_next;
@@ -88,9 +88,9 @@ module s2mm_ram_writer #
     assign tdata                        = {{(64 - AXIS_TDATA_WIDTH - ADDR_WIDTH){1'b0}}, S_AXIS_tdata, address};
     assign S_AXIS_tready                = ~full;
 
-    assign M_AXI_awid                   = {(AXI_ID_WIDTH){1'b1}};                       // Write address ID
+    assign M_AXI_awid                   = {(AXI_ID_WIDTH){1'b0}};                       // Write address ID
     assign M_AXI_awaddr                 = wdata[ADDR_WIDTH-1:0];                        // Write address
-    assign M_AXI_awlen                  = burst_size;                                   // Write burst length   // AXI 3: max = 16
+    assign M_AXI_awlen                  = burst_length - 1;                             // Write burst length   // AXI 3: max = 16, burst_length = awlen[7:0] + 1
     assign M_AXI_awsize                 = ADDR_SIZE;                                    // Write burst size     // # of bytes = 2^awsize
     assign M_AXI_awburst                = 2'b01;                                        // Write burst type     // 01b = INCR - Incrementing address
     assign M_AXI_awcache                = 4'b0011;                                      // Write cache 
@@ -107,10 +107,8 @@ module s2mm_ram_writer #
 
     FIFO36E1 #(
         .FIRST_WORD_FALL_THROUGH("TRUE"),
-        .ALMOST_EMPTY_OFFSET( { {(13 - 8){1'b0}}, burst_size} ),                        // 8 = sizeof(burst_size)
+        .ALMOST_EMPTY_OFFSET( { {(13 - 8){1'b0}}, burst_length} ),                      // 8 = sizeof(burst_length)
         .DATA_WIDTH(72),                                                                // 512K depth
-        // .EN_SYN("TRUE"),                                                                // synchronuous clocks
-        // .DO_REG(0),                                                                     // synchronuous clocks
         .FIFO_MODE("FIFO36_72")
     ) fifo_0 (
         .RST(~aresetn),
@@ -172,7 +170,7 @@ module s2mm_ram_writer #
             count_next      = count + 1;
         end
 
-        // - allow transaction until burst_size beats are reached, then wait for data to arrive or otherwise restart immediately
+        // - allow transaction until burst_length beats are reached, then wait for data to arrive or otherwise restart immediately
         if (M_AXI_wready & wlast) begin
             if(empty)
                 wvalid_next = 0;
