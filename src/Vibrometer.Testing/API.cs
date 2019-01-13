@@ -104,9 +104,9 @@ namespace Vibrometer.Testing
 
             // buffer length = 2^12 = 4096 = 1024 * 4 byte
             API.RamWriter.LogLength = 12;
-
+            
             // throttle 125 MHz ADC data by factor 2^12 = 4096 to get into the kHz range
-            API.RamWriter.LogThrottle = 1;
+            API.RamWriter.LogThrottle = 12;
 
             // enable RAM writer
             API.RamWriter.Enabled = true;

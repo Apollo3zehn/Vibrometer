@@ -43,7 +43,7 @@ module position_tracker #
     assign signal_b                         = S_AXIS_tdata[AXIS_TDATA_WIDTH-1:AXIS_TDATA_WIDTH/2];
 
     always @(posedge aclk) begin
-        if (~SYS_aresetn) begin
+        if (~aresetn) begin
             position        <= 0;
             state           <= idle;
         end
@@ -74,7 +74,7 @@ module position_tracker #
                 
                     center = (($signed(FC_upper_threshold) + $signed(FC_lower_threshold)) >>> 1);
                 
-                    if ($signed(signal_b) < $signed(center))
+                    if ($signed(signal_b) > $signed(center))
                         position_next = $signed(position) + 1;
                     else
                         position_next = $signed(position) - 1;

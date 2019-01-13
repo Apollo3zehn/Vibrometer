@@ -55,7 +55,7 @@ module sync_manager #
     assign length                           = 1 << SM_log_length;
 
     always @(posedge aclk) begin
-        if (~SYS_aresetn) begin
+        if (~aresetn) begin
             state_read      <= buffer_1;
             state_ready     <= buffer_2;
             state_lock      <= buffer_3;

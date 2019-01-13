@@ -48,7 +48,7 @@ module extremum_finder #
     assign max_count                        = 1 << EF_log_count;
 
     always @(posedge aclk) begin
-        if (~SYS_aresetn) begin
+        if (~aresetn) begin
             min             <= {1'b0, {(AXIS_TDATA_WIDTH/2-1){1'b1}}}; // max. positve number
             max             <= {1'b1, {(AXIS_TDATA_WIDTH/2-1){1'b0}}}; // max. negative number
             tmp_min         <= {1'b0, {(AXIS_TDATA_WIDTH/2-1){1'b1}}}; // max. positve number
