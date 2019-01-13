@@ -7,8 +7,8 @@ module sync_manager #
 )
 (
     // system signals
-    input  wire                             SYS_aclk,
-    input  wire                             SYS_aresetn,
+    input  wire                             aclk,
+    input  wire                             aresetn,
     output reg [3:0]                        combination,
     
     // SM signals
@@ -54,7 +54,7 @@ module sync_manager #
     assign SM_write_buffer                  = SM_base_address + length * buffer_to_factor(state_write) * DATA_WIDTH / 8 + read_count * DATA_WIDTH / 8;
     assign length                           = 1 << SM_log_length;
 
-    always @(posedge SYS_aclk) begin
+    always @(posedge aclk) begin
         if (~SYS_aresetn) begin
             state_read      <= buffer_1;
             state_ready     <= buffer_2;

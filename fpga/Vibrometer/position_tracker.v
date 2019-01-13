@@ -6,8 +6,8 @@ module position_tracker #
 )
 (
     // system signals
-    input  wire                             SYS_aclk,
-    input  wire                             SYS_aresetn,
+    input  wire                             aclk,
+    input  wire                             aresetn,
     
     // FC signals
     input  wire [(AXIS_TDATA_WIDTH/2)-1:0]  FC_lower_threshold,
@@ -42,7 +42,7 @@ module position_tracker #
     assign signal_a                         = S_AXIS_tdata[(AXIS_TDATA_WIDTH/2)-1:0];
     assign signal_b                         = S_AXIS_tdata[AXIS_TDATA_WIDTH-1:AXIS_TDATA_WIDTH/2];
 
-    always @(posedge SYS_aclk) begin
+    always @(posedge aclk) begin
         if (~SYS_aresetn) begin
             position        <= 0;
             state           <= idle;
@@ -74,7 +74,7 @@ module position_tracker #
                 
                     center = (($signed(FC_upper_threshold) + $signed(FC_lower_threshold)) >>> 1);
                 
-                    if ($signed(signal_b) > $signed(center))
+                    if ($signed(signal_b) < $signed(center))
                         position_next = $signed(position) + 1;
                     else
                         position_next = $signed(position) - 1;

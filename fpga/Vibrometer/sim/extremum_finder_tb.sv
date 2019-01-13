@@ -5,8 +5,8 @@ module extremum_finder_tb #
     parameter integer           AXIS_TDATA_WIDTH    = 32
 );
 
-    reg                         SYS_aclk;
-    reg                         SYS_aresetn;
+    reg                         aclk;
+    reg                         aresetn;
     reg [4:0]                   EF_log_count;
     reg [2:0]                   EF_shift;
     reg [AXIS_TDATA_WIDTH-1:0]  S_AXIS_tdata;
@@ -22,19 +22,19 @@ module extremum_finder_tb #
     );
      
     initial begin
-        SYS_aclk = 0;
-        SYS_aresetn = 0;
+        aclk = 0;
+        aresetn = 0;
         EF_log_count = 0;
         EF_shift = 0;
         S_AXIS_tvalid = 1;
 
         // 1        
         S_AXIS_tdata = 0;
-        SYS_aresetn = 0;
+        aresetn = 0;
         #8;
                     
         S_AXIS_tdata = -20;
-        SYS_aresetn = 1;
+        aresetn = 1;
         #8;
         
         S_AXIS_tdata = -10;
@@ -87,11 +87,11 @@ module extremum_finder_tb #
         S_AXIS_tdata = 40;
         #8;
         
-        forever #1 SYS_aclk = ~SYS_aclk;
+        forever #1 aclk = ~SYS_aclk;
     end
 
     always 
-        #4 SYS_aclk = !SYS_aclk;
+        #4 aclk = !SYS_aclk;
         
     initial begin
         #200

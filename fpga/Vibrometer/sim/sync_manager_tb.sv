@@ -6,8 +6,8 @@ module sync_manager_tb #
 );
 
     // system signals
-    reg                            SYS_aclk;
-    reg                            SYS_aresetn;
+    reg                            aclk;
+    reg                            aresetn;
     
     // SM signals
     reg                            SM_request;
@@ -23,16 +23,16 @@ module sync_manager_tb #
     );
      
     initial begin
-        SYS_aclk = 0;
-        SYS_aresetn = 0;
+        aclk = 0;
+        aresetn = 0;
         SM_request = 1'b0;
         SM_log_length = 3;
         SM_address = 10;
 
-        SYS_aresetn = 0;
+        aresetn = 0;
         #16;
                     
-        SYS_aresetn = 1;
+        aresetn = 1;
         #8;
 
         // write 4 cycles
@@ -55,7 +55,7 @@ module sync_manager_tb #
     end
 
     always 
-        #4 SYS_aclk = !SYS_aclk;
+        #4 aclk = !SYS_aclk;
         
     initial begin
         #200

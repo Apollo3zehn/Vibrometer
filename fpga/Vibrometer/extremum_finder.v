@@ -6,8 +6,8 @@ module extremum_finder #
 )
 (
     // system signals
-    input  wire                             SYS_aclk,
-    input  wire                             SYS_aresetn,
+    input  wire                             aclk,
+    input  wire                             aresetn,
     
     // EF signals
     input  wire [4:0]                       EF_log_count,
@@ -47,7 +47,7 @@ module extremum_finder #
     assign signal_b                         = S_AXIS_tdata[AXIS_TDATA_WIDTH-1:AXIS_TDATA_WIDTH/2];
     assign max_count                        = 1 << EF_log_count;
 
-    always @(posedge SYS_aclk) begin
+    always @(posedge aclk) begin
         if (~SYS_aresetn) begin
             min             <= {1'b0, {(AXIS_TDATA_WIDTH/2-1){1'b1}}}; // max. positve number
             max             <= {1'b1, {(AXIS_TDATA_WIDTH/2-1){1'b0}}}; // max. negative number

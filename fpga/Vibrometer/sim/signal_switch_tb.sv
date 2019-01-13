@@ -5,7 +5,7 @@ module signal_switch_tb #
      parameter integer              DATA_WIDTH      = 16
 );
 
-    reg                             SYS_aclk;
+    reg                             aclk;
     reg                             switch;
     reg  [DATA_WIDTH-1:0]           a;
     reg  [DATA_WIDTH-1:0]           b;
@@ -18,7 +18,7 @@ module signal_switch_tb #
     );
      
     initial begin
-        SYS_aclk = 0;
+        aclk = 0;
         switch = 0;
         a = 14;
         b = -29;
@@ -34,7 +34,7 @@ module signal_switch_tb #
     end
 
     always 
-        #4 SYS_aclk = !SYS_aclk;
+        #4 aclk = !SYS_aclk;
         
     initial begin
         #200

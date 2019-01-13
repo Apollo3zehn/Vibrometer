@@ -17,7 +17,7 @@ namespace Vibrometer.Testing
             {
                 Console.Clear();
                 Console.WriteLine($"[L] - load FPGA image");
-                Console.WriteLine($"[F] - set defaults");
+                Console.WriteLine($"[P] - set defaults");
 
                 Console.WriteLine();
 
@@ -70,7 +70,8 @@ namespace Vibrometer.Testing
 
                 Console.WriteLine("RAM");
                 Console.WriteLine($"[D] - get data ({Math.Min(Math.Pow(2, API.RamWriter.LogLength), 1024)} values)");
-                Console.WriteLine($"[E] - clear");
+                Console.WriteLine($"[E] - get stream");
+                Console.WriteLine($"[F] - clear");
 
                 var keyInfo = Console.ReadKey(true);
 
@@ -79,7 +80,7 @@ namespace Vibrometer.Testing
                     case ConsoleKey.L:
                         Program.LoadFPGAImage();
                         break;
-                    case ConsoleKey.F:
+                    case ConsoleKey.P:
                         API.SetDefaults();
                         break;
                     case ConsoleKey.NumPad0:
@@ -135,6 +136,9 @@ namespace Vibrometer.Testing
                         Program.RAM_Get_Data();
                         break;
                     case ConsoleKey.E:
+                        Program.RAM_Get_Stream();
+                        break;
+                    case ConsoleKey.F:
                         API.Clear();
                         break;
                     case ConsoleKey.Escape:
@@ -383,6 +387,35 @@ namespace Vibrometer.Testing
             }
 
             Console.ReadKey(true);
+        }
+
+        private static void RAM_Get_Stream()
+        {
+            Task task;
+            CancellationTokenSource cts;
+
+            cts = new CancellationTokenSource();
+
+            Console.Clear();
+
+            task = Task.Run(() =>
+            {
+                while (!cts.IsCancellationRequested)
+                {
+                    int data;
+
+                    API.RamWriter.RequestEnabled = true;
+                    data = API.Ram.GetData((int)(API.RamWriter.ReadBuffer - API.DATA_BASE));
+                    API.RamWriter.RequestEnabled = false;
+
+                    Console.WriteLine($"{data,10}");
+                    Thread.Sleep(100);
+                }
+            }, cts.Token);
+
+            Console.ReadKey(true);
+            cts.Cancel();
+            task.Wait();
         }
     }
 }

@@ -5,8 +5,8 @@ module position_tracker_tb #
     parameter integer           AXIS_TDATA_WIDTH    = 32
 );
 
-    reg                         SYS_aclk;
-    reg                         SYS_aresetn;
+    reg                         aclk;
+    reg                         aresetn;
     reg [AXIS_TDATA_WIDTH-1:0]  FC_lower_treshold;
     reg [AXIS_TDATA_WIDTH-1:0]  FC_upper_treshold;
     reg                         S_AXIS_tvalid;
@@ -24,18 +24,18 @@ module position_tracker_tb #
     );
      
     initial begin
-        SYS_aclk = 0;
-        SYS_aresetn = 0;
+        aclk = 0;
+        aresetn = 0;
         FC_lower_treshold = -10;
         FC_upper_treshold = 10;
         S_AXIS_tvalid = 1'b0;
 
         S_AXIS_tdata = 0;
-        SYS_aresetn = 0;
+        aresetn = 0;
         #8;
                     
         S_AXIS_tdata = -5;
-        SYS_aresetn = 1;
+        aresetn = 1;
         #8;
 
         for (i=0; i<6; i=i+1) begin
@@ -56,7 +56,7 @@ module position_tracker_tb #
     end
 
     always 
-        #4 SYS_aclk = !SYS_aclk;
+        #4 aclk = !SYS_aclk;
         
     initial begin
         #400
