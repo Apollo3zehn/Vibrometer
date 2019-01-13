@@ -1,7 +1,5 @@
-﻿using Mono.Unix.Native;
-using System;
+﻿using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,61 +7,80 @@ namespace Vibrometer.Testing
 {
     class Program
     {
-        const int CLOCK_RATE            = 125000000;
-        const int DATA_BASE             = 0x1E00_0000;
-        const int GPIO_REG_COUNT        = 5;
-        const int GPIO_REG_SIZE         = 65536;
-        const int GPIO_BASE             = 0x4120_0000;
-        const int GPIO_GENERAL          = 0x0000_0000;
-        const int GPIO_SIGNAL_GENERATOR = 0x0001_0000;
-        const int GPIO_DATA_ACQUISITION = 0x0002_0000;
-        const int GPIO_POSITION_TRACKER = 0x0003_0000;
-        const int GPIO_RAM_WRITER       = 0x0004_0000;
-
-        static uint _gpio_general;
-        static uint _gpio_signal_generator;
-        static uint _gpio_data_acquisition;
-        static uint _gpio_position_tracker;
-        static uint _gpio_ram_writer;
-
-        static IntPtr _GPIO;
-        static IntPtr _DATA;
-
         static void Main(string[] args)
         {
-            Program.MemoryMap();
+            bool exit = false;
 
-            while (true)
+            API.Init();
+
+            while (!exit)
             {
                 Console.Clear();
-                Console.WriteLine($"v2");
-                Console.WriteLine($"GPIO memory map: 0x{(uint)_GPIO,8:X}");
-                Console.WriteLine($"DATA memory map: 0x{(uint)_DATA,8:X}");
-                Console.WriteLine("[L] - Load FPGA image");
-                Console.WriteLine("[0] - GE_Get_Position");
-                Console.WriteLine("[1] - SG_Set_Phase");
-                Console.WriteLine("[2] - DA_Set_SwitchEnable");
-                Console.WriteLine("[3] - DA_Set_SwitchDisable");
-                Console.WriteLine("[4] - DA_Get_Raw");
-                Console.WriteLine("[5] - PT_Set_LogCountExtremum");
-                Console.WriteLine("[6] - PT_Set_ShiftExtremum");
-                Console.WriteLine("[7] - PT_Get_Threshold");
-                Console.WriteLine("[8] - RW_Set_Enable");
-                Console.WriteLine("[9] - RW_Set_Disable");
-                Console.WriteLine("[A] - RW_Set_RequestEnable");
-                Console.WriteLine("[B] - RW_Set_RequestDisable");
-                Console.WriteLine("[C] - RW_Set_LogLength");
-                Console.WriteLine("[D] - RW_Set_LogThrottle");
-                Console.WriteLine("[E] - RW_Set_Address");
-                Console.WriteLine("[F] - RW_Get_ReadBuffer");
+                Console.WriteLine($"[L] - load FPGA image");
+                Console.WriteLine($"[F] - set defaults");
+
                 Console.WriteLine();
 
-                var keyInfo = Console.ReadKey();
+                Console.WriteLine("General");
+                Console.WriteLine($"[0] - get position");
+
+                Console.WriteLine();
+
+                Console.WriteLine("Signal Generator");
+                Console.WriteLine($"[1] - set phase");
+
+                Console.WriteLine();
+
+                Console.WriteLine("Data Acquisition");
+
+                if (API.DataAcquisition.SwitchEnabled)
+                    Program.WriteColored($"[2] - disable switch\n");
+                else
+                    Console.Write($"[2] - enable switch\n");
+
+                Console.WriteLine($"[3] - get raw");
+
+                Console.WriteLine();
+
+                Console.WriteLine("Position Tracker");
+                Console.WriteLine($"[4] - set log count extremum");
+                Console.WriteLine($"[5] - set shift extremum");
+                Console.WriteLine($"[6] - get threshold");
+
+                Console.WriteLine();
+
+                Console.WriteLine("RAM Writer");
+
+                if (API.RamWriter.Enabled)
+                    Program.WriteColored($"[7] - disable RAM writer\n");
+                else
+                    Console.Write($"[7] - enable RAM writer\n");
+
+                if (API.RamWriter.RequestEnabled)
+                    Program.WriteColored($"[8] - disable buffer request\n");
+                else
+                    Console.Write($"[8] - enable buffer request\n");
+
+                Console.WriteLine($"[9] - set log length");
+                Console.WriteLine($"[A] - set log throttle");
+                Console.WriteLine($"[B] - set address");
+                Console.WriteLine($"[C] - get read buffer");
+
+                Console.WriteLine();
+
+                Console.WriteLine("RAM");
+                Console.WriteLine($"[D] - get data ({Math.Min(Math.Pow(2, API.RamWriter.LogLength), 1024)} values)");
+                Console.WriteLine($"[E] - clear");
+
+                var keyInfo = Console.ReadKey(true);
 
                 switch(keyInfo.Key)
                 {
                     case ConsoleKey.L:
                         Program.LoadFPGAImage();
+                        break;
+                    case ConsoleKey.F:
+                        API.SetDefaults();
                         break;
                     case ConsoleKey.NumPad0:
                     case ConsoleKey.D0:
@@ -75,95 +92,119 @@ namespace Vibrometer.Testing
                         break;
                     case ConsoleKey.NumPad2:
                     case ConsoleKey.D2:
-                        Program.DA_Set_SwitchEnable();
+                        Program.DA_Toggle_Switch();
                         break;
                     case ConsoleKey.NumPad3:
                     case ConsoleKey.D3:
-                        Program.DA_Set_SwitchDisable();
+                        Program.DA_Get_Raw();
                         break;
                     case ConsoleKey.NumPad4:
                     case ConsoleKey.D4:
-                        Program.DA_Get_Raw();
+                        Program.PT_Set_LogCountExtremum();
                         break;
                     case ConsoleKey.NumPad5:
                     case ConsoleKey.D5:
-                        Program.PT_Set_LogCountExtremum();
+                        Program.PT_Set_ShiftExtremum();
                         break;
                     case ConsoleKey.NumPad6:
                     case ConsoleKey.D6:
-                        Program.PT_Set_ShiftExtremum();
+                        Program.PT_Get_Threshold();
                         break;
                     case ConsoleKey.NumPad7:
                     case ConsoleKey.D7:
-                        Program.PT_Get_Threshold();
+                        Program.RW_Toggle_Enable();
                         break;
                     case ConsoleKey.NumPad8:
                     case ConsoleKey.D8:
-                        Program.RW_Set_Enable();
+                        Program.RW_Toggle_RequestEnable();
                         break;
                     case ConsoleKey.NumPad9:
                     case ConsoleKey.D9:
-                        Program.RW_Set_Disable();
-                        break;
-                    case ConsoleKey.A:
-                        Program.RW_Set_RequestEnable();
-                        break;
-                    case ConsoleKey.B:
-                        Program.RW_Set_RequestDisable();
-                        break;
-                    case ConsoleKey.C:
                         Program.RW_Set_LogLength();
                         break;
-                    case ConsoleKey.D:
+                    case ConsoleKey.A:
                         Program.RW_Set_LogThrottle();
                         break;
-                    case ConsoleKey.E:
+                    case ConsoleKey.B:
                         Program.RW_Set_Address();
                         break;
-                    case ConsoleKey.F:
+                    case ConsoleKey.C:
                         Program.RW_Get_ReadBuffer();
+                        break;
+                    case ConsoleKey.D:
+                        Program.RAM_Get_Data();
+                        break;
+                    case ConsoleKey.E:
+                        API.Clear();
+                        break;
+                    case ConsoleKey.Escape:
+                        exit = true;
                         break;
                     default:
                         break;
                 }
             }
 
-            Syscall.munmap(_GPIO, (ulong)Syscall.sysconf(SysconfName._SC_PAGESIZE));
-            Syscall.munmap(_DATA, (ulong)Syscall.sysconf(SysconfName._SC_PAGESIZE));
-            // TODO: free AlloHGlobal
-            // TODO: close fd
-            // 32768
+            API.Free();
         }
 
-        private static void MemoryMap()
-        {
-            var fd = Syscall.open("/dev/mem", OpenFlags.O_RDWR);
-            _GPIO = Syscall.mmap(IntPtr.Zero, GPIO_REG_COUNT * GPIO_REG_SIZE, MmapProts.PROT_READ | MmapProts.PROT_WRITE, MmapFlags.MAP_SHARED, fd, GPIO_BASE);
-            _DATA = Syscall.mmap(IntPtr.Zero, 32768, MmapProts.PROT_READ | MmapProts.PROT_WRITE, MmapFlags.MAP_SHARED, fd, DATA_BASE);
-        }
-
+        // helper
         private static void LoadFPGAImage()
         {
             Console.Clear();
-            Console.WriteLine("Please enter the file path of FPGA image:");
+            Console.WriteLine("Please enter the file path of the FPGA image:");
             Console.WriteLine();
 
             var filePath = Console.ReadLine();
 
-            if (File.Exists(filePath))
+            while (true)
             {
-                using (var sourceFileStream = File.Open(filePath, FileMode.Open, FileAccess.Read))
+                if (File.Exists(filePath))
                 {
-                    using (var targetFileStream = File.Open("/dev/xdevcfg", FileMode.Open, FileAccess.Write))
-                    {
-                        sourceFileStream.CopyTo(targetFileStream);
-                    }
+                    API.LoadFPGAImage(filePath);
+                    break;
                 }
             }
         }
 
-        // API
+        private static void WriteColored(string text)
+        {
+            ConsoleColor color;
 
+            color = Console.ForegroundColor;
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(text);
+            Console.ForegroundColor = color;
+        }
+
+        private static void PrintDialogFloat(ref double value, double min, double max, string name, string unit = "")
+        {
+            Console.Clear();
+            Console.WriteLine($"max: {min:F2} <= value <= {max:F2} {unit}\ncurrent: {value:F2} {unit}\n");
+            Console.WriteLine($"Please enter the desired {name}:");
+            Console.WriteLine();
+
+            while (!double.TryParse(Console.ReadLine(), out value) || value < min || value > max)
+            {
+                //
+            }
+        }
+
+        private static void PrintDialogInteger(ref uint value, uint min, uint max, string name, string unit = "")
+        {
+            Console.Clear();
+            Console.WriteLine($"max: {min} <= value <= {max} {unit}\ncurrent: {value} {unit}\n");
+            Console.WriteLine($"Please enter the desired {name}:");
+            Console.WriteLine();
+
+            while (!uint.TryParse(Console.ReadLine(), out value) || value < min || value > max)
+            {
+                //
+            }
+        }
+
+        // API
         private static void GE_Get_Position()
         {
             Task task;
@@ -178,12 +219,9 @@ namespace Vibrometer.Testing
             {
                 while (!cts.IsCancellationRequested)
                 {
-                    unsafe
-                    {
-                        position = *(int*)(_GPIO + GPIO_GENERAL);
-                    }
+                    position = API.General.Position;
 
-                    Console.WriteLine($"{position,8:X}");
+                    Console.WriteLine($"{position,10}");
                     Thread.Sleep(100);
                 }
             }, cts.Token);
@@ -195,58 +233,22 @@ namespace Vibrometer.Testing
 
         private static void SG_Set_Phase()
         {
-            double max_value;
-            double value;
+            double min = 0;
+            double max = API.CLOCK_RATE;
+            double value = API.SignalGenerator.Phase / Math.Pow(2, 28) * API.CLOCK_RATE;
 
-            unsafe
-            {
-                _gpio_signal_generator = *(uint*)(_GPIO + GPIO_SIGNAL_GENERATOR);
-            }
+            Program.PrintDialogFloat(ref value, min, max, "signal generator frequency", "Hz");
 
-            max_value = CLOCK_RATE;
-            value = _gpio_signal_generator / Math.Pow(2, 28) * CLOCK_RATE;
-
-            Console.Clear();
-            Console.WriteLine($"Current: {value:F2} Hz, max: 0 <= value <= { max_value } Hz");
-            Console.WriteLine($"Please enter the desired signal generator frequency:");
-            Console.WriteLine();
-
-            while (!double.TryParse(Console.ReadLine(), out value) || value > max_value)
-            {
-                //
-            }
-
-            _gpio_signal_generator = (uint)(value * Math.Pow(2, 28) / CLOCK_RATE);
-
-            unsafe
-            {
-                *(uint*)(_GPIO + GPIO_SIGNAL_GENERATOR) = _gpio_signal_generator;
-            }
+            API.SignalGenerator.Phase = (uint)(value * Math.Pow(2, 28) / API.CLOCK_RATE);
         }
 
-        private static void DA_Set_SwitchEnable()
+        private static void DA_Toggle_Switch()
         {
-            _gpio_data_acquisition |= (1U << 0);
-
-            unsafe
-            {
-                *(uint*)(_GPIO + GPIO_DATA_ACQUISITION) = _gpio_data_acquisition;
-            }
-        }
-
-        private static void DA_Set_SwitchDisable()
-        {
-            _gpio_data_acquisition &= ~(1U << 0);
-
-            unsafe
-            {
-                *(uint*)(_GPIO + GPIO_DATA_ACQUISITION) = _gpio_data_acquisition;
-            }
+            API.DataAcquisition.SwitchEnabled = !API.DataAcquisition.SwitchEnabled;
         }
 
         private static void DA_Get_Raw()
         {
-            uint raw;
             short a;
             short b;
             Task task;
@@ -260,15 +262,9 @@ namespace Vibrometer.Testing
             {
                 while (!cts.IsCancellationRequested)
                 {
-                    unsafe
-                    {
-                        raw = *(uint*)(_GPIO + GPIO_DATA_ACQUISITION + 0x08);
-                    }
+                    (a, b) = API.DataAcquisition.Raw;
 
-                    a = unchecked((short)(raw & ~0xFFFF0000));
-                    b = unchecked((short)(raw >> 16));
-
-                    Console.WriteLine($"hex: {raw,8:X}, a: {a,10}, b: {b,10}");
+                    Console.WriteLine($"a: {a,10}, b: {b,10}");
                     Thread.Sleep(100);
                 }
             }, cts.Token);
@@ -280,71 +276,28 @@ namespace Vibrometer.Testing
 
         private static void PT_Set_LogCountExtremum()
         {
-            uint value;
-            uint max_value;
+            uint min = 0;
+            uint max = (uint)Math.Pow(2, 5) - 1;
+            uint value = API.PositionTracker.LogCountExtremum;
 
-            unsafe
-            {
-                _gpio_position_tracker = *(uint*)(_GPIO + GPIO_POSITION_TRACKER);
-            }
+            Program.PrintDialogInteger(ref value, min, max, "log count extremum");
 
-            max_value = (uint)Math.Pow(2, 5) - 1;
-            value = (_gpio_position_tracker >> 3) & max_value;
-
-            Console.Clear();
-            Console.WriteLine($"Current: { value }, max: (0 <= value <= { max_value })");
-            Console.WriteLine($"Please enter the desired log count extremum:");
-            Console.WriteLine();
-
-            while (!uint.TryParse(Console.ReadLine(), out value) || value > max_value)
-            {
-                //
-            }
-
-            _gpio_position_tracker &= ~(max_value << 3);
-            _gpio_position_tracker |= (value << 3);
-
-            unsafe
-            {
-                *(uint*)(_GPIO + GPIO_POSITION_TRACKER) = _gpio_position_tracker;
-            }
+            API.PositionTracker.LogCountExtremum = value;
         }
 
         private static void PT_Set_ShiftExtremum()
         {
-            uint value;
-            uint max_value;
+            uint min = 0;
+            uint max = (uint)Math.Pow(2, 3) - 1;
+            uint value = API.PositionTracker.ShiftExtremum;
 
-            unsafe
-            {
-                _gpio_position_tracker = *(uint*)(_GPIO + GPIO_POSITION_TRACKER);
-            }
+            Program.PrintDialogInteger(ref value, min, max, "shift extremum");
 
-            max_value = (uint)Math.Pow(2, 3) - 1;
-            value = (_gpio_position_tracker >> 0) & max_value;
-
-            Console.Clear();
-            Console.WriteLine($"Current: { value }, max: (0 <= value <= { max_value })");
-            Console.WriteLine($"Please enter the desired shift extremum:");
-            Console.WriteLine();
-
-            while (!uint.TryParse(Console.ReadLine(), out value) || value > max_value)
-            {
-                //
-            }
-
-            _gpio_position_tracker &= ~(max_value << 0);
-            _gpio_position_tracker |= (value << 0);
-
-            unsafe
-            {
-                *(uint*)(_GPIO + GPIO_POSITION_TRACKER) = _gpio_position_tracker;
-            }
+            API.PositionTracker.ShiftExtremum = value;
         }
 
         private static void PT_Get_Threshold()
         {
-            uint raw;
             short a;
             short b;
             Task task;
@@ -358,15 +311,9 @@ namespace Vibrometer.Testing
             {
                 while (!cts.IsCancellationRequested)
                 {
-                    unsafe
-                    {
-                        raw = *(uint*)(_GPIO + GPIO_POSITION_TRACKER + 0x08);
-                    }
+                    (a, b) = API.PositionTracker.Threshold;
 
-                    a = unchecked((short)(raw & ~0xFFFF0000));
-                    b = unchecked((short)(raw >> 16));
-
-                    Console.WriteLine($"hex: {raw,8:X}, high: {b,10}, low: {a,10}");
+                    Console.WriteLine($"high: {b,10}, low: {a,10}");
                     Thread.Sleep(100);
                 }
             }, cts.Token);
@@ -376,150 +323,66 @@ namespace Vibrometer.Testing
             task.Wait();
         }
 
-        private static void RW_Set_Enable()
+        private static void RW_Toggle_Enable()
         {
-            _gpio_ram_writer |= (1U << 0);
-
-            unsafe
-            {
-                *(uint*)(_GPIO + GPIO_RAM_WRITER) = _gpio_ram_writer;
-            }
+            API.RamWriter.Enabled = !API.RamWriter.Enabled;
         }
 
-        private static void RW_Set_Disable()
+        private static void RW_Toggle_RequestEnable()
         {
-            _gpio_ram_writer &= ~(1U << 0);
-
-            unsafe
-            {
-                *(uint*)(_GPIO + GPIO_RAM_WRITER) = _gpio_ram_writer;
-            }
-        }
-
-        private static void RW_Set_RequestEnable()
-        {
-            _gpio_ram_writer |= (1U << 1);
-
-            unsafe
-            {
-                *(uint*)(_GPIO + GPIO_RAM_WRITER) = _gpio_ram_writer;
-            }
-        }
-
-        private static void RW_Set_RequestDisable()
-        {
-            _gpio_ram_writer &= ~(1U << 1);
-
-            unsafe
-            {
-                *(uint*)(_GPIO + GPIO_RAM_WRITER) = _gpio_ram_writer;
-            }
+            API.RamWriter.RequestEnabled = !API.RamWriter.RequestEnabled;
         }
 
         private static void RW_Set_LogLength()
         {
-            uint value;
-            uint max_value;
+            uint min = 0;
+            uint max = (uint)Math.Pow(2, 5) - 1;
+            uint value = API.RamWriter.LogLength;
 
-            unsafe
-            {
-                _gpio_ram_writer = *(uint*)(_GPIO + GPIO_RAM_WRITER);
-            }
+            Program.PrintDialogInteger(ref value, min, max, "log length");
 
-            max_value = (uint)Math.Pow(2, 5) - 1;
-            value = (_gpio_ram_writer >> 2) & max_value;
-
-            Console.Clear();
-            Console.WriteLine($"Current: { value }, max: (0 <= value <= { max_value })");
-            Console.WriteLine($"Please enter the desired log length:");
-            Console.WriteLine();
-
-            while (!uint.TryParse(Console.ReadLine(), out value) || value > max_value)
-            {
-                //
-            }
-
-            _gpio_ram_writer &= ~(max_value << 2);
-            _gpio_ram_writer |= (value << 2);
-
-            unsafe
-            {
-                *(uint*)(_GPIO + GPIO_RAM_WRITER) = _gpio_ram_writer;
-            }
+            API.RamWriter.LogLength = value;
         }
 
         private static void RW_Set_LogThrottle()
         {
-            uint value;
-            uint max_value;
+            uint min = 1;
+            uint max = (uint)Math.Pow(2, 5) - 1;
+            uint value = API.RamWriter.LogThrottle;
 
-            unsafe
-            {
-                _gpio_ram_writer = *(uint*)(_GPIO + GPIO_RAM_WRITER);
-            }
+            Program.PrintDialogInteger(ref value, min, max, "log throttle");
 
-            max_value = (uint)Math.Pow(2, 5) - 1;
-            value = (_gpio_ram_writer >> 7) & max_value;
-
-            Console.Clear();
-            Console.WriteLine($"Current: { value }, max: (0 <= value <= { max_value })");
-            Console.WriteLine($"Please enter the desired log throttle:");
-            Console.WriteLine();
-
-            while (!uint.TryParse(Console.ReadLine(), out value) || value > max_value)
-            {
-                //
-            }
-
-            _gpio_ram_writer &= ~(max_value << 7);
-            _gpio_ram_writer |= (value << 7);
-
-            unsafe
-            {
-                *(uint*)(_GPIO + GPIO_RAM_WRITER) = _gpio_ram_writer;
-            }
+            API.RamWriter.LogThrottle = value;
         }
 
         private static void RW_Set_Address()
         {
-            unsafe
-            {
-                * (uint*)(_GPIO + GPIO_RAM_WRITER + 0x08) = DATA_BASE;
-            }
+            API.RamWriter.Address = API.DATA_BASE;
         }
 
         private static void RW_Get_ReadBuffer()
         {
             uint address;
-            uint data;
+
+            address = API.RamWriter.ReadBuffer;
 
             Console.Clear();
-
-            unsafe
-            {
-                address = *(uint*)(_GPIO + GPIO_RAM_WRITER + 0x08);
-            }
-
             Console.WriteLine($"0x{address,8:X}");
-            Console.WriteLine();
+            Console.ReadKey(true);
+        }  
 
-            unsafe
+        private static void RAM_Get_Data()
+        {
+            Span<int> dataSet;
+
+            dataSet = API.GetBuffer((int)(API.RamWriter.ReadBuffer - API.DATA_BASE));
+
+            foreach (int data in dataSet)
             {
-                data = *(uint*)(_DATA + 0x0000);
-                Console.WriteLine($"{data,8:X}");
-                data = *(uint*)(_DATA + 0x0050);
-                Console.WriteLine($"{data,8:X}");
-                data = *(uint*)(_DATA + 0x0100);
-                Console.WriteLine($"{data,8:X}");
-                data = *(uint*)(_DATA + 0x0150);
-                Console.WriteLine($"{data,8:X}");
-                data = *(uint*)(_DATA + 0x0200);
-                Console.WriteLine($"{data,8:X}");
-                data = *(uint*)(_DATA + 0x0250);
-                Console.WriteLine($"{data,8:X}");
+                Console.WriteLine($"{data,10}");
             }
 
             Console.ReadKey(true);
-        }     
+        }
     }
 }

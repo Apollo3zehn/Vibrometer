@@ -9,6 +9,7 @@ module sync_manager #
     // system signals
     input  wire                             SYS_aclk,
     input  wire                             SYS_aresetn,
+    output reg [3:0]                        combination,
     
     // SM signals
     input  wire                             SM_request,
@@ -42,7 +43,6 @@ module sync_manager #
     reg  [3:0]                              state_ready,        state_ready_next;
     reg  [3:0]                              state_lock,         state_lock_next;
     reg  [3:0]                              state_write,        state_write_next;
-    reg  [3:0]                              combination;
 
     reg  [MM_ADDR_WIDTH-1:0]                read_count,         read_count_next;
     reg  [MM_ADDR_WIDTH-1:0]                write_count,        write_count_next;
