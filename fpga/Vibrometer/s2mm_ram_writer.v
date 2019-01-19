@@ -52,6 +52,7 @@ module s2mm_ram_writer #
     reg                                 awvalid,                awvalid_next;
     reg                                 wvalid,                 wvalid_next;
     reg  [63:0]                         tdata_cache,            tdata_cache_next;
+    reg                                 aresetn_cache,          aresetn_cache_next;
 
     wire                                full;              
     wire                                empty;
@@ -73,16 +74,18 @@ module s2mm_ram_writer #
     // Note: "writing" is "RDEN" and "reading" is "WREN" for FIFO!
     // TODO: clear register during reset
 
-    // TODO: RST must be held high for at least three RDCLK clock cycles, and RDEN must be low for four clock cycles before RST becomes active high, and RDEN remains low during this reset cycle.
+    // TODO: RST must be held high for at least five RDCLK clock cycles, ...
+    // DONE: ... and RDEN must be low before RST becomes active high, and RDEN remains low during this reset cycle.
     // DONE: The read operation is also synchronous, presenting the next data word at DO whenever the RDEN is active one setup time before the rising RDCLK edge.
     // DONE: RDEN must be held low during reset cycle
     // DONE: RDEN must be low for at least two RDCLK clock cycles after RST deasserted.
-    assign writing                      = wvalid        & M_AXI_wready  & count_rst > 2;
-    // TODO: RST must be held high for at least three WRCLK clock cycles, and WREN must be low for four clock cycles before RST becomes active high, and WREN remains low during this reset cycle.
+    assign writing                      = wvalid        & M_AXI_wready  & aresetn & aresetn_cache & count_rst > 2;
+    // TODO: RST must be held high for at least five WRCLK clock cycles ...
+    // DONE: ... and WREN must be low before RST becomes active high, and WREN remains low during this reset cycle.
     // DONE: The write operation is synchronous, writing the data word available at DI into the FIFO whenever WREN is active one setup time before the rising WRCLK edge.
     // DONE: WREN must be held low during reset cycle
     // DONE: WREN must be low for at least two WRCLK clock cycles after RST deasserted.
-    assign reading                      = S_AXIS_tvalid & S_AXIS_tready & count_rst > 2;
+    assign reading                      = S_AXIS_tvalid & S_AXIS_tready & aresetn & aresetn_cache & count_rst > 2;
 
     assign wlast                        = &count;
     assign tdata                        = {{(64 - AXIS_TDATA_WIDTH - ADDR_WIDTH){1'b0}}, S_AXIS_tdata, address};
@@ -111,7 +114,7 @@ module s2mm_ram_writer #
         .DATA_WIDTH(72),                                                                // 512K depth
         .FIFO_MODE("FIFO36_72")
     ) fifo_0 (
-        .RST(~aresetn),
+        .RST(~aresetn_cache),
         .DI(tdata_cache),
         .DO(wdata),
         .WREN(reading),                                                                 // "reading" means that data are read from module input stream (i.e FIFO is allowed to write)
@@ -131,6 +134,7 @@ module s2mm_ram_writer #
             awvalid         <= 0;
             wvalid          <= 0;
             tdata_cache     <= 0;
+            aresetn_cache   <= 0;
         end
         else begin
             count           <= count_next;
@@ -138,6 +142,7 @@ module s2mm_ram_writer #
             awvalid         <= awvalid_next;
             wvalid          <= wvalid_next;
             tdata_cache     <= tdata_cache_next;
+            aresetn_cache   <= aresetn_cache_next;
         end
     end
 
@@ -148,7 +153,8 @@ module s2mm_ram_writer #
         wvalid_next         = wvalid;
 
         // the following assignments delay output by one clock cycle, which helps handling the FIFO
-        tdata_cache_next    = tdata;          
+        tdata_cache_next    = tdata;
+        aresetn_cache_next  = aresetn;
 
         // FIFO
         if (count_rst <= 2)

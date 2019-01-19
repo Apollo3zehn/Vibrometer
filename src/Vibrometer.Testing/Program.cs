@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Mono.Unix.Native;
+using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,8 +9,23 @@ namespace Vibrometer.Testing
 {
     class Program
     {
+        //[DllImport("c", CharSet = CharSet.Auto)]
+        //static unsafe extern void* dma_alloc_coherent(void* dev, uint size, uint* dma_addr, uint flag);
+
         static void Main(string[] args)
         {
+            //Console.WriteLine("Hello World!");
+            //Console.ReadKey(true);
+
+            //unsafe
+            //{
+            //    uint yellow;
+            //    var res = dma_alloc_coherent(null, 10, &yellow, 0);
+            //    uint a = *(uint*)res;
+
+            //}
+
+            //return;
             bool exit = false;
 
             API.Init();
@@ -406,9 +423,10 @@ namespace Vibrometer.Testing
 
                     API.RamWriter.RequestEnabled = true;
                     data = API.Ram.GetData((int)(API.RamWriter.ReadBuffer - API.DATA_BASE));
+                    var buffer = API.RamWriter.ReadBuffer;
                     API.RamWriter.RequestEnabled = false;
 
-                    Console.WriteLine($"{data,10}");
+                    Console.WriteLine($"{API.RamWriter.ReadBuffer,8:X} - {data,10}");
                     Thread.Sleep(100);
                 }
             }, cts.Token);

@@ -12,13 +12,13 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="389000001fs"></ZoomEndTime>
-      <Cursor1Time time="60000000fs"></Cursor1Time>
+      <ZoomStartTime time="364600000fs"></ZoomStartTime>
+      <ZoomEndTime time="394100001fs"></ZoomEndTime>
+      <Cursor1Time time="113925000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="139"></NameColumnWidth>
-      <ValueColumnWidth column_width="58"></ValueColumnWidth>
+      <NameColumnWidth column_width="220"></NameColumnWidth>
+      <ValueColumnWidth column_width="165"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="7" />
    <wvobject fp_name="/ram_writer_tb/aclk" type="logic">
@@ -49,9 +49,9 @@
          <obj_property name="ObjectShortName">request[0:0]</obj_property>
          <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/GPIO" type="logic">
-         <obj_property name="ElementShortName">GPIO</obj_property>
-         <obj_property name="ObjectShortName">GPIO</obj_property>
+      <wvobject fp_name="/ram_writer_tb/rwriter/GPIO" type="array">
+         <obj_property name="ElementShortName">GPIO[31:0]</obj_property>
+         <obj_property name="ObjectShortName">GPIO[31:0]</obj_property>
       </wvobject>
    </wvobject>
    <wvobject fp_name="group2794" type="group">
@@ -141,6 +141,7 @@
    <wvobject fp_name="group93" type="group">
       <obj_property name="label">s2mm_ram_writer</obj_property>
       <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
       <wvobject fp_name="/ram_writer_tb/aclk" type="logic">
          <obj_property name="ElementShortName">aclk</obj_property>
          <obj_property name="ObjectShortName">aclk</obj_property>
@@ -151,6 +152,10 @@
          <obj_property name="ElementShortName">aresetn</obj_property>
          <obj_property name="ObjectShortName">aresetn</obj_property>
       </wvobject>
+      <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/inst/aresetn_cache" type="logic">
+         <obj_property name="ElementShortName">aresetn_cache</obj_property>
+         <obj_property name="ObjectShortName">aresetn_cache</obj_property>
+      </wvobject>
       <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/address" type="array">
          <obj_property name="ElementShortName">address[31:0]</obj_property>
          <obj_property name="ObjectShortName">address[31:0]</obj_property>
@@ -159,11 +164,6 @@
       <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/inst/M_AXI_awaddr" type="array">
          <obj_property name="ElementShortName">M_AXI_awaddr[31:0]</obj_property>
          <obj_property name="ObjectShortName">M_AXI_awaddr[31:0]</obj_property>
-         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/inst/M_AXI_awlen" type="array">
-         <obj_property name="ElementShortName">M_AXI_awlen[7:0]</obj_property>
-         <obj_property name="ObjectShortName">M_AXI_awlen[7:0]</obj_property>
          <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
       <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/inst/M_AXI_wdata" type="array">
@@ -180,6 +180,10 @@
          <obj_property name="ElementShortName">S_AXIS_tdata[31:0]</obj_property>
          <obj_property name="ObjectShortName">S_AXIS_tdata[31:0]</obj_property>
          <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/inst/tdata_cache" type="array">
+         <obj_property name="ElementShortName">tdata_cache[63:0]</obj_property>
+         <obj_property name="ObjectShortName">tdata_cache[63:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/inst/full" type="logic">
          <obj_property name="ElementShortName">full</obj_property>
@@ -219,11 +223,6 @@
          <obj_property name="ElementShortName">wrcount[12:0]</obj_property>
          <obj_property name="ObjectShortName">wrcount[12:0]</obj_property>
          <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/inst/tdata_cache" type="array">
-         <obj_property name="ElementShortName">tdata_cache[63:0]</obj_property>
-         <obj_property name="ObjectShortName">tdata_cache[63:0]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
       </wvobject>
    </wvobject>
 </wave_config>
