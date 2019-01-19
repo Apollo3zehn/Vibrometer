@@ -9,7 +9,7 @@ module sync_manager #
     // system signals
     input  wire                             aclk,
     input  wire                             aresetn,
-    output reg [3:0]                        combination,
+    output wire [3:0]                       combination,
     
     // SM signals
     input  wire                             SM_request,
@@ -53,6 +53,7 @@ module sync_manager #
     assign SM_read_buffer                   = SM_base_address + length * buffer_to_factor(state_read)  * DATA_WIDTH / 8;
     assign SM_write_buffer                  = SM_base_address + length * buffer_to_factor(state_write) * DATA_WIDTH / 8 + read_count * DATA_WIDTH / 8;
     assign length                           = 1 << SM_log_length;
+    assign combination                      = state_read | state_ready | state_lock | state_write;
 
     always @(posedge aclk) begin
         if (~aresetn) begin
@@ -63,8 +64,7 @@ module sync_manager #
             read_count      <= 0;
             write_count     <= 0;
             lock            <= 0;
-        end
-        else begin
+        end else begin
             state_read      <= state_read_next;
             state_ready     <= state_ready_next;
             state_lock      <= state_lock_next;
@@ -99,7 +99,6 @@ module sync_manager #
         // if read_count has reached the maximum, assign a new buffer
         if (read_count_next >= length) begin
             read_count_next     = 0;
-            combination         = state_read | state_ready | state_lock | state_write;
 
             if (combination[0] == 1'b0)
                 state_write_next = buffer_1;
@@ -119,7 +118,6 @@ module sync_manager #
         // if write_count has reached the maximum, assign new buffers
         if (write_count >= length - 1) begin
             write_count_next    = 0;
-
             state_lock_next     = state_write;
             state_ready_next    = state_lock;
         end

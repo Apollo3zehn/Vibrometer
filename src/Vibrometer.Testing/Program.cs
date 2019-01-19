@@ -158,6 +158,10 @@ namespace Vibrometer.Testing
                     case ConsoleKey.F:
                         API.Clear();
                         break;
+                    case ConsoleKey.Z:
+                        Program.RW_Toggle_Enable();
+                        Program.RW_Toggle_Enable();
+                        break;
                     case ConsoleKey.Escape:
                         exit = true;
                         break;
@@ -359,6 +363,12 @@ namespace Vibrometer.Testing
             uint min = 0;
             uint max = (uint)Math.Pow(2, 5) - 1;
             uint value = API.RamWriter.LogLength;
+
+            if (API.RamWriter.Enabled)
+            {
+                Console.Clear();
+                Console.WriteLine();
+            }
 
             Program.PrintDialogInteger(ref value, min, max, "log length");
 

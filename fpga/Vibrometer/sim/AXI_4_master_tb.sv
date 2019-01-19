@@ -14,7 +14,6 @@ module axi_4_master_tb();
         .aresetn(aresetn)
     );
     
-    // Declare agent
     axi_4_axi_vip_0_0_slv_mem_t      slv_mem_agent;
     
     initial begin
@@ -25,14 +24,18 @@ module axi_4_master_tb();
     end
 
     initial begin
-        #150ns;
-        aresetn                     = 1;
+        repeat (25) @(posedge aclk);
+            aresetn <= 1;
+        
+        repeat (100) @(posedge aclk);
+            aresetn <= 0;
+        
+        repeat (25) @(posedge aclk);
+            aresetn <= 1;
     end
 
-    always begin
-        #4ns;
-        aclk                        = !aclk;
-    end
+    always 
+        #4 aclk = ~aclk;
 
     initial begin
         #2000ns;

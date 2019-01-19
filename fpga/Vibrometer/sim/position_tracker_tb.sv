@@ -5,14 +5,14 @@ module position_tracker_tb #
     parameter integer           AXIS_TDATA_WIDTH    = 32
 );
 
-    reg                         aclk;
-    reg                         aresetn;
-    reg [AXIS_TDATA_WIDTH-1:0]  FC_lower_treshold;
-    reg [AXIS_TDATA_WIDTH-1:0]  FC_upper_treshold;
-    reg                         S_AXIS_tvalid;
-    reg [AXIS_TDATA_WIDTH-1:0]  S_AXIS_tdata;
+    reg                         aclk                = 0;
+    reg                         aresetn             = 0;
+    reg [AXIS_TDATA_WIDTH-1:0]  FC_lower_treshold   = -10;
+    reg [AXIS_TDATA_WIDTH-1:0]  FC_upper_treshold   = 10;
+    reg                         S_AXIS_tvalid       = 1;
+    reg [AXIS_TDATA_WIDTH-1:0]  S_AXIS_tdata        = 0;
 
-    integer i                   = 0;
+    integer i                                       = 0;
 
     position_tracker ptracker (
         .SYS_aclk(SYS_aclk),
@@ -24,40 +24,44 @@ module position_tracker_tb #
     );
      
     initial begin
-        aclk = 0;
-        aresetn = 0;
-        FC_lower_treshold = -10;
-        FC_upper_treshold = 10;
-        S_AXIS_tvalid = 1'b0;
 
-        S_AXIS_tdata = 0;
-        aresetn = 0;
-        #8;
-                    
-        S_AXIS_tdata = -5;
-        aresetn = 1;
-        #8;
-
-        for (i=0; i<6; i=i+1) begin
-            #8; S_AXIS_tdata = 10; 
-            #8; S_AXIS_tdata = 5;
-            #8; S_AXIS_tdata = 0;
-            #8; S_AXIS_tdata = -5;
-            #8; S_AXIS_tdata = -10;
-            #8; S_AXIS_tdata = -15;
-            #8; S_AXIS_tdata = -10;
-            #8; S_AXIS_tdata = -5;
-            #8; S_AXIS_tdata = 0;
-            #8; S_AXIS_tdata = 5;
-            #8; S_AXIS_tdata = 10;
-            #8; S_AXIS_tdata = 15;
-        end
+        repeat (1) @(posedge aclk);                     
+            S_AXIS_tdata        = -5;
+            aresetn             = 1;
+        
+        repeat (1) @(posedge aclk); 
+            for (i=0; i<6; i=i+1) begin
+                repeat (1) @(posedge aclk); 
+                    S_AXIS_tdata = 10; 
+                repeat (1) @(posedge aclk); 
+                    S_AXIS_tdata = 5;
+                repeat (1) @(posedge aclk); 
+                    S_AXIS_tdata = 0;
+                repeat (1) @(posedge aclk); 
+                    S_AXIS_tdata = -5;
+                repeat (1) @(posedge aclk); 
+                    S_AXIS_tdata = -10;
+                repeat (1) @(posedge aclk); 
+                    S_AXIS_tdata = -15;
+                repeat (1) @(posedge aclk); 
+                    S_AXIS_tdata = -10;
+                repeat (1) @(posedge aclk); 
+                    S_AXIS_tdata = -5;
+                repeat (1) @(posedge aclk); 
+                    S_AXIS_tdata = 0;
+                repeat (1) @(posedge aclk); 
+                    S_AXIS_tdata = 5;
+                repeat (1) @(posedge aclk); 
+                    S_AXIS_tdata = 10;
+                repeat (1) @(posedge aclk); 
+                    S_AXIS_tdata = 15;
+            end
 
     end
 
     always 
-        #4 aclk = !SYS_aclk;
-        
+        #4 aclk = ~aclk;
+
     initial begin
         #400
         $finish;

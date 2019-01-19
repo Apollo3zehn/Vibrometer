@@ -55,8 +55,7 @@ module extremum_finder #
             tmp_max         <= {1'b1, {(AXIS_TDATA_WIDTH/2-1){1'b0}}}; // max. negative number
             count           <= 0;
             state           <= idle;
-        end
-        else begin
+        end else begin
             min             <= min_next;
             max             <= max_next;
             tmp_min         <= tmp_min_next;
@@ -84,7 +83,6 @@ module extremum_finder #
             end
                 
             measure: begin
-            
                 if ($signed(signal_a) < $signed(tmp_min))
                     tmp_min_next    = $signed(signal_a);
                     
@@ -101,7 +99,7 @@ module extremum_finder #
                 count_next = count + 1;
             end
                              
-        endcase       
+        endcase
     end
 
 endmodule

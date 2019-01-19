@@ -2,20 +2,20 @@
 
 module signal_generator_tb();
 
-    reg                         aclk;
-    reg [31:0]                  GPIO_sg;
+    reg         aclk    = 0;
+    reg [31:0]  GPIO_sg = 3000000;
  
     Signal_Generator_imp_H83IIY sgenerator (
         .GPIO_sg(GPIO_sg),
         .aclk(SYS_aclk)
     );
      
+    always 
+        #4 aclk = !aclk;
+        
     initial begin
-    
-        aclk = 0;
-        GPIO_sg = 3000000;
-
-        forever #8 aclk = ~SYS_aclk;
+        #1000
+        $finish;
     end
 
 endmodule

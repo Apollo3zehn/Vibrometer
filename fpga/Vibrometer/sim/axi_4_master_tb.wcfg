@@ -14,13 +14,13 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="155100960fs"></ZoomStartTime>
-      <ZoomEndTime time="958600961fs"></ZoomEndTime>
+      <ZoomStartTime time="819340000fs"></ZoomStartTime>
+      <ZoomEndTime time="1203385456fs"></ZoomEndTime>
       <Cursor1Time time="468101000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="195"></NameColumnWidth>
-      <ValueColumnWidth column_width="74"></ValueColumnWidth>
+      <ValueColumnWidth column_width="66"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="4" />
    <wvobject fp_name="/axi_4_master_tb/aclk" type="logic">
@@ -125,6 +125,12 @@
       <obj_property name="label">ram_writer</obj_property>
       <obj_property name="DisplayName">label</obj_property>
       <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/axi_4_master_tb/DUT/axi_4_i/s2mm_ram_writer_0/inst/aclk" type="logic">
+         <obj_property name="ElementShortName">aclk</obj_property>
+         <obj_property name="ObjectShortName">aclk</obj_property>
+         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+      </wvobject>
       <wvobject fp_name="/axi_4_master_tb/DUT/axi_4_i/s2mm_ram_writer_0/inst/aresetn" type="logic">
          <obj_property name="ElementShortName">aresetn</obj_property>
          <obj_property name="ObjectShortName">aresetn</obj_property>
@@ -137,72 +143,6 @@
          <obj_property name="ElementShortName">reading</obj_property>
          <obj_property name="ObjectShortName">reading</obj_property>
       </wvobject>
-      <wvobject fp_name="/axi_4_master_tb/DUT/axi_4_i/s2mm_ram_writer_0/inst/S_AXIS_tready" type="logic">
-         <obj_property name="ElementShortName">S_AXIS_tready</obj_property>
-         <obj_property name="ObjectShortName">S_AXIS_tready</obj_property>
-      </wvobject>
-      <wvobject fp_name="/axi_4_master_tb/DUT/axi_4_i/s2mm_ram_writer_0/inst/S_AXIS_tdata" type="array">
-         <obj_property name="ElementShortName">S_AXIS_tdata[31:0]</obj_property>
-         <obj_property name="ObjectShortName">S_AXIS_tdata[31:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/axi_4_master_tb/DUT/axi_4_i/s2mm_ram_writer_0/inst/S_AXIS_tvalid" type="logic">
-         <obj_property name="ElementShortName">S_AXIS_tvalid</obj_property>
-         <obj_property name="ObjectShortName">S_AXIS_tvalid</obj_property>
-      </wvobject>
-      <wvobject fp_name="/axi_4_master_tb/DUT/axi_4_i/s2mm_ram_writer_0/inst/M_AXI_awid" type="array">
-         <obj_property name="ElementShortName">M_AXI_awid[5:0]</obj_property>
-         <obj_property name="ObjectShortName">M_AXI_awid[5:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/axi_4_master_tb/DUT/axi_4_i/s2mm_ram_writer_0/inst/M_AXI_awaddr" type="array">
-         <obj_property name="ElementShortName">M_AXI_awaddr[31:0]</obj_property>
-         <obj_property name="ObjectShortName">M_AXI_awaddr[31:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/axi_4_master_tb/DUT/axi_4_i/s2mm_ram_writer_0/inst/M_AXI_awlen" type="array">
-         <obj_property name="ElementShortName">M_AXI_awlen[7:0]</obj_property>
-         <obj_property name="ObjectShortName">M_AXI_awlen[7:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/axi_4_master_tb/DUT/axi_4_i/s2mm_ram_writer_0/inst/M_AXI_awsize" type="array">
-         <obj_property name="ElementShortName">M_AXI_awsize[2:0]</obj_property>
-         <obj_property name="ObjectShortName">M_AXI_awsize[2:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/axi_4_master_tb/DUT/axi_4_i/s2mm_ram_writer_0/inst/M_AXI_awburst" type="array">
-         <obj_property name="ElementShortName">M_AXI_awburst[1:0]</obj_property>
-         <obj_property name="ObjectShortName">M_AXI_awburst[1:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/axi_4_master_tb/DUT/axi_4_i/s2mm_ram_writer_0/inst/M_AXI_awcache" type="array">
-         <obj_property name="ElementShortName">M_AXI_awcache[3:0]</obj_property>
-         <obj_property name="ObjectShortName">M_AXI_awcache[3:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/axi_4_master_tb/DUT/axi_4_i/s2mm_ram_writer_0/inst/M_AXI_awprot" type="array">
-         <obj_property name="ElementShortName">M_AXI_awprot[2:0]</obj_property>
-         <obj_property name="ObjectShortName">M_AXI_awprot[2:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/axi_4_master_tb/DUT/axi_4_i/s2mm_ram_writer_0/inst/M_AXI_awuser" type="array">
-         <obj_property name="ElementShortName">M_AXI_awuser[3:0]</obj_property>
-         <obj_property name="ObjectShortName">M_AXI_awuser[3:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/axi_4_master_tb/DUT/axi_4_i/s2mm_ram_writer_0/inst/M_AXI_awvalid" type="logic">
-         <obj_property name="ElementShortName">M_AXI_awvalid</obj_property>
-         <obj_property name="ObjectShortName">M_AXI_awvalid</obj_property>
-      </wvobject>
-      <wvobject fp_name="/axi_4_master_tb/DUT/axi_4_i/s2mm_ram_writer_0/inst/M_AXI_awready" type="logic">
-         <obj_property name="ElementShortName">M_AXI_awready</obj_property>
-         <obj_property name="ObjectShortName">M_AXI_awready</obj_property>
-      </wvobject>
-      <wvobject fp_name="/axi_4_master_tb/DUT/axi_4_i/s2mm_ram_writer_0/inst/M_AXI_wdata" type="array">
-         <obj_property name="ElementShortName">M_AXI_wdata[31:0]</obj_property>
-         <obj_property name="ObjectShortName">M_AXI_wdata[31:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/axi_4_master_tb/DUT/axi_4_i/s2mm_ram_writer_0/inst/M_AXI_wstrb" type="array">
-         <obj_property name="ElementShortName">M_AXI_wstrb[3:0]</obj_property>
-         <obj_property name="ObjectShortName">M_AXI_wstrb[3:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/axi_4_master_tb/DUT/axi_4_i/s2mm_ram_writer_0/inst/aclk" type="logic">
-         <obj_property name="ElementShortName">aclk</obj_property>
-         <obj_property name="ObjectShortName">aclk</obj_property>
-         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
-         <obj_property name="UseCustomSignalColor">true</obj_property>
-      </wvobject>
       <wvobject fp_name="/axi_4_master_tb/DUT/axi_4_i/s2mm_ram_writer_0/inst/writing" type="logic">
          <obj_property name="ElementShortName">writing</obj_property>
          <obj_property name="ObjectShortName">writing</obj_property>
@@ -214,30 +154,6 @@
          <obj_property name="ObjectShortName">wlast</obj_property>
          <obj_property name="CustomSignalColor">#00FFFF</obj_property>
          <obj_property name="UseCustomSignalColor">true</obj_property>
-      </wvobject>
-      <wvobject fp_name="/axi_4_master_tb/DUT/axi_4_i/s2mm_ram_writer_0/inst/M_AXI_wlast" type="logic">
-         <obj_property name="ElementShortName">M_AXI_wlast</obj_property>
-         <obj_property name="ObjectShortName">M_AXI_wlast</obj_property>
-      </wvobject>
-      <wvobject fp_name="/axi_4_master_tb/DUT/axi_4_i/s2mm_ram_writer_0/inst/M_AXI_wvalid" type="logic">
-         <obj_property name="ElementShortName">M_AXI_wvalid</obj_property>
-         <obj_property name="ObjectShortName">M_AXI_wvalid</obj_property>
-      </wvobject>
-      <wvobject fp_name="/axi_4_master_tb/DUT/axi_4_i/s2mm_ram_writer_0/inst/M_AXI_wready" type="logic">
-         <obj_property name="ElementShortName">M_AXI_wready</obj_property>
-         <obj_property name="ObjectShortName">M_AXI_wready</obj_property>
-      </wvobject>
-      <wvobject fp_name="/axi_4_master_tb/DUT/axi_4_i/s2mm_ram_writer_0/inst/M_AXI_bresp" type="array">
-         <obj_property name="ElementShortName">M_AXI_bresp[1:0]</obj_property>
-         <obj_property name="ObjectShortName">M_AXI_bresp[1:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/axi_4_master_tb/DUT/axi_4_i/s2mm_ram_writer_0/inst/M_AXI_bvalid" type="logic">
-         <obj_property name="ElementShortName">M_AXI_bvalid</obj_property>
-         <obj_property name="ObjectShortName">M_AXI_bvalid</obj_property>
-      </wvobject>
-      <wvobject fp_name="/axi_4_master_tb/DUT/axi_4_i/s2mm_ram_writer_0/inst/M_AXI_bready" type="logic">
-         <obj_property name="ElementShortName">M_AXI_bready</obj_property>
-         <obj_property name="ObjectShortName">M_AXI_bready</obj_property>
       </wvobject>
       <wvobject fp_name="/axi_4_master_tb/DUT/axi_4_i/s2mm_ram_writer_0/inst/count" type="array">
          <obj_property name="ElementShortName">count[3:0]</obj_property>

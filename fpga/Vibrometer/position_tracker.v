@@ -46,8 +46,7 @@ module position_tracker #
         if (~aresetn) begin
             position        <= 0;
             state           <= idle;
-        end
-        else begin
+        end else begin
             position        <= position_next;
             state           <= state_next;
         end
@@ -71,7 +70,6 @@ module position_tracker #
             
             high: begin
                 if ($signed(signal_a) < $signed(FC_lower_threshold)) begin
-                
                     center = (($signed(FC_upper_threshold) + $signed(FC_lower_threshold)) >>> 1);
                 
                     if ($signed(signal_b) > $signed(center))

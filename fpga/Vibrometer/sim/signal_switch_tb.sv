@@ -2,39 +2,32 @@
 
 module signal_switch_tb #
 (
-     parameter integer              DATA_WIDTH      = 16
+     parameter integer      DATA_WIDTH  = 16
 );
 
-    reg                             aclk;
-    reg                             switch;
-    reg  [DATA_WIDTH-1:0]           a;
-    reg  [DATA_WIDTH-1:0]           b;
+    reg                     aclk        = 0;
+    reg                     switch      = 0;
+    reg  [DATA_WIDTH-1:0]   a           = 14;
+    reg  [DATA_WIDTH-1:0]   b           = -29;
     
     signal_switch sswitch (
-        .SYS_aclk(SYS_aclk),
+        .aclk(aclk),
         .switch(switch),
         .a(a),
         .b(b)
     );
      
-    initial begin
-        aclk = 0;
-        switch = 0;
-        a = 14;
-        b = -29;
-    
-        #24;
-
-        switch = 1;
+    initial begin   
+        repeat (3) @(posedge aclk);
+            switch  = 1;
         
-        #24;
-        
-        a = 7;
-        b = 16;
+        repeat (3) @(posedge aclk);
+            a       = 7;
+            b       = 16;
     end
 
     always 
-        #4 aclk = !SYS_aclk;
+        #4 aclk = ~aclk;
         
     initial begin
         #200

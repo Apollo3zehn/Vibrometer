@@ -38,8 +38,7 @@ module axis_throttler #
         if (~aresetn) begin
             count           <= 0;
             tvalid          <= 0;
-        end
-        else begin
+        end else begin
             count           <= count_next;
             tvalid          <= tvalid_next;
         end
