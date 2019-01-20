@@ -1,7 +1,5 @@
-﻿using Mono.Unix.Native;
-using System;
+﻿using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -39,7 +37,25 @@ namespace Vibrometer.Testing
                 Console.WriteLine();
 
                 Console.WriteLine("General");
-                Console.WriteLine($"[0] - get position");
+
+                switch (API.General.Source)
+                {
+                    case Source.Raw:
+                        Program.WriteColored($"[0] - set source (source: raw)\n");
+                        break;
+                    case Source.Position:
+                        Program.WriteColored($"[0] - set source (source: position)\n");
+                        break;
+                    case Source.Filter:
+                        Program.WriteColored($"[0] - set source (source: filter)\n");
+                        break;
+                    case Source.FourierTransform:
+                        Program.WriteColored($"[0] - set source (source: Fourier)\n");
+                        break;
+                    default:
+                        Console.WriteLine($"[0] - set source (source: disabled)");
+                        break;
+                }
 
                 Console.WriteLine();
 
@@ -55,40 +71,37 @@ namespace Vibrometer.Testing
                 else
                     Console.Write($"[2] - enable switch\n");
 
-                Console.WriteLine($"[3] - get raw");
-
                 Console.WriteLine();
 
                 Console.WriteLine("Position Tracker");
-                Console.WriteLine($"[4] - set log count extremum");
-                Console.WriteLine($"[5] - set shift extremum");
-                Console.WriteLine($"[6] - get threshold");
+                Console.WriteLine($"[3] - set log count extremum");
+                Console.WriteLine($"[4] - set shift extremum");
 
                 Console.WriteLine();
 
                 Console.WriteLine("RAM Writer");
 
                 if (API.RamWriter.Enabled)
-                    Program.WriteColored($"[7] - disable RAM writer\n");
+                    Program.WriteColored($"[5] - disable RAM writer\n");
                 else
-                    Console.Write($"[7] - enable RAM writer\n");
+                    Console.Write($"[5] - enable RAM writer\n");
 
                 if (API.RamWriter.RequestEnabled)
-                    Program.WriteColored($"[8] - disable buffer request\n");
+                    Program.WriteColored($"[6] - disable buffer request\n");
                 else
-                    Console.Write($"[8] - enable buffer request\n");
+                    Console.Write($"[6] - enable buffer request\n");
 
-                Console.WriteLine($"[9] - set log length");
-                Console.WriteLine($"[A] - set log throttle");
-                Console.WriteLine($"[B] - set address");
-                Console.WriteLine($"[C] - get read buffer");
+                Console.WriteLine($"[7] - set log length");
+                Console.WriteLine($"[8] - set log throttle");
+                Console.WriteLine($"[9] - set address");
+                Console.WriteLine($"[A] - get read buffer");
 
                 Console.WriteLine();
 
                 Console.WriteLine("RAM");
-                Console.WriteLine($"[D] - get data ({Math.Min(Math.Pow(2, API.RamWriter.LogLength), 1024)} values)");
-                Console.WriteLine($"[E] - get stream");
-                Console.WriteLine($"[F] - clear");
+                Console.WriteLine($"[B] - get data ({Math.Min(Math.Pow(2, API.RamWriter.LogLength), 1024)} values)");
+                Console.WriteLine($"[C] - get stream");
+                Console.WriteLine($"[D] - clear");
 
                 var keyInfo = Console.ReadKey(true);
 
@@ -102,7 +115,7 @@ namespace Vibrometer.Testing
                         break;
                     case ConsoleKey.NumPad0:
                     case ConsoleKey.D0:
-                        Program.GE_Get_Position();
+                        Program.GE_Set_Source();
                         break;
                     case ConsoleKey.NumPad1:
                     case ConsoleKey.D1:
@@ -114,53 +127,43 @@ namespace Vibrometer.Testing
                         break;
                     case ConsoleKey.NumPad3:
                     case ConsoleKey.D3:
-                        Program.DA_Get_Raw();
+                        Program.PT_Set_LogCountExtremum();
                         break;
                     case ConsoleKey.NumPad4:
                     case ConsoleKey.D4:
-                        Program.PT_Set_LogCountExtremum();
+                        Program.PT_Set_ShiftExtremum();
                         break;
                     case ConsoleKey.NumPad5:
                     case ConsoleKey.D5:
-                        Program.PT_Set_ShiftExtremum();
+                        Program.RW_Toggle_Enable();
                         break;
                     case ConsoleKey.NumPad6:
                     case ConsoleKey.D6:
-                        Program.PT_Get_Threshold();
+                        Program.RW_Toggle_RequestEnable();
                         break;
                     case ConsoleKey.NumPad7:
                     case ConsoleKey.D7:
-                        Program.RW_Toggle_Enable();
+                        Program.RW_Set_LogLength();
                         break;
                     case ConsoleKey.NumPad8:
                     case ConsoleKey.D8:
-                        Program.RW_Toggle_RequestEnable();
+                        Program.RW_Set_LogThrottle();
                         break;
                     case ConsoleKey.NumPad9:
                     case ConsoleKey.D9:
-                        Program.RW_Set_LogLength();
-                        break;
-                    case ConsoleKey.A:
-                        Program.RW_Set_LogThrottle();
-                        break;
-                    case ConsoleKey.B:
                         Program.RW_Set_Address();
                         break;
-                    case ConsoleKey.C:
+                    case ConsoleKey.A:
                         Program.RW_Get_ReadBuffer();
                         break;
-                    case ConsoleKey.D:
+                    case ConsoleKey.B:
                         Program.RAM_Get_Data();
                         break;
-                    case ConsoleKey.E:
+                    case ConsoleKey.C:
                         Program.RAM_Get_Stream();
                         break;
-                    case ConsoleKey.F:
-                        API.Clear();
-                        break;
-                    case ConsoleKey.Z:
-                        Program.RW_Toggle_Enable();
-                        Program.RW_Toggle_Enable();
+                    case ConsoleKey.E:
+                        API.ClearRam();
                         break;
                     case ConsoleKey.Escape:
                         exit = true;
@@ -230,30 +233,15 @@ namespace Vibrometer.Testing
         }
 
         // API
-        private static void GE_Get_Position()
+        private static void GE_Set_Source()
         {
-            Task task;
-            int position;
-            CancellationTokenSource cts;
+            uint min = 0;
+            uint max = 4;
+            uint value = (uint)API.General.Source;
 
-            cts = new CancellationTokenSource();
+            Program.PrintDialogInteger(ref value, min, max, "source");
 
-            Console.Clear();
-
-            task = Task.Run(() =>
-            {
-                while (!cts.IsCancellationRequested)
-                {
-                    position = API.General.Position;
-
-                    Console.WriteLine($"{position,10}");
-                    Thread.Sleep(100);
-                }
-            }, cts.Token);
-
-            Console.ReadKey(true);
-            cts.Cancel();
-            task.Wait();
+            API.General.Source = (Source)value;
         }
 
         private static void SG_Set_Phase()
@@ -270,33 +258,6 @@ namespace Vibrometer.Testing
         private static void DA_Toggle_Switch()
         {
             API.DataAcquisition.SwitchEnabled = !API.DataAcquisition.SwitchEnabled;
-        }
-
-        private static void DA_Get_Raw()
-        {
-            short a;
-            short b;
-            Task task;
-            CancellationTokenSource cts;
-
-            cts = new CancellationTokenSource();
-
-            Console.Clear();
-
-            task = Task.Run(() =>
-            {
-                while (!cts.IsCancellationRequested)
-                {
-                    (a, b) = API.DataAcquisition.Raw;
-
-                    Console.WriteLine($"a: {a,10}, b: {b,10}");
-                    Thread.Sleep(100);
-                }
-            }, cts.Token);
-
-            Console.ReadKey(true);
-            cts.Cancel();
-            task.Wait();
         }
 
         private static void PT_Set_LogCountExtremum()
@@ -429,14 +390,37 @@ namespace Vibrometer.Testing
             {
                 while (!cts.IsCancellationRequested)
                 {
-                    int data;
+                    short a;
+                    short b;
+                    uint value;
 
                     API.RamWriter.RequestEnabled = true;
-                    data = API.Ram.GetData((int)(API.RamWriter.ReadBuffer - API.DATA_BASE));
-                    var buffer = API.RamWriter.ReadBuffer;
+
+                    value = API.Ram.GetData((int)(API.RamWriter.ReadBuffer - API.DATA_BASE));
+                    a = unchecked((short)(value & ~0xFFFF0000));
+                    b = unchecked((short)(value >> 16));
+
                     API.RamWriter.RequestEnabled = false;
 
-                    Console.WriteLine($"{API.RamWriter.ReadBuffer,8:X} - {data,10}");
+                    switch (API.General.Source)
+                    {
+                        case Source.Raw:
+                            Console.WriteLine($"Buffer: {API.RamWriter.ReadBuffer,8:X} | Raw data: {b,10} (b), {a,10} (a)");
+                            break;
+                        case Source.Position:
+                            Console.WriteLine($"Buffer: {API.RamWriter.ReadBuffer,8:X} | Position: {value,10}");
+                            break;
+                        case Source.Filter:
+                            Console.WriteLine($"Buffer: {API.RamWriter.ReadBuffer,8:X} | Filter: {value,10}");
+                            break;
+                        case Source.FourierTransform:
+                            Console.WriteLine($"Buffer: {API.RamWriter.ReadBuffer,8:X} | Fourier: {value,10}");
+                            break;
+                        default:
+                            Console.WriteLine($"Buffer: {API.RamWriter.ReadBuffer,8:X} | (undefined): {value,10}");
+                            break;
+                    }
+
                     Thread.Sleep(100);
                 }
             }, cts.Token);

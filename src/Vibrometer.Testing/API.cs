@@ -9,6 +9,8 @@ namespace Vibrometer.Testing
         public const int CLOCK_RATE = 125000000;
         public const int DATA_BASE = 0x1E00_0000;
 
+        private const int SWITCH_BASE = 0x43C0_0000;
+
         private const int GPIO_BASE = 0x4120_0000;
         private const int GPIO_REG_COUNT = 5;
         private const int GPIO_REG_SIZE = 0x0001_0000;
@@ -20,9 +22,11 @@ namespace Vibrometer.Testing
         private const int GPIO_RAM_WRITER = 0x0004_0000;
 
         private const int DATA_SIZE = 0x0100_0000;
+        private const int SWITCH_SIZE = 0x0100_0000;
 
         private static IntPtr _GPIO;
         private static IntPtr _DATA;
+        private static IntPtr _SWITCH;
 
         // helper
         private static void SetValue(int width, int shift, IntPtr address, uint value)
@@ -30,7 +34,7 @@ namespace Vibrometer.Testing
             uint storage;
             uint max;
 
-            max = (uint)Math.Pow(2, width) - 1;
+            max = (uint)(Math.Pow(2, width) - 1);
 
             if (value > max)
             {
@@ -71,6 +75,7 @@ namespace Vibrometer.Testing
 
             _GPIO = Syscall.mmap(IntPtr.Zero, GPIO_SIZE, MmapProts.PROT_READ | MmapProts.PROT_WRITE, MmapFlags.MAP_SHARED, fd, GPIO_BASE);
             _DATA = Syscall.mmap(IntPtr.Zero, DATA_SIZE, MmapProts.PROT_READ | MmapProts.PROT_WRITE, MmapFlags.MAP_SHARED, fd, DATA_BASE);
+            _SWITCH = Syscall.mmap(IntPtr.Zero, SWITCH_SIZE, MmapProts.PROT_READ | MmapProts.PROT_WRITE, MmapFlags.MAP_SHARED, fd, SWITCH_BASE);
 
             Syscall.close(fd);
         }
@@ -86,10 +91,18 @@ namespace Vibrometer.Testing
             {
                 Syscall.munmap(_DATA, DATA_SIZE);
             }
+
+            if (_SWITCH.ToInt64() > 0)
+            {
+                Syscall.munmap(_SWITCH, SWITCH_SIZE);
+            }
         }
 
         public static void SetDefaults()
         {
+            // source
+            API.General.Source = Source.Position;
+
             // 100 Hz
             API.SignalGenerator.Phase = 100;
 
@@ -124,7 +137,7 @@ namespace Vibrometer.Testing
             }
         }
 
-        public static void Clear()
+        public static void ClearRam()
         {
             bool enabled;
             Span<byte> data;
@@ -155,11 +168,44 @@ namespace Vibrometer.Testing
         // API (low level)
         public static class General
         {
-            public static int Position
+            public static Source Source
             {
                 get
                 {
-                    return (int)API.GetValue(32, 0, _GPIO + GPIO_GENERAL);
+                    uint value;
+
+                    value = API.GetValue(32, 0, _SWITCH + 0x0040);
+
+                    // return 0, if switch is disabled
+                    if (value >= 0x80000000)
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        return (Source)(value + 1);
+                    }
+                }
+                set
+                {
+                    if ((uint)value > 4)
+                    {
+                        throw new ArgumentException(nameof(value));
+                    }
+
+                    if (value == 0)
+                    {
+                        // disable switch
+                        API.SetValue(32, 0, _SWITCH + 0x0040, 0x8000_0000);
+                    }
+                    else
+                    {
+                        // connect slave[value - 1] with master[0]
+                        API.SetValue(32, 0, _SWITCH + 0x0040, (uint)value - 1);
+                    }
+
+                    // commit settings
+                    API.SetValue(32, 0, _SWITCH + 0x0000, 0x0000_0002);
                 }
             }
         }
@@ -195,23 +241,6 @@ namespace Vibrometer.Testing
                 set
                 {
                     API.SetValue(1, 0, _GPIO + GPIO_DATA_ACQUISITION, value ? 1U : 0U);
-                }
-            }
-
-            public static (short, short) Raw
-            {
-                get
-                {
-                    short a;
-                    short b;
-                    uint value;
-
-                    value = API.GetValue(32, 0, _GPIO + GPIO_DATA_ACQUISITION + 0x08);
-
-                    a = unchecked((short)(value & ~0xFFFF0000));
-                    b = unchecked((short)(value >> 16));
-
-                    return (a, b);
                 }
             }
         }
@@ -334,11 +363,11 @@ namespace Vibrometer.Testing
 
         public static class Ram
         {
-            public static int GetData(int offset)
+            public static uint GetData(int offset)
             {
                 unsafe
                 {
-                    return *(int*)(IntPtr.Add(_DATA, offset));
+                    return *(uint*)(IntPtr.Add(_DATA, offset));
                 }
             }
         }
