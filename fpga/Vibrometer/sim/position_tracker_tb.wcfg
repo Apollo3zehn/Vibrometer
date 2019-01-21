@@ -20,7 +20,7 @@
       <ValueColumnWidth column_width="98"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="8" />
-   <wvobject fp_name="/position_tracker_tb/ptracker/SYS_aclk" type="logic">
+   <wvobject fp_name="/position_tracker_tb/DUT/SYS_aclk" type="logic">
       <obj_property name="ElementShortName">SYS_aclk</obj_property>
       <obj_property name="ObjectShortName">SYS_aclk</obj_property>
    </wvobject>
@@ -28,31 +28,31 @@
       <obj_property name="ElementShortName">SYS_aresetn</obj_property>
       <obj_property name="ObjectShortName">SYS_aresetn</obj_property>
    </wvobject>
-   <wvobject fp_name="/position_tracker_tb/ptracker/FC_sign" type="logic">
+   <wvobject fp_name="/position_tracker_tb/DUT/FC_sign" type="logic">
       <obj_property name="ElementShortName">FC_sign</obj_property>
       <obj_property name="ObjectShortName">FC_sign</obj_property>
    </wvobject>
-   <wvobject fp_name="/position_tracker_tb/ptracker/FC_lower_treshold" type="array">
+   <wvobject fp_name="/position_tracker_tb/DUT/FC_lower_treshold" type="array">
       <obj_property name="ElementShortName">FC_lower_treshold[31:0]</obj_property>
       <obj_property name="ObjectShortName">FC_lower_treshold[31:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/position_tracker_tb/ptracker/FC_upper_treshold" type="array">
+   <wvobject fp_name="/position_tracker_tb/DUT/FC_upper_treshold" type="array">
       <obj_property name="ElementShortName">FC_upper_treshold[31:0]</obj_property>
       <obj_property name="ObjectShortName">FC_upper_treshold[31:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/position_tracker_tb/ptracker/S_AXIS_tdata" type="array">
+   <wvobject fp_name="/position_tracker_tb/DUT/S_AXIS_tdata" type="array">
       <obj_property name="ElementShortName">S_AXIS_tdata[31:0]</obj_property>
       <obj_property name="ObjectShortName">S_AXIS_tdata[31:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/position_tracker_tb/ptracker/position" type="array">
+   <wvobject fp_name="/position_tracker_tb/DUT/position" type="array">
       <obj_property name="ElementShortName">position[31:0]</obj_property>
       <obj_property name="ObjectShortName">position[31:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/position_tracker_tb/ptracker/state" type="array">
+   <wvobject fp_name="/position_tracker_tb/DUT/state" type="array">
       <obj_property name="ElementShortName">state[1:0]</obj_property>
       <obj_property name="ObjectShortName">state[1:0]</obj_property>
       <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>

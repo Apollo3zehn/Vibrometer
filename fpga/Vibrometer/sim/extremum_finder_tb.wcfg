@@ -28,7 +28,7 @@
       <obj_property name="ElementShortName">SYS_aresetn</obj_property>
       <obj_property name="ObjectShortName">SYS_aresetn</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/efinder/state" type="logic">
+   <wvobject fp_name="/extremum_finder_tb/DUT/state" type="logic">
       <obj_property name="ElementShortName">state</obj_property>
       <obj_property name="ObjectShortName">state</obj_property>
    </wvobject>
@@ -37,57 +37,57 @@
       <obj_property name="ObjectShortName">S_AXIS_tdata[31:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/efinder/min" type="array">
+   <wvobject fp_name="/extremum_finder_tb/DUT/min" type="array">
       <obj_property name="ElementShortName">min[15:0]</obj_property>
       <obj_property name="ObjectShortName">min[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/efinder/min_next" type="array">
+   <wvobject fp_name="/extremum_finder_tb/DUT/min_next" type="array">
       <obj_property name="ElementShortName">min_next[15:0]</obj_property>
       <obj_property name="ObjectShortName">min_next[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/efinder/tmp_min" type="array">
+   <wvobject fp_name="/extremum_finder_tb/DUT/tmp_min" type="array">
       <obj_property name="ElementShortName">tmp_min[15:0]</obj_property>
       <obj_property name="ObjectShortName">tmp_min[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/efinder/tmp_min_next" type="array">
+   <wvobject fp_name="/extremum_finder_tb/DUT/tmp_min_next" type="array">
       <obj_property name="ElementShortName">tmp_min_next[15:0]</obj_property>
       <obj_property name="ObjectShortName">tmp_min_next[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/efinder/max" type="array">
+   <wvobject fp_name="/extremum_finder_tb/DUT/max" type="array">
       <obj_property name="ElementShortName">max[15:0]</obj_property>
       <obj_property name="ObjectShortName">max[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/efinder/max_next" type="array">
+   <wvobject fp_name="/extremum_finder_tb/DUT/max_next" type="array">
       <obj_property name="ElementShortName">max_next[15:0]</obj_property>
       <obj_property name="ObjectShortName">max_next[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/efinder/tmp_max" type="array">
+   <wvobject fp_name="/extremum_finder_tb/DUT/tmp_max" type="array">
       <obj_property name="ElementShortName">tmp_max[15:0]</obj_property>
       <obj_property name="ObjectShortName">tmp_max[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/efinder/tmp_center" type="array">
+   <wvobject fp_name="/extremum_finder_tb/DUT/tmp_center" type="array">
       <obj_property name="ElementShortName">tmp_center[15:0]</obj_property>
       <obj_property name="ObjectShortName">tmp_center[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/efinder/count" type="array">
+   <wvobject fp_name="/extremum_finder_tb/DUT/count" type="array">
       <obj_property name="ElementShortName">count[31:0]</obj_property>
       <obj_property name="ObjectShortName">count[31:0]</obj_property>
       <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/efinder/count_next" type="array">
+   <wvobject fp_name="/extremum_finder_tb/DUT/count_next" type="array">
       <obj_property name="ElementShortName">count_next[31:0]</obj_property>
       <obj_property name="ObjectShortName">count_next[31:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/efinder/max_count" type="array">
+   <wvobject fp_name="/extremum_finder_tb/DUT/max_count" type="array">
       <obj_property name="ElementShortName">max_count[31:0]</obj_property>
       <obj_property name="ObjectShortName">max_count[31:0]</obj_property>
    </wvobject>

@@ -48,7 +48,7 @@ module sync_manager #
     reg  [MM_ADDR_WIDTH-1:0]                write_count,        write_count_next;
     reg                                     lock,               lock_next;
 
-    wire [22:0]                             length;
+    wire [31:0]                             length;
 
     assign SM_read_buffer                   = SM_base_address + length * buffer_to_factor(state_read)  * DATA_WIDTH / 8;
     assign SM_write_buffer                  = SM_base_address + length * buffer_to_factor(state_write) * DATA_WIDTH / 8 + read_count * DATA_WIDTH / 8;
@@ -84,13 +84,6 @@ module sync_manager #
         state_lock_next         = state_lock;
         state_write_next        = state_write;
         
-        // if read request
-        if (SM_request) begin
-            if (~lock) begin
-                state_read_next = state_ready;
-            end
-        end
-
         // if s2mm read transfer was successful, increase read_count
         if (SM_reading) begin
             read_count_next     = read_count + 1;
@@ -106,8 +99,12 @@ module sync_manager #
                 state_write_next = buffer_2;
             else if (combination[2] == 1'b0)
                 state_write_next = buffer_3;
-            else
+            else if (combination[3] == 1'b0)
                 state_write_next = buffer_4;
+            else begin
+                state_write_next = state_ready;
+                state_ready_next = state_read;
+            end
         end
 
         // if s2mm write transfer was successful, increase write_count
@@ -120,6 +117,13 @@ module sync_manager #
             write_count_next    = 0;
             state_lock_next     = state_write;
             state_ready_next    = state_lock;
+        end
+
+        // if read request
+        if (SM_request) begin
+            if (~lock) begin
+                state_read_next = state_ready_next;
+            end
         end
     end
 

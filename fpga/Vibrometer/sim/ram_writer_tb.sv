@@ -7,17 +7,17 @@ module ram_writer_tb();
     reg [31:0]  GPIO                    = 0;
     reg         S_AXIS_tvalid           = 1;
     reg [31:0]  S_AXIS_tdata            = 0;
-    reg         M_AXI_position_awready  = 1;
-    reg         M_AXI_position_wready   = 1;
+    reg         M_AXI_awready           = 1;
+    reg         M_AXI_wready            = 1;
  
-    RAM_Writer_imp_DKQNRD rwriter (
+    RAM_Writer_imp_DKQNRD DUT (
         .aclk(aclk),
         .aresetn(aresetn),
         .GPIO(GPIO),
         .S_AXIS_tvalid(S_AXIS_tvalid),
         .S_AXIS_tdata(S_AXIS_tdata),
-        .M_AXI_position_awready(M_AXI_position_awready),
-        .M_AXI_position_wready(M_AXI_position_wready)
+        .M_AXI_awready(M_AXI_awready),
+        .M_AXI_wready(M_AXI_wready)
     );
      
     initial begin      
@@ -26,25 +26,25 @@ module ram_writer_tb();
 
         repeat (6) @(posedge aclk);
             // 11-7 log_throttle, 6-2 log_length, 1 request, 0 enable
-            GPIO            <= 32'b00000000_00000000_00000000_10011001;
+            GPIO            <= 32'b00000000_00000000_00000000_00011001;
 
         repeat (100) @(posedge aclk);
-            GPIO            <= 32'b00000000_00000000_00000000_10011011;
+            GPIO            <= 32'b00000000_00000000_00000000_00011011;
 
         repeat (100) @(posedge aclk);
-            GPIO            <= 32'b00000000_00000000_00000000_10011001;
+            GPIO            <= 32'b00000000_00000000_00000000_00011001;
 
         repeat (100) @(posedge aclk);
-            GPIO            <= 32'b00000000_00000000_00000000_10011000;
+            GPIO            <= 32'b00000000_00000000_00000000_00011000;
 
         repeat (100) @(posedge aclk);
-            GPIO            <= 32'b00000000_00000000_00000000_10011001;
+            GPIO            <= 32'b00000000_00000000_00000000_00011001;
 
         repeat (100) @(posedge aclk);
-            GPIO            <= 32'b00000000_00000000_00000000_10011011;
+            GPIO            <= 32'b00000000_00000000_00000000_00011011;
 
         repeat (100) @(posedge aclk);
-            GPIO            <= 32'b00000000_00000000_00000000_10011001;
+            GPIO            <= 32'b00000000_00000000_00000000_00011001;
     end
 
     always begin
@@ -56,7 +56,7 @@ module ram_writer_tb();
         #4 aclk = ~aclk;
 
     initial begin
-        #10000
+        #15000
         $finish;
     end
 

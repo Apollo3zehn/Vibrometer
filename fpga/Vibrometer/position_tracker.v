@@ -12,6 +12,7 @@ module position_tracker #
     // FC signals
     input  wire [(AXIS_TDATA_WIDTH/2)-1:0]  FC_lower_threshold,
     input  wire [(AXIS_TDATA_WIDTH/2)-1:0]  FC_upper_threshold,
+    input  wire [4:0]                       FC_log_scale,
     
     // axis slave
     input  wire                             S_AXIS_tvalid,
@@ -34,7 +35,7 @@ module position_tracker #
     
     wire [AXIS_TDATA_WIDTH/2-1:0]           signal_a;
     wire [AXIS_TDATA_WIDTH/2-1:0]           signal_b;
-  
+ 
     assign S_AXIS_tready                    = 1'b1;
     assign M_AXIS_tvalid                    = 1'b1;
     assign M_AXIS_tdata                     = position;
@@ -73,9 +74,9 @@ module position_tracker #
                     center = (($signed(FC_upper_threshold) + $signed(FC_lower_threshold)) >>> 1);
                 
                     if ($signed(signal_b) > $signed(center))
-                        position_next = $signed(position) + 1;
+                        position_next = $signed(position) + $signed((1 << FC_log_scale));
                     else
-                        position_next = $signed(position) - 1;
+                        position_next = $signed(position) - $signed((1 << FC_log_scale));
                         
                     state_next  = low;             
                 end

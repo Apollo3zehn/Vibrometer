@@ -74,34 +74,41 @@ namespace Vibrometer.Testing
                 Console.WriteLine();
 
                 Console.WriteLine("Position Tracker");
-                Console.WriteLine($"[3] - set log count extremum");
-                Console.WriteLine($"[4] - set shift extremum");
+                Console.WriteLine($"[3] - set log scale");
+                Console.WriteLine($"[4] - set log count extremum");
+                Console.WriteLine($"[5] - set shift extremum");
+                Console.WriteLine($"[6] - get threshold");
+
+                Console.WriteLine();
+
+                Console.WriteLine("Fourier Transform");
+                Console.WriteLine($"[7] - set log throttle");
 
                 Console.WriteLine();
 
                 Console.WriteLine("RAM Writer");
 
                 if (API.RamWriter.Enabled)
-                    Program.WriteColored($"[5] - disable RAM writer\n");
+                    Program.WriteColored($"[8] - disable RAM writer\n");
                 else
-                    Console.Write($"[5] - enable RAM writer\n");
+                    Console.Write($"[8] - enable RAM writer\n");
 
                 if (API.RamWriter.RequestEnabled)
-                    Program.WriteColored($"[6] - disable buffer request\n");
+                    Program.WriteColored($"[9] - disable buffer request\n");
                 else
-                    Console.Write($"[6] - enable buffer request\n");
+                    Console.Write($"[9] - enable buffer request\n");
 
-                Console.WriteLine($"[7] - set log length");
-                Console.WriteLine($"[8] - set log throttle");
-                Console.WriteLine($"[9] - set address");
-                Console.WriteLine($"[A] - get read buffer");
+                Console.WriteLine($"[A] - set log length");
+                Console.WriteLine($"[B] - set log throttle");
+                Console.WriteLine($"[C] - set address");
+                Console.WriteLine($"[D] - get read buffer");
 
                 Console.WriteLine();
 
                 Console.WriteLine("RAM");
-                Console.WriteLine($"[B] - get data ({Math.Min(Math.Pow(2, API.RamWriter.LogLength), 1024)} values)");
-                Console.WriteLine($"[C] - get stream");
-                Console.WriteLine($"[D] - clear");
+                Console.WriteLine($"[E] - get data ({Math.Min(Math.Pow(2, API.RamWriter.LogLength), 1024)} values)");
+                Console.WriteLine($"[F] - get stream");
+                Console.WriteLine($"[G] - clear");
 
                 var keyInfo = Console.ReadKey(true);
 
@@ -127,42 +134,51 @@ namespace Vibrometer.Testing
                         break;
                     case ConsoleKey.NumPad3:
                     case ConsoleKey.D3:
-                        Program.PT_Set_LogCountExtremum();
+                        Program.PT_Set_LogScale();
                         break;
                     case ConsoleKey.NumPad4:
                     case ConsoleKey.D4:
-                        Program.PT_Set_ShiftExtremum();
+                        Program.PT_Set_LogCountExtremum();
                         break;
                     case ConsoleKey.NumPad5:
                     case ConsoleKey.D5:
-                        Program.RW_Toggle_Enable();
+                        Program.PT_Set_ShiftExtremum();
                         break;
                     case ConsoleKey.NumPad6:
                     case ConsoleKey.D6:
-                        Program.RW_Toggle_RequestEnable();
+                        Program.PT_Get_Threshold();
                         break;
                     case ConsoleKey.NumPad7:
                     case ConsoleKey.D7:
-                        Program.RW_Set_LogLength();
+                        Program.FT_Set_LogThrottle();
                         break;
                     case ConsoleKey.NumPad8:
                     case ConsoleKey.D8:
-                        Program.RW_Set_LogThrottle();
+                        Program.RW_Toggle_Enable();
                         break;
                     case ConsoleKey.NumPad9:
                     case ConsoleKey.D9:
-                        Program.RW_Set_Address();
+                        Program.RW_Toggle_RequestEnable();
                         break;
                     case ConsoleKey.A:
-                        Program.RW_Get_ReadBuffer();
+                        Program.RW_Set_LogLength();
                         break;
                     case ConsoleKey.B:
-                        Program.RAM_Get_Data();
+                        Program.RW_Set_LogThrottle();
                         break;
                     case ConsoleKey.C:
-                        Program.RAM_Get_Stream();
+                        Program.RW_Set_Address();
+                        break;
+                    case ConsoleKey.D:
+                        Program.RW_Get_ReadBuffer();
                         break;
                     case ConsoleKey.E:
+                        Program.RAM_Get_Data();
+                        break;
+                    case ConsoleKey.F:
+                        Program.RAM_Get_Stream();
+                        break;
+                    case ConsoleKey.G:
                         API.ClearRam();
                         break;
                     case ConsoleKey.Escape:
@@ -209,7 +225,7 @@ namespace Vibrometer.Testing
         private static void PrintDialogFloat(ref double value, double min, double max, string name, string unit = "")
         {
             Console.Clear();
-            Console.WriteLine($"max: {min:F2} <= value <= {max:F2} {unit}\ncurrent: {value:F2} {unit}\n");
+            Console.WriteLine($"{min:F2} <= value <= {max:F2} {unit}\ncurrent: {value:F2} {unit}\n");
             Console.WriteLine($"Please enter the desired {name}:");
             Console.WriteLine();
 
@@ -222,7 +238,7 @@ namespace Vibrometer.Testing
         private static void PrintDialogInteger(ref uint value, uint min, uint max, string name, string unit = "")
         {
             Console.Clear();
-            Console.WriteLine($"max: {min} <= value <= {max} {unit}\ncurrent: {value} {unit}\n");
+            Console.WriteLine($"{min} <= value <= {max} {unit}\ncurrent: {value} {unit}\n");
             Console.WriteLine($"Please enter the desired {name}:");
             Console.WriteLine();
 
@@ -258,6 +274,17 @@ namespace Vibrometer.Testing
         private static void DA_Toggle_Switch()
         {
             API.DataAcquisition.SwitchEnabled = !API.DataAcquisition.SwitchEnabled;
+        }
+
+        private static void PT_Set_LogScale()
+        {
+            uint min = 0;
+            uint max = (uint)Math.Pow(2, 5) - 1;
+            uint value = API.PositionTracker.LogScale;
+
+            Program.PrintDialogInteger(ref value, min, max, "log scale");
+
+            API.PositionTracker.LogScale = value;
         }
 
         private static void PT_Set_LogCountExtremum()
@@ -307,6 +334,17 @@ namespace Vibrometer.Testing
             Console.ReadKey(true);
             cts.Cancel();
             task.Wait();
+        }
+
+        private static void FT_Set_LogThrottle()
+        {
+            uint min = 0;
+            uint max = (uint)Math.Pow(2, 5) - 1;
+            uint value = API.FourierTransform.LogThrottle;
+
+            Program.PrintDialogInteger(ref value, min, max, "log throttle");
+
+            API.FourierTransform.LogThrottle = value;
         }
 
         private static void RW_Toggle_Enable()
@@ -390,15 +428,15 @@ namespace Vibrometer.Testing
             {
                 while (!cts.IsCancellationRequested)
                 {
-                    short a;
-                    short b;
-                    uint value;
+                    ushort a;
+                    ushort b;
+                    int value;
 
                     API.RamWriter.RequestEnabled = true;
 
-                    value = API.Ram.GetData((int)(API.RamWriter.ReadBuffer - API.DATA_BASE));
-                    a = unchecked((short)(value & ~0xFFFF0000));
-                    b = unchecked((short)(value >> 16));
+                    value = (int)API.Ram.GetData((int)(API.RamWriter.ReadBuffer - API.DATA_BASE));
+                    a = unchecked((ushort)(value & ~0xFFFF0000));
+                    b = unchecked((ushort)(value >> 16));
 
                     API.RamWriter.RequestEnabled = false;
 

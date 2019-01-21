@@ -15,10 +15,10 @@ namespace Vibrometer.Testing
         private const int GPIO_REG_COUNT = 5;
         private const int GPIO_REG_SIZE = 0x0001_0000;
         private const int GPIO_SIZE = GPIO_REG_COUNT * GPIO_REG_SIZE;
-        private const int GPIO_GENERAL = 0x0000_0000;
-        private const int GPIO_SIGNAL_GENERATOR = 0x0001_0000;
-        private const int GPIO_DATA_ACQUISITION = 0x0002_0000;
-        private const int GPIO_POSITION_TRACKER = 0x0003_0000;
+        private const int GPIO_SIGNAL_GENERATOR = 0x0000_0000;
+        private const int GPIO_DATA_ACQUISITION = 0x0001_0000;
+        private const int GPIO_POSITION_TRACKER = 0x0002_0000;
+        private const int GPIO_FOURIER_TRANSFORM = 0x0003_0000;
         private const int GPIO_RAM_WRITER = 0x0004_0000;
 
         private const int DATA_SIZE = 0x0100_0000;
@@ -104,7 +104,7 @@ namespace Vibrometer.Testing
             API.General.Source = Source.Position;
 
             // 100 Hz
-            API.SignalGenerator.Phase = 100;
+            API.SignalGenerator.Phase = (uint)(100 * Math.Pow(2, 28) / API.CLOCK_RATE);
 
             // approx. 1s
             API.PositionTracker.LogCountExtremum = 27;
@@ -115,10 +115,10 @@ namespace Vibrometer.Testing
             // physical RAM address
             API.RamWriter.Address = DATA_BASE;
 
-            // buffer length = 2^12 = 4096 = 1024 * 4 byte
-            API.RamWriter.LogLength = 12;
+            // buffer length = 2^10 = 1024 => 1024 * 4 byte = 4096 byte
+            API.RamWriter.LogLength = 10;
             
-            // throttle 125 MHz ADC data by factor 2^12 = 4096 to get into the kHz range
+            // throttle data by factor 2^12 = 4096 to get into the kHz range
             API.RamWriter.LogThrottle = 12;
 
             // enable RAM writer
@@ -225,7 +225,7 @@ namespace Vibrometer.Testing
                         throw new ArgumentException(nameof(value));
                     }
 
-                    API.SetValue(32, 0, _GPIO + GPIO_SIGNAL_GENERATOR, (uint)(value * Math.Pow(2, 28) / CLOCK_RATE));
+                    API.SetValue(32, 0, _GPIO + GPIO_SIGNAL_GENERATOR, value);
                 }
             }
         }
@@ -247,6 +247,18 @@ namespace Vibrometer.Testing
 
         public static class PositionTracker
         {
+            public static uint LogScale
+            {
+                get
+                {
+                    return API.GetValue(5, 8, _GPIO + GPIO_POSITION_TRACKER);
+                }
+                set
+                {
+                    API.SetValue(5, 8, _GPIO + GPIO_POSITION_TRACKER, value);
+                }
+            }
+
             public static uint LogCountExtremum
             {
                 get
@@ -285,6 +297,21 @@ namespace Vibrometer.Testing
                     b = unchecked((short)(value >> 16));
 
                     return (a, b);
+                }
+            }
+        }
+
+        public static class FourierTransform
+        {
+            public static uint LogThrottle
+            {
+                get
+                {
+                    return API.GetValue(5, 0, _GPIO + GPIO_FOURIER_TRANSFORM);
+                }
+                set
+                {
+                    API.SetValue(5, 0, _GPIO + GPIO_FOURIER_TRANSFORM, value);
                 }
             }
         }

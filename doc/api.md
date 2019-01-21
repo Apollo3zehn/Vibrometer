@@ -1,21 +1,23 @@
 #Name                Address / Description   Dir    Comment
 
-General             0x4120_0000                     reserved
-
-Signal_Generator    0x4121_0000
+Signal_Generator    0x4120_0000
     [31:0]          phase                   RW
 
-Data_Acquisition    0x4122_0000
+Data_Acquisition    0x4121_0000
     [0:0]           switch                  RW
 
-Position_Tracker    0x4123_0000
+Position_Tracker    0x4122_0000
+    [12:8]          log_scale               RW
     [7:3]           log_count_extremum      RW
     [2:0]           shift_extremum          RW
     + 0x0008 
     [31:0]          threshold               RO      31_[max, min]_0
 
+Fourier_Transform   0x4123_0000
+    [4:0]           log_throttle            RW      
+
 RAM_Writer          0x4124_0000
-    [11:7]          log_throttle            RW      
+    [11:7]          log_throttle            RW
     [6:2]           log_length              RW
     [1:1]           request                 RW
     [0:0]           enable                  RW

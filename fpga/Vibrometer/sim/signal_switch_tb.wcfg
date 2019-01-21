@@ -40,11 +40,11 @@
       <obj_property name="ElementShortName">DATA_WIDTH[31:0]</obj_property>
       <obj_property name="ObjectShortName">DATA_WIDTH[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/signal_switch_tb/sswitch/x" type="array">
+   <wvobject fp_name="/signal_switch_tb/DUT/x" type="array">
       <obj_property name="ElementShortName">x[15:0]</obj_property>
       <obj_property name="ObjectShortName">x[15:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/signal_switch_tb/sswitch/y" type="array">
+   <wvobject fp_name="/signal_switch_tb/DUT/y" type="array">
       <obj_property name="ElementShortName">y[15:0]</obj_property>
       <obj_property name="ObjectShortName">y[15:0]</obj_property>
    </wvobject>

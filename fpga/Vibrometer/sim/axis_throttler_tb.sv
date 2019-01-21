@@ -13,7 +13,7 @@ module axis_throttler_tb #
     reg                             S_AXIS_tvalid       = 0;
     reg [AXIS_TDATA_WIDTH-1:0]      S_AXIS_tdata        = 0;
 
-    axis_throttler athrottler (
+    axis_throttler DUT (
         .aclk(aclk),
         .aresetn(aresetn),
         .log_throttle(log_throttle),

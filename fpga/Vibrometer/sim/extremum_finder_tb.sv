@@ -12,7 +12,7 @@ module extremum_finder_tb #
     reg [AXIS_TDATA_WIDTH-1:0]  S_AXIS_tdata        = 0;
     reg                         S_AXIS_tvalid       = 1;
  
-    extremum_finder efinder (
+    extremum_finder DUT (
         .aclk(aclk),
         .aresetn(aresetn),
         .EF_log_count(EF_log_count),

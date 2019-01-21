@@ -38,21 +38,21 @@
          <obj_property name="ElementShortName">aresetn</obj_property>
          <obj_property name="ObjectShortName">aresetn</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/GPIO_config/aresetn_o" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/GPIO_config/aresetn_o" type="array">
          <obj_property name="ElementShortName">aresetn_o[0:0]</obj_property>
          <obj_property name="ObjectShortName">aresetn_o[0:0]</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/GPIO_config/log_throttle" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/GPIO_config/log_throttle" type="array">
          <obj_property name="ElementShortName">log_throttle[4:0]</obj_property>
          <obj_property name="ObjectShortName">log_throttle[4:0]</obj_property>
          <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/GPIO_config/request" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/GPIO_config/request" type="array">
          <obj_property name="ElementShortName">request[0:0]</obj_property>
          <obj_property name="ObjectShortName">request[0:0]</obj_property>
          <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/GPIO" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/GPIO" type="array">
          <obj_property name="ElementShortName">GPIO[31:0]</obj_property>
          <obj_property name="ObjectShortName">GPIO[31:0]</obj_property>
       </wvobject>
@@ -60,38 +60,38 @@
    <wvobject fp_name="group2794" type="group">
       <obj_property name="label">states</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <wvobject fp_name="/ram_writer_tb/rwriter/sync_manager/inst/state_read" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/sync_manager/inst/state_read" type="array">
          <obj_property name="ElementShortName">state_read[3:0]</obj_property>
          <obj_property name="ObjectShortName">state_read[3:0]</obj_property>
          <obj_property name="CustomSignalColor">#FFA500</obj_property>
          <obj_property name="UseCustomSignalColor">true</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/sync_manager/inst/state_ready" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/sync_manager/inst/state_ready" type="array">
          <obj_property name="ElementShortName">state_ready[3:0]</obj_property>
          <obj_property name="ObjectShortName">state_ready[3:0]</obj_property>
          <obj_property name="CustomSignalColor">#FFA500</obj_property>
          <obj_property name="UseCustomSignalColor">true</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/sync_manager/inst/state_lock" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/sync_manager/inst/state_lock" type="array">
          <obj_property name="ElementShortName">state_lock[3:0]</obj_property>
          <obj_property name="ObjectShortName">state_lock[3:0]</obj_property>
          <obj_property name="CustomSignalColor">#FFA500</obj_property>
          <obj_property name="UseCustomSignalColor">true</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/sync_manager/inst/state_write" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/sync_manager/inst/state_write" type="array">
          <obj_property name="ElementShortName">state_write[3:0]</obj_property>
          <obj_property name="ObjectShortName">state_write[3:0]</obj_property>
          <obj_property name="CustomSignalColor">#FFA500</obj_property>
          <obj_property name="UseCustomSignalColor">true</obj_property>
       </wvobject>
    </wvobject>
-   <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/reading" type="logic">
+   <wvobject fp_name="/ram_writer_tb/DUT/s2mm_ram_writer/reading" type="logic">
       <obj_property name="ElementShortName">reading</obj_property>
       <obj_property name="ObjectShortName">reading</obj_property>
       <obj_property name="CustomSignalColor">#FF0080</obj_property>
       <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
-   <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/writing" type="logic">
+   <wvobject fp_name="/ram_writer_tb/DUT/s2mm_ram_writer/writing" type="logic">
       <obj_property name="ElementShortName">writing</obj_property>
       <obj_property name="ObjectShortName">writing</obj_property>
       <obj_property name="CustomSignalColor">#FF0080</obj_property>
@@ -101,41 +101,41 @@
       <obj_property name="label">sync_manager</obj_property>
       <obj_property name="DisplayName">label</obj_property>
       <obj_property name="isExpanded"></obj_property>
-      <wvobject fp_name="/ram_writer_tb/rwriter/sync_manager/inst/combination" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/sync_manager/inst/combination" type="array">
          <obj_property name="ElementShortName">combination[3:0]</obj_property>
          <obj_property name="ObjectShortName">combination[3:0]</obj_property>
          <obj_property name="Radix">BINARYRADIX</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/sync_manager/SM_request" type="logic">
+      <wvobject fp_name="/ram_writer_tb/DUT/sync_manager/SM_request" type="logic">
          <obj_property name="ElementShortName">SM_request</obj_property>
          <obj_property name="ObjectShortName">SM_request</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/sync_manager/SM_log_length" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/sync_manager/SM_log_length" type="array">
          <obj_property name="ElementShortName">SM_log_length[4:0]</obj_property>
          <obj_property name="ObjectShortName">SM_log_length[4:0]</obj_property>
          <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/sync_manager/SM_base_address" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/sync_manager/SM_base_address" type="array">
          <obj_property name="ElementShortName">SM_base_address[31:0]</obj_property>
          <obj_property name="ObjectShortName">SM_base_address[31:0]</obj_property>
          <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/sync_manager/inst/read_count" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/sync_manager/inst/read_count" type="array">
          <obj_property name="ElementShortName">read_count[31:0]</obj_property>
          <obj_property name="ObjectShortName">read_count[31:0]</obj_property>
          <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/sync_manager/inst/write_count" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/sync_manager/inst/write_count" type="array">
          <obj_property name="ElementShortName">write_count[31:0]</obj_property>
          <obj_property name="ObjectShortName">write_count[31:0]</obj_property>
          <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/sync_manager/SM_read_buffer" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/sync_manager/SM_read_buffer" type="array">
          <obj_property name="ElementShortName">SM_read_buffer[31:0]</obj_property>
          <obj_property name="ObjectShortName">SM_read_buffer[31:0]</obj_property>
          <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/sync_manager/SM_write_buffer" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/sync_manager/SM_write_buffer" type="array">
          <obj_property name="ElementShortName">SM_write_buffer[31:0]</obj_property>
          <obj_property name="ObjectShortName">SM_write_buffer[31:0]</obj_property>
          <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
@@ -151,86 +151,86 @@
          <obj_property name="CustomSignalColor">#0000FF</obj_property>
          <obj_property name="UseCustomSignalColor">true</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/aresetn" type="logic">
+      <wvobject fp_name="/ram_writer_tb/DUT/s2mm_ram_writer/aresetn" type="logic">
          <obj_property name="ElementShortName">aresetn</obj_property>
          <obj_property name="ObjectShortName">aresetn</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/inst/state" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/s2mm_ram_writer/inst/state" type="array">
          <obj_property name="ElementShortName">state[1:0]</obj_property>
          <obj_property name="ObjectShortName">state[1:0]</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/address" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/s2mm_ram_writer/address" type="array">
          <obj_property name="ElementShortName">address[31:0]</obj_property>
          <obj_property name="ObjectShortName">address[31:0]</obj_property>
          <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/inst/M_AXI_awaddr" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/s2mm_ram_writer/inst/M_AXI_awaddr" type="array">
          <obj_property name="ElementShortName">M_AXI_awaddr[31:0]</obj_property>
          <obj_property name="ObjectShortName">M_AXI_awaddr[31:0]</obj_property>
          <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/inst/M_AXI_wdata" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/s2mm_ram_writer/inst/M_AXI_wdata" type="array">
          <obj_property name="ElementShortName">M_AXI_wdata[31:0]</obj_property>
          <obj_property name="ObjectShortName">M_AXI_wdata[31:0]</obj_property>
          <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/inst/M_AXI_awsize" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/s2mm_ram_writer/inst/M_AXI_awsize" type="array">
          <obj_property name="ElementShortName">M_AXI_awsize[2:0]</obj_property>
          <obj_property name="ObjectShortName">M_AXI_awsize[2:0]</obj_property>
          <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/inst/S_AXIS_tdata" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/s2mm_ram_writer/inst/S_AXIS_tdata" type="array">
          <obj_property name="ElementShortName">S_AXIS_tdata[31:0]</obj_property>
          <obj_property name="ObjectShortName">S_AXIS_tdata[31:0]</obj_property>
          <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/inst/tdata" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/s2mm_ram_writer/inst/tdata" type="array">
          <obj_property name="ElementShortName">tdata[63:0]</obj_property>
          <obj_property name="ObjectShortName">tdata[63:0]</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/inst/full" type="logic">
+      <wvobject fp_name="/ram_writer_tb/DUT/s2mm_ram_writer/inst/full" type="logic">
          <obj_property name="ElementShortName">full</obj_property>
          <obj_property name="ObjectShortName">full</obj_property>
          <obj_property name="CustomSignalColor">#800000</obj_property>
          <obj_property name="UseCustomSignalColor">true</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/inst/wdata" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/s2mm_ram_writer/inst/wdata" type="array">
          <obj_property name="ElementShortName">wdata[63:0]</obj_property>
          <obj_property name="ObjectShortName">wdata[63:0]</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/inst/empty" type="logic">
+      <wvobject fp_name="/ram_writer_tb/DUT/s2mm_ram_writer/inst/empty" type="logic">
          <obj_property name="ElementShortName">empty</obj_property>
          <obj_property name="ObjectShortName">empty</obj_property>
          <obj_property name="CustomSignalColor">#800000</obj_property>
          <obj_property name="UseCustomSignalColor">true</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/inst/awvalid" type="logic">
+      <wvobject fp_name="/ram_writer_tb/DUT/s2mm_ram_writer/inst/awvalid" type="logic">
          <obj_property name="ElementShortName">awvalid</obj_property>
          <obj_property name="ObjectShortName">awvalid</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/inst/wvalid" type="logic">
+      <wvobject fp_name="/ram_writer_tb/DUT/s2mm_ram_writer/inst/wvalid" type="logic">
          <obj_property name="ElementShortName">wvalid</obj_property>
          <obj_property name="ObjectShortName">wvalid</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/inst/wlast" type="logic">
+      <wvobject fp_name="/ram_writer_tb/DUT/s2mm_ram_writer/inst/wlast" type="logic">
          <obj_property name="ElementShortName">wlast</obj_property>
          <obj_property name="ObjectShortName">wlast</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/inst/count_rst" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/s2mm_ram_writer/inst/count_rst" type="array">
          <obj_property name="ElementShortName">count_rst[2:0]</obj_property>
          <obj_property name="ObjectShortName">count_rst[2:0]</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/inst/count" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/s2mm_ram_writer/inst/count" type="array">
          <obj_property name="ElementShortName">count[3:0]</obj_property>
          <obj_property name="ObjectShortName">count[3:0]</obj_property>
          <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/inst/rdcount" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/s2mm_ram_writer/inst/rdcount" type="array">
          <obj_property name="ElementShortName">rdcount[12:0]</obj_property>
          <obj_property name="ObjectShortName">rdcount[12:0]</obj_property>
          <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
-      <wvobject fp_name="/ram_writer_tb/rwriter/s2mm_ram_writer/inst/wrcount" type="array">
+      <wvobject fp_name="/ram_writer_tb/DUT/s2mm_ram_writer/inst/wrcount" type="array">
          <obj_property name="ElementShortName">wrcount[12:0]</obj_property>
          <obj_property name="ObjectShortName">wrcount[12:0]</obj_property>
          <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>

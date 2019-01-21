@@ -10,7 +10,7 @@ module signal_switch_tb #
     reg  [DATA_WIDTH-1:0]   a           = 14;
     reg  [DATA_WIDTH-1:0]   b           = -29;
     
-    signal_switch sswitch (
+    signal_switch DUT (
         .aclk(aclk),
         .switch(switch),
         .a(a),

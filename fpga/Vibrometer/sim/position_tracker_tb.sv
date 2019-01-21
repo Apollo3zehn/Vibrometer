@@ -14,7 +14,7 @@ module position_tracker_tb #
 
     integer i                                       = 0;
 
-    position_tracker ptracker (
+    position_tracker DUT (
         .SYS_aclk(SYS_aclk),
         .SYS_aresetn(SYS_aresetn),
         .FC_lower_treshold(FC_lower_treshold),
