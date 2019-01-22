@@ -81,7 +81,7 @@ namespace Vibrometer.Testing
 
                 Console.WriteLine();
 
-                Console.WriteLine("Fourier Transform");
+                Console.WriteLine("Filter");
                 Console.WriteLine($"[7] - set log throttle");
 
                 Console.WriteLine();
@@ -150,7 +150,7 @@ namespace Vibrometer.Testing
                         break;
                     case ConsoleKey.NumPad7:
                     case ConsoleKey.D7:
-                        Program.FT_Set_LogThrottle();
+                        Program.FI_Set_LogThrottle();
                         break;
                     case ConsoleKey.NumPad8:
                     case ConsoleKey.D8:
@@ -336,15 +336,15 @@ namespace Vibrometer.Testing
             task.Wait();
         }
 
-        private static void FT_Set_LogThrottle()
+        private static void FI_Set_LogThrottle()
         {
             uint min = 0;
             uint max = (uint)Math.Pow(2, 5) - 1;
-            uint value = API.FourierTransform.LogThrottle;
+            uint value = API.Filter.LogThrottle;
 
             Program.PrintDialogInteger(ref value, min, max, "log throttle");
 
-            API.FourierTransform.LogThrottle = value;
+            API.Filter.LogThrottle = value;
         }
 
         private static void RW_Toggle_Enable()

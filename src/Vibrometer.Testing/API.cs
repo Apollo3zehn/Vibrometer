@@ -18,7 +18,7 @@ namespace Vibrometer.Testing
         private const int GPIO_SIGNAL_GENERATOR = 0x0000_0000;
         private const int GPIO_DATA_ACQUISITION = 0x0001_0000;
         private const int GPIO_POSITION_TRACKER = 0x0002_0000;
-        private const int GPIO_FOURIER_TRANSFORM = 0x0003_0000;
+        private const int GPIO_FILTER = 0x0003_0000;
         private const int GPIO_RAM_WRITER = 0x0004_0000;
 
         private const int DATA_SIZE = 0x0100_0000;
@@ -301,17 +301,17 @@ namespace Vibrometer.Testing
             }
         }
 
-        public static class FourierTransform
+        public static class Filter
         {
             public static uint LogThrottle
             {
                 get
                 {
-                    return API.GetValue(5, 0, _GPIO + GPIO_FOURIER_TRANSFORM);
+                    return API.GetValue(5, 0, _GPIO + GPIO_FILTER);
                 }
                 set
                 {
-                    API.SetValue(5, 0, _GPIO + GPIO_FOURIER_TRANSFORM, value);
+                    API.SetValue(5, 0, _GPIO + GPIO_FILTER, value);
                 }
             }
         }
