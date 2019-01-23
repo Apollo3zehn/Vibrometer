@@ -47,31 +47,35 @@ module sync_manager #
     reg  [MM_ADDR_WIDTH-1:0]                read_count,         read_count_next;
     reg  [MM_ADDR_WIDTH-1:0]                write_count,        write_count_next;
     reg                                     lock,               lock_next;
+    reg  [31:0]                             length,             length_next;
+    reg                                     write_buffer_tmp,   write_buffer_tmp_next;
 
-    wire [31:0]                             length;
 
-    assign SM_read_buffer                   = SM_base_address + length * buffer_to_factor(state_read)  * DATA_WIDTH / 8;
-    assign SM_write_buffer                  = SM_base_address + length * buffer_to_factor(state_write) * DATA_WIDTH / 8 + read_count * DATA_WIDTH / 8;
-    assign length                           = 1 << SM_log_length;
+    assign SM_read_buffer                   = SM_base_address + length * buffer_to_factor(state_read);
+    assign SM_write_buffer                  = write_buffer_tmp + length * buffer_to_factor(state_write);
     assign combination                      = state_read | state_ready | state_lock | state_write;
 
     always @(posedge aclk) begin
         if (~aresetn) begin
-            state_read      <= buffer_1;
-            state_ready     <= buffer_2;
-            state_lock      <= buffer_3;
-            state_write     <= buffer_3;
-            read_count      <= 0;
-            write_count     <= 0;
-            lock            <= 0;
+            state_read          <= buffer_1;
+            state_ready         <= buffer_2;
+            state_lock          <= buffer_3;
+            state_write         <= buffer_3;
+            read_count          <= 0;
+            write_count         <= 0;
+            lock                <= 0;
+            length              <= 1;
+            write_buffer_tmp    <= 0;
         end else begin
-            state_read      <= state_read_next;
-            state_ready     <= state_ready_next;
-            state_lock      <= state_lock_next;
-            state_write     <= state_write_next;
-            read_count      <= read_count_next;
-            write_count     <= write_count_next;
-            lock            <= lock_next;
+            state_read          <= state_read_next;
+            state_ready         <= state_ready_next;
+            state_lock          <= state_lock_next;
+            state_write         <= state_write_next;
+            read_count          <= read_count_next;
+            write_count         <= write_count_next;
+            lock                <= lock_next;
+            length              <= length_next;
+            write_buffer_tmp_next = write_buffer_tmp;
         end
     end
 
@@ -83,14 +87,12 @@ module sync_manager #
         state_ready_next        = state_ready;
         state_lock_next         = state_lock;
         state_write_next        = state_write;
+        length_next             = (1 << SM_log_length) + DATA_WIDTH / 8;
         
         // if s2mm read transfer was successful, increase read_count
         if (SM_reading) begin
             read_count_next     = read_count + 1;
-        end
-
-        // if read_count has reached the maximum, assign a new buffer
-        if (read_count_next >= length) begin
+        end else if (read_count >= length - 1) begin // else if read_count has reached the maximum, assign a new buffer
             read_count_next     = 0;
 
             if (combination[0] == 1'b0)
@@ -106,6 +108,9 @@ module sync_manager #
                 state_ready_next = state_read;
             end
         end
+
+        // calculate part of the final write address
+        write_buffer_tmp_next   = SM_base_address + read_count_next * DATA_WIDTH / 8;
 
         // if s2mm write transfer was successful, increase write_count
         if (SM_writing) begin

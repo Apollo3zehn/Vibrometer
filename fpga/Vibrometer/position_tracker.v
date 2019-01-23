@@ -2,46 +2,47 @@
 
 module position_tracker #
 (
-    parameter integer                       AXIS_TDATA_WIDTH    = 32
+    parameter integer                           S_AXIS_TDATA_WIDTH  = 32,
+    parameter integer                           M_AXIS_TDATA_WIDTH  = 16
 )
 (
     // system signals
-    input  wire                             aclk,
-    input  wire                             aresetn,
+    input  wire                                 aclk,
+    input  wire                                 aresetn,
     
     // FC signals
-    input  wire [(AXIS_TDATA_WIDTH/2)-1:0]  FC_lower_threshold,
-    input  wire [(AXIS_TDATA_WIDTH/2)-1:0]  FC_upper_threshold,
-    input  wire [4:0]                       FC_log_scale,
+    input  wire [(S_AXIS_TDATA_WIDTH/2)-1:0]    FC_lower_threshold,
+    input  wire [(S_AXIS_TDATA_WIDTH/2)-1:0]    FC_upper_threshold,
+    input  wire [4:0]                           FC_log_scale,
     
     // axis slave
-    input  wire                             S_AXIS_tvalid,
-    input  wire [AXIS_TDATA_WIDTH-1:0]      S_AXIS_tdata,
-    output wire                             S_AXIS_tready,
+    input  wire                                 S_AXIS_tvalid,
+    input  wire [S_AXIS_TDATA_WIDTH-1:0]        S_AXIS_tdata,
+    output wire                                 S_AXIS_tready,
     
     // axis master
-    input  wire                             M_AXIS_tready,
-    output wire                             M_AXIS_tvalid,
-    output wire [AXIS_TDATA_WIDTH-1:0]      M_AXIS_tdata
+    input  wire                                 M_AXIS_tready,
+    output wire                                 M_AXIS_tvalid,
+    output wire [M_AXIS_TDATA_WIDTH-1:0]        M_AXIS_tdata
 );
 
-    localparam                              idle            = 2'b00, 
-                                            low             = 2'b01, 
-                                            high            = 2'b10;              
+    localparam                                  idle            = 2'b00, 
+                                                low             = 2'b01, 
+                                                high            = 2'b10;              
 
-    reg  [AXIS_TDATA_WIDTH-1:0]             position,       position_next;
-    reg  [1:0]                              state,          state_next;                
-    reg  [AXIS_TDATA_WIDTH/2-1:0]           center;
+    reg  [M_AXIS_TDATA_WIDTH-1:0]               position,       position_next;
+    reg  [1:0]                                  state,          state_next;                
+    reg  [S_AXIS_TDATA_WIDTH/2-1:0]             center;
     
-    wire [AXIS_TDATA_WIDTH/2-1:0]           signal_a;
-    wire [AXIS_TDATA_WIDTH/2-1:0]           signal_b;
+    wire [S_AXIS_TDATA_WIDTH/2-1:0]             signal_a;
+    wire [S_AXIS_TDATA_WIDTH/2-1:0]             signal_b;
  
-    assign S_AXIS_tready                    = 1'b1;
-    assign M_AXIS_tvalid                    = 1'b1;
-    assign M_AXIS_tdata                     = position;
+    assign S_AXIS_tready                        = 1'b1;
+    assign M_AXIS_tvalid                        = 1'b1;
+    assign M_AXIS_tdata                         = position;
 
-    assign signal_a                         = S_AXIS_tdata[(AXIS_TDATA_WIDTH/2)-1:0];
-    assign signal_b                         = S_AXIS_tdata[AXIS_TDATA_WIDTH-1:AXIS_TDATA_WIDTH/2];
+    assign signal_a                             = S_AXIS_tdata[(S_AXIS_TDATA_WIDTH/2)-1:0];
+    assign signal_b                             = S_AXIS_tdata[S_AXIS_TDATA_WIDTH-1:S_AXIS_TDATA_WIDTH/2];
 
     always @(posedge aclk) begin
         if (~aresetn) begin

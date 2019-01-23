@@ -12,8 +12,8 @@ module differentiator_tb #
     reg                                 aresetn             = 0'b0;
     reg                                 M_AXIS_tready       = 1'b1;
     reg                                 S_AXIS_tvalid       = 1'b1;
-    reg     [AXIS_TDATA_WIDTH - 1:0]    value               = 0;
-
+    reg  [AXIS_TDATA_WIDTH-1:0]         value               = 0;
+ 
     wire [AXIS_TDATA_WIDTH-1:0]         S_AXIS_tdata;
 
     differentiator DUT (
