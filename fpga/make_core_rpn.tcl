@@ -1,16 +1,17 @@
 
 set partName [lindex $argv 0]
 set coreName [lindex $argv 1]
-set projectName [lindex $argv 2]
-set version [lindex $argv 3]
-set sourceDirectoryPath [lindex $argv 4]
-set targetDirectoryPath [lindex $argv 5]
+set sourceDirectoryPath [lindex $argv 2]
+set targetDirectoryPath [lindex $argv 3]
 
-create_project -force -part $partName $projectName $targetDirectoryPath
+set elementSet [split $coreName _]
+set projectName [join [lrange $elementSet 0 end-2] _]
+set version [string trimleft [join [lrange $elementSet end-1 end] .] v]
 
-add_files -quiet -fileset sources_1   -norecurse [glob -nocomplain $sourceDirectoryPath/$coreName/*.v]
-add_files -quiet -fileset sim_1       -norecurse [glob -nocomplain $sourceDirectoryPath/$coreName/*tb.sv]
-add_files -quiet -fileset sim_1       -norecurse [glob -nocomplain $sourceDirectoryPath/$coreName/*tb.wcfg]
+file delete -force $targetDirectoryPath/$coreName $targetDirectoryPath/$projectName.cache $targetDirectoryPath/$projectName.hw $targetDirectoryPath/$projectName.xpr
+
+create_project -part $partName $projectName $targetDirectoryPath
+add_files -norecurse [glob $sourceDirectoryPath/$coreName/*.v]
 
 ipx::package_project -import_files -root_dir $targetDirectoryPath/$coreName
 
@@ -19,9 +20,9 @@ set core [ipx::current_core]
 set_property VERSION $version $core
 set_property NAME $projectName $core
 set_property LIBRARY {user} $core
-set_property VENDOR {Apollo3zehn} $core
-set_property VENDOR_DISPLAY_NAME {Apollo3zehn} $core
-set_property COMPANY_URL {https://github.com/apollo3zehn} $core
+set_property VENDOR {pavel-demin} $core
+set_property VENDOR_DISPLAY_NAME {Pavel Demin} $core
+set_property COMPANY_URL {https://github.com/pavel-demin/red-pitaya-notes} $core
 set_property SUPPORTED_FAMILIES {zynq Production} $core
 
 proc core_parameter {name display_name description} {

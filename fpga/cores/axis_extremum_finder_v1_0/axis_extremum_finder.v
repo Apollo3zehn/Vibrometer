@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module extremum_finder #
+module axis_extremum_finder #
 (
     parameter integer                       AXIS_TDATA_WIDTH    = 32
 )

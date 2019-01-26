@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module extremum_finder_tb #
+module axis_extremum_finder_tb #
 (
     parameter integer           AXIS_TDATA_WIDTH    = 32
 );
@@ -12,7 +12,7 @@ module extremum_finder_tb #
     reg [AXIS_TDATA_WIDTH-1:0]  S_AXIS_tdata        = 0;
     reg                         S_AXIS_tvalid       = 1;
  
-    extremum_finder DUT (
+    axis_extremum_finder DUT (
         .aclk(aclk),
         .aresetn(aresetn),
         .EF_log_count(EF_log_count),

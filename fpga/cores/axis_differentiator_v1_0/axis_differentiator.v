@@ -1,7 +1,7 @@
 // https://www.dsprelated.com/showarticle/814.php
 `timescale 1ns / 1ps
 
-module differentiator #
+module axis_differentiator #
 (
     parameter integer                       AXIS_TDATA_WIDTH    = 16
 )

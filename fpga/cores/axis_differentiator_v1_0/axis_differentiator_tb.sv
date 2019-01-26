@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module differentiator_tb #
+module axis_differentiator_tb #
 (
      parameter integer                  AXIS_TDATA_WIDTH    = 32
 );
@@ -16,7 +16,7 @@ module differentiator_tb #
  
     wire [AXIS_TDATA_WIDTH-1:0]         S_AXIS_tdata;
 
-    differentiator DUT (
+    axis_differentiator DUT (
         .aclk(aclk),
         .aresetn(aresetn),
         .M_AXIS_tready(M_AXIS_tready),
@@ -28,7 +28,7 @@ module differentiator_tb #
      
     initial begin
 
-        data_handle = $fopen("C:/Users/wilvin/Desktop/Git/Vibrometer/fpga/Vibrometer/sim/differentiator.dat", "r");
+        data_handle = $fopen("C:/Users/wilvin/Desktop/Git/Vibrometer/fpga/cores/axis_differentiator_v1_0/axis_differentiator.dat", "r");
 
         if (data_handle == `NULL) begin
             $display("file handle is NULL");

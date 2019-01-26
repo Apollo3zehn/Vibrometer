@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module position_tracker_tb #
+module axis_position_tracker_tb #
 (
     parameter integer           AXIS_TDATA_WIDTH    = 32
 );
@@ -14,7 +14,7 @@ module position_tracker_tb #
 
     integer i                                       = 0;
 
-    position_tracker DUT (
+    axis_position_tracker DUT (
         .SYS_aclk(SYS_aclk),
         .SYS_aresetn(SYS_aresetn),
         .FC_lower_treshold(FC_lower_treshold),

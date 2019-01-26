@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module position_tracker #
+module axis_position_tracker #
 (
     parameter integer                           S_AXIS_TDATA_WIDTH  = 32,
     parameter integer                           M_AXIS_TDATA_WIDTH  = 16

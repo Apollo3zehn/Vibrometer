@@ -3,7 +3,7 @@
 
 module s2mm_ram_writer #
 (
-    parameter integer ADDR_WIDTH        = 32,
+    parameter integer AXI_ADDR_WIDTH    = 32,
     parameter integer AXI_ID_WIDTH      = 6,
     parameter integer AXI_DATA_WIDTH    = 32,
     parameter integer AXIS_TDATA_WIDTH  = 32
@@ -13,7 +13,7 @@ module s2mm_ram_writer #
     input  wire                         aclk,
     input  wire                         aresetn,
 
-    input  wire [ADDR_WIDTH-1:0]        address,
+    input  wire [AXI_ADDR_WIDTH-1:0]    address,
     output wire                         reading,
     output wire                         writing,
 
@@ -24,7 +24,7 @@ module s2mm_ram_writer #
 
     // master side
     output wire [AXI_ID_WIDTH-1:0]      M_AXI_awid,
-    output wire [ADDR_WIDTH-1:0]        M_AXI_awaddr,
+    output wire [AXI_ADDR_WIDTH-1:0]    M_AXI_awaddr,
     output wire [7:0]                   M_AXI_awlen,
     output wire [2:0]                   M_AXI_awsize,
     output wire [1:0]                   M_AXI_awburst,
@@ -91,11 +91,11 @@ module s2mm_ram_writer #
     assign reading                      = S_AXIS_tvalid & S_AXIS_tready & aresetn & count_rst > 2;
 
     assign wlast                        = &count;
-    assign tdata                        = {{(64 - AXIS_TDATA_WIDTH - ADDR_WIDTH){1'b0}}, S_AXIS_tdata, address};
+    assign tdata                        = {{(64 - AXIS_TDATA_WIDTH - AXI_ADDR_WIDTH){1'b0}}, S_AXIS_tdata, address};
     assign S_AXIS_tready                = ~full;
 
     assign M_AXI_awid                   = {(AXI_ID_WIDTH){1'b0}};                       // Write address ID
-    assign M_AXI_awaddr                 = wdata[ADDR_WIDTH-1:0];                        // Write address
+    assign M_AXI_awaddr                 = wdata[AXI_ADDR_WIDTH-1:0];                    // Write address
     assign M_AXI_awlen                  = burst_length - 1;                             // Write burst length   // AXI 3: max = 16, burst_length = awlen[7:0] + 1
     assign M_AXI_awsize                 = ADDR_SIZE;                                    // Write burst size     // # of bytes = 2^awsize
     assign M_AXI_awburst                = 2'b01;                                        // Write burst type     // 01b = INCR - Incrementing address
@@ -104,7 +104,7 @@ module s2mm_ram_writer #
     assign M_AXI_awuser                 = 4'b0000;                                      // Write user data
     assign M_AXI_awvalid                = awvalid;                                      // Write address valid
 
-    assign M_AXI_wdata                  = wdata[AXI_DATA_WIDTH + ADDR_WIDTH - 1:ADDR_WIDTH]; // Write data
+    assign M_AXI_wdata                  = wdata[AXI_DATA_WIDTH + AXI_ADDR_WIDTH - 1:AXI_ADDR_WIDTH]; // Write data
     assign M_AXI_wstrb                  = {(AXI_DATA_WIDTH/8){1'b1}};                   // Write strobes
     assign M_AXI_wlast                  = wlast;                                        // Write last
     assign M_AXI_wvalid                 = wvalid;                                       // Write valid

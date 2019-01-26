@@ -3,9 +3,9 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="extremum_finder_tb_behav.wdb" id="1">
+      <db_ref path="axis_extremum_finder_tb_behav.wdb" id="1">
          <top_modules>
-            <top_module name="extremum_finder_tb" />
+            <top_module name="axis_extremum_finder_tb" />
             <top_module name="glbl" />
          </top_modules>
       </db_ref>
@@ -20,74 +20,74 @@
       <ValueColumnWidth column_width="94"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="15" />
-   <wvobject fp_name="/extremum_finder_tb/SYS_aclk" type="logic">
+   <wvobject fp_name="/axis_extremum_finder_tb/SYS_aclk" type="logic">
       <obj_property name="ElementShortName">SYS_aclk</obj_property>
       <obj_property name="ObjectShortName">SYS_aclk</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/SYS_aresetn" type="logic">
+   <wvobject fp_name="/axis_extremum_finder_tb/SYS_aresetn" type="logic">
       <obj_property name="ElementShortName">SYS_aresetn</obj_property>
       <obj_property name="ObjectShortName">SYS_aresetn</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/DUT/state" type="logic">
+   <wvobject fp_name="/axis_extremum_finder_tb/DUT/state" type="logic">
       <obj_property name="ElementShortName">state</obj_property>
       <obj_property name="ObjectShortName">state</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/S_AXIS_tdata" type="array">
+   <wvobject fp_name="/axis_extremum_finder_tb/S_AXIS_tdata" type="array">
       <obj_property name="ElementShortName">S_AXIS_tdata[31:0]</obj_property>
       <obj_property name="ObjectShortName">S_AXIS_tdata[31:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/DUT/min" type="array">
+   <wvobject fp_name="/axis_extremum_finder_tb/DUT/min" type="array">
       <obj_property name="ElementShortName">min[15:0]</obj_property>
       <obj_property name="ObjectShortName">min[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/DUT/min_next" type="array">
+   <wvobject fp_name="/axis_extremum_finder_tb/DUT/min_next" type="array">
       <obj_property name="ElementShortName">min_next[15:0]</obj_property>
       <obj_property name="ObjectShortName">min_next[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/DUT/tmp_min" type="array">
+   <wvobject fp_name="/axis_extremum_finder_tb/DUT/tmp_min" type="array">
       <obj_property name="ElementShortName">tmp_min[15:0]</obj_property>
       <obj_property name="ObjectShortName">tmp_min[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/DUT/tmp_min_next" type="array">
+   <wvobject fp_name="/axis_extremum_finder_tb/DUT/tmp_min_next" type="array">
       <obj_property name="ElementShortName">tmp_min_next[15:0]</obj_property>
       <obj_property name="ObjectShortName">tmp_min_next[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/DUT/max" type="array">
+   <wvobject fp_name="/axis_extremum_finder_tb/DUT/max" type="array">
       <obj_property name="ElementShortName">max[15:0]</obj_property>
       <obj_property name="ObjectShortName">max[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/DUT/max_next" type="array">
+   <wvobject fp_name="/axis_extremum_finder_tb/DUT/max_next" type="array">
       <obj_property name="ElementShortName">max_next[15:0]</obj_property>
       <obj_property name="ObjectShortName">max_next[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/DUT/tmp_max" type="array">
+   <wvobject fp_name="/axis_extremum_finder_tb/DUT/tmp_max" type="array">
       <obj_property name="ElementShortName">tmp_max[15:0]</obj_property>
       <obj_property name="ObjectShortName">tmp_max[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/DUT/tmp_center" type="array">
+   <wvobject fp_name="/axis_extremum_finder_tb/DUT/tmp_center" type="array">
       <obj_property name="ElementShortName">tmp_center[15:0]</obj_property>
       <obj_property name="ObjectShortName">tmp_center[15:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/DUT/count" type="array">
+   <wvobject fp_name="/axis_extremum_finder_tb/DUT/count" type="array">
       <obj_property name="ElementShortName">count[31:0]</obj_property>
       <obj_property name="ObjectShortName">count[31:0]</obj_property>
       <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/DUT/count_next" type="array">
+   <wvobject fp_name="/axis_extremum_finder_tb/DUT/count_next" type="array">
       <obj_property name="ElementShortName">count_next[31:0]</obj_property>
       <obj_property name="ObjectShortName">count_next[31:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/extremum_finder_tb/DUT/max_count" type="array">
+   <wvobject fp_name="/axis_extremum_finder_tb/DUT/max_count" type="array">
       <obj_property name="ElementShortName">max_count[31:0]</obj_property>
       <obj_property name="ObjectShortName">max_count[31:0]</obj_property>
    </wvobject>
