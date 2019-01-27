@@ -20,7 +20,8 @@ module axis_differentiator #
     output wire                             M_AXIS_tvalid,
     output wire [AXIS_TDATA_WIDTH-1:0]      M_AXIS_tdata
 );
-    genvar                                  i, j;
+    genvar                                  i;
+    
     reg  signed [AXIS_TDATA_WIDTH-1:0]      shift1,                 shift1_next;
     reg  signed [AXIS_TDATA_WIDTH-1:0]      shift2,                 shift2_next;
     reg  signed [AXIS_TDATA_WIDTH-1:0]      shift3,                 shift3_next;

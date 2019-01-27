@@ -72,7 +72,6 @@ module s2mm_ram_writer #
         end
     endfunction
 
-
     // https://www.xilinx.com/support/documentation/user_guides/ug473_7Series_Memory_Resources.pdf 48 pp.
     // Note: "writing" is "RDEN" and "reading" is "WREN" for FIFO!
     // TODO: wait for bresp?

@@ -1,4 +1,4 @@
-set display_name {AXIS Sniffer}
+set display_name {AXI4-Stream Sniffer}
 
 set core [ipx::current_core]
 

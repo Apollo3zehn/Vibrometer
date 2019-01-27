@@ -1,4 +1,4 @@
-set display_name {AXIS Throttler}
+set display_name {AXI4-Stream Throttler}
 
 set core [ipx::current_core]
 

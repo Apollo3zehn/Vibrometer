@@ -1,4 +1,4 @@
-set display_name {AXIS Differentiator}
+set display_name {AXI4-Stream Differentiator}
 
 set core [ipx::current_core]
 

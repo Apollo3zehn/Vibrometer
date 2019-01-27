@@ -24,16 +24,16 @@ module axis_extremum_finder #
     localparam                              idle            = 1'b0, 
                                             measure         = 1'b1;
 
-    reg [AXIS_TDATA_WIDTH/2-1:0]            min,            min_next;
-    reg [AXIS_TDATA_WIDTH/2-1:0]            max,            max_next;
-    reg [AXIS_TDATA_WIDTH/2-1:0]            tmp_min,        tmp_min_next;
-    reg [AXIS_TDATA_WIDTH/2-1:0]            tmp_max,        tmp_max_next;
-    reg [31:0]                              count,          count_next;
+    reg  [AXIS_TDATA_WIDTH/2-1:0]           min,            min_next;
+    reg  [AXIS_TDATA_WIDTH/2-1:0]           max,            max_next;
+    reg  [AXIS_TDATA_WIDTH/2-1:0]           tmp_min,        tmp_min_next;
+    reg  [AXIS_TDATA_WIDTH/2-1:0]           tmp_max,        tmp_max_next;
+    reg  [31:0]                             count,          count_next;
     reg                                     state,          state_next;
     
-    reg [AXIS_TDATA_WIDTH/2-1:0]            tmp_center;
+    reg  [AXIS_TDATA_WIDTH/2-1:0]           tmp_center;
     
-    reg [AXIS_TDATA_WIDTH/2-1:0]            testreg;
+    reg  [AXIS_TDATA_WIDTH/2-1:0]           testreg;
     
     wire [AXIS_TDATA_WIDTH/2-1:0]           signal_a;
     wire [AXIS_TDATA_WIDTH/2-1:0]           signal_b; 

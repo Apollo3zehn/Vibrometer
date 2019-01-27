@@ -13,10 +13,15 @@ Position_Tracker    0x4122_0000
     + 0x0008 
     [31:0]          threshold               RO      31_[max, min]_0
 
-Fourier_Transform   0x4123_0000
-    [4:0]           log_throttle            RW      
+Filter              0x4123_0000
+    [4:0]           log_throttle            RW
 
-RAM_Writer          0x4124_0000
+Fourier_Transform   0x4124_0000
+    [10:6]          log_throttle            RW      
+    [5:1]           log_count_averages      RW
+    [0:0]           enable                  RW      
+
+RAM_Writer          0x4125_0000
     [11:7]          log_throttle            RW
     [6:2]           log_length              RW
     [1:1]           request                 RW

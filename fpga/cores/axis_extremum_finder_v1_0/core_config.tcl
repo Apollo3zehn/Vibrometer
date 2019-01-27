@@ -1,4 +1,4 @@
-set display_name {AXIS Extremum Finder}
+set display_name {AXI4-Stream Extremum Finder}
 
 set core [ipx::current_core]
 

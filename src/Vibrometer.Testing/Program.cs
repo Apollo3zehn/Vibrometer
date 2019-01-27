@@ -7,23 +7,8 @@ namespace Vibrometer.Testing
 {
     class Program
     {
-        //[DllImport("c", CharSet = CharSet.Auto)]
-        //static unsafe extern void* dma_alloc_coherent(void* dev, uint size, uint* dma_addr, uint flag);
-
         static void Main(string[] args)
         {
-            //Console.WriteLine("Hello World!");
-            //Console.ReadKey(true);
-
-            //unsafe
-            //{
-            //    uint yellow;
-            //    var res = dma_alloc_coherent(null, 10, &yellow, 0);
-            //    uint a = *(uint*)res;
-
-            //}
-
-            //return;
             bool exit = false;
 
             API.Init();
@@ -86,29 +71,40 @@ namespace Vibrometer.Testing
 
                 Console.WriteLine();
 
+                Console.WriteLine("Fourier Transform");
+                if (API.RamWriter.Enabled)
+                    Program.WriteColored($"[8] - disable Fourier Transform\n");
+                else
+                    Console.Write($"[8] - enable Fourier Transform\n");
+
+                Console.WriteLine($"[9] - set log count averages");
+                Console.WriteLine($"[A] - set log throttle");
+
+                Console.WriteLine();
+
                 Console.WriteLine("RAM Writer");
 
                 if (API.RamWriter.Enabled)
-                    Program.WriteColored($"[8] - disable RAM writer\n");
+                    Program.WriteColored($"[B] - disable RAM writer\n");
                 else
-                    Console.Write($"[8] - enable RAM writer\n");
+                    Console.Write($"[B] - enable RAM writer\n");
 
                 if (API.RamWriter.RequestEnabled)
-                    Program.WriteColored($"[9] - disable buffer request\n");
+                    Program.WriteColored($"[C] - disable buffer request\n");
                 else
-                    Console.Write($"[9] - enable buffer request\n");
+                    Console.Write($"[C] - enable buffer request\n");
 
-                Console.WriteLine($"[A] - set log length");
-                Console.WriteLine($"[B] - set log throttle");
-                Console.WriteLine($"[C] - set address");
-                Console.WriteLine($"[D] - get read buffer");
+                Console.WriteLine($"[D] - set log length");
+                Console.WriteLine($"[E] - set log throttle");
+                Console.WriteLine($"[F] - set address");
+                Console.WriteLine($"[G] - get read buffer");
 
                 Console.WriteLine();
 
                 Console.WriteLine("RAM");
-                Console.WriteLine($"[E] - get data ({Math.Min(Math.Pow(2, API.RamWriter.LogLength), 1024)} values)");
-                Console.WriteLine($"[F] - get stream");
-                Console.WriteLine($"[G] - clear");
+                Console.WriteLine($"[H] - get data ({Math.Min(Math.Pow(2, API.RamWriter.LogLength), 1024)} values)");
+                Console.WriteLine($"[I] - get stream");
+                Console.WriteLine($"[J] - clear");
 
                 var keyInfo = Console.ReadKey(true);
 
@@ -154,31 +150,40 @@ namespace Vibrometer.Testing
                         break;
                     case ConsoleKey.NumPad8:
                     case ConsoleKey.D8:
-                        Program.RW_Toggle_Enable();
+                        Program.FT_Toggle_Enable();
                         break;
                     case ConsoleKey.NumPad9:
                     case ConsoleKey.D9:
-                        Program.RW_Toggle_RequestEnable();
+                        Program.FT_Set_LogCountAverages();
                         break;
                     case ConsoleKey.A:
-                        Program.RW_Set_LogLength();
+                        Program.FT_Set_LogThrottle();
                         break;
                     case ConsoleKey.B:
-                        Program.RW_Set_LogThrottle();
+                        Program.RW_Toggle_Enable();
                         break;
                     case ConsoleKey.C:
-                        Program.RW_Set_Address();
+                        Program.RW_Toggle_RequestEnable();
                         break;
                     case ConsoleKey.D:
-                        Program.RW_Get_ReadBuffer();
+                        Program.RW_Set_LogLength();
                         break;
                     case ConsoleKey.E:
-                        Program.RAM_Get_Data();
+                        Program.RW_Set_LogThrottle();
                         break;
                     case ConsoleKey.F:
-                        Program.RAM_Get_Stream();
+                        Program.RW_Set_Address();
                         break;
                     case ConsoleKey.G:
+                        Program.RW_Get_ReadBuffer();
+                        break;
+                    case ConsoleKey.H:
+                        Program.RAM_Get_Data();
+                        break;
+                    case ConsoleKey.I:
+                        Program.RAM_Get_Stream();
+                        break;
+                    case ConsoleKey.J:
                         API.ClearRam();
                         break;
                     case ConsoleKey.Escape:
@@ -345,6 +350,33 @@ namespace Vibrometer.Testing
             Program.PrintDialogInteger(ref value, min, max, "log throttle");
 
             API.Filter.LogThrottle = value;
+        }
+
+        private static void FT_Toggle_Enable()
+        {
+            API.FourierTransform.Enabled = !API.FourierTransform.Enabled;
+        }
+
+        private static void FT_Set_LogCountAverages()
+        {
+            uint min = 0;
+            uint max = (uint)Math.Pow(2, 5) - 1;
+            uint value = API.FourierTransform.LogCountAverages;
+
+            Program.PrintDialogInteger(ref value, min, max, "log count averages");
+
+            API.FourierTransform.LogCountAverages = value;
+        }
+
+        private static void FT_Set_LogThrottle()
+        {
+            uint min = 1;
+            uint max = (uint)Math.Pow(2, 5) - 1;
+            uint value = API.FourierTransform.LogThrottle;
+
+            Program.PrintDialogInteger(ref value, min, max, "log throttle");
+
+            API.FourierTransform.LogThrottle = value;
         }
 
         private static void RW_Toggle_Enable()

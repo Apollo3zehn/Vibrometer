@@ -1,4 +1,4 @@
-set display_name {AXIS Position Tracker}
+set display_name {AXI4-Stream Position Tracker}
 
 set core [ipx::current_core]
 
