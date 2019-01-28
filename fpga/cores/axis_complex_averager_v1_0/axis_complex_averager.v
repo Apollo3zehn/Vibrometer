@@ -1,5 +1,3 @@
-// TODO: Allow asynchronous operation (currently this IP works reliable only when write_enable is constantly asserted.
-// TODO: Simulation shows strange calculation of sum (glitches?)
 // TODO: A master is not permitted to wait until TREADY is asserted before asserting TVALID
 
 `timescale 1ns / 1ps
@@ -38,6 +36,7 @@ module axis_complex_averager #
     // BRAM port B
     output wire [BRAM_ADDR_WIDTH-1:0]       bram_portb_addr,
     output wire                             bram_portb_clk,
+    output wire                             bram_portb_en,
     input  wire [BRAM_DATA_WIDTH-1:0]       bram_portb_rddata
 );
     function [(AXIS_TDATA_WIDTH/2)-1:0] truncate(input [(BRAM_DATA_WIDTH/2)-1:0] val32);
@@ -82,12 +81,13 @@ module axis_complex_averager #
     // BRAM port A (write)
     assign bram_porta_addr                  = a_addr;
     assign bram_porta_clk                   = aclk;
-    assign bram_porta_wrdata                = state == first ? {s_imag, s_real} : {b_real + s_real, b_imag + s_imag};
+    assign bram_porta_wrdata                = state == first ? {s_imag, s_real} : {b_imag + s_imag, b_real + s_real};
     assign bram_porta_we                    = write_enable;
 
     // BRAM port B (read)
     assign bram_portb_addr                  = b_addr;
     assign bram_portb_clk                   = aclk;
+    assign bram_portb_en                    = write_enable;
 
     always @(posedge aclk) begin
         if (~aresetn) begin

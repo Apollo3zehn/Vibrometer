@@ -50,6 +50,7 @@ set_property INTERFACE_MODE master $bus
 foreach {logical physical} {
   CLK  bram_portb_clk
   ADDR bram_portb_addr
+  EN   bram_portb_en
   DOUT bram_portb_rddata
 } {
   set_property PHYSICAL_NAME $physical [ipx::add_port_map $logical $bus]
