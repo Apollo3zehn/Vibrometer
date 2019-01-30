@@ -45,14 +45,16 @@ module axis_complex_averager #
 
     genvar                                  i;
 
-    localparam                              first            = 1'b0, 
-                                            measure          = 1'b1;
+    localparam                              SIGN_EXTENSION      = (BRAM_DATA_WIDTH - AXIS_TDATA_WIDTH) / 2;
 
-    reg  [7:0]                              avg_count,      avg_count_next;
-    reg                                     state,          state_next;
-    reg  [BRAM_ADDR_WIDTH-1:0]              a_addr,         a_addr_next;
-    reg  [BRAM_ADDR_WIDTH-1:0]              b_addr,         b_addr_next;
-    reg                                     t_last,         t_last_next;
+    localparam                              first               = 1'b0, 
+                                            measure             = 1'b1;
+
+    reg  [7:0]                              avg_count,          avg_count_next;
+    reg                                     state,              state_next;
+    reg  [BRAM_ADDR_WIDTH-1:0]              a_addr,             a_addr_next;
+    reg  [BRAM_ADDR_WIDTH-1:0]              b_addr,             b_addr_next;
+    reg                                     t_last,             t_last_next;
 
     wire [(BRAM_DATA_WIDTH/2)-1:0]          s_real;
     wire [(BRAM_DATA_WIDTH/2)-1:0]          s_imag;
@@ -65,8 +67,8 @@ module axis_complex_averager #
     assign write_enable                     = M_AXIS_tready && S_AXIS_tvalid && aresetn;
 
     // split signals
-    assign s_real                           = S_AXIS_tdata[(AXIS_TDATA_WIDTH/2)-1:0];
-    assign s_imag                           = S_AXIS_tdata[AXIS_TDATA_WIDTH-1:AXIS_TDATA_WIDTH/2];
+    assign s_real                           = {{SIGN_EXTENSION{S_AXIS_tdata[(AXIS_TDATA_WIDTH/2)-1]}}, S_AXIS_tdata[(AXIS_TDATA_WIDTH/2)-1:0]};
+    assign s_imag                           = {{SIGN_EXTENSION{S_AXIS_tdata[AXIS_TDATA_WIDTH-1]}}, S_AXIS_tdata[AXIS_TDATA_WIDTH-1:AXIS_TDATA_WIDTH/2]};
     assign b_real                           = bram_portb_rddata[(BRAM_DATA_WIDTH/2)-1:0];
     assign b_imag                           = bram_portb_rddata[BRAM_DATA_WIDTH-1:BRAM_DATA_WIDTH/2];
 
@@ -75,7 +77,7 @@ module axis_complex_averager #
 
     // M_AXIS
     assign M_AXIS_tvalid                    = write_enable && state == first;
-    assign M_AXIS_tdata                     = {truncate(b_real >> AV_log_count), truncate(b_imag >> AV_log_count)};
+    assign M_AXIS_tdata                     = {truncate($signed(b_imag) >>> AV_log_count), truncate($signed(b_real) >>> AV_log_count)};
     assign M_AXIS_tlast                     = t_last;
 
     // BRAM port A (write)

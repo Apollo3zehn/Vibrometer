@@ -7,196 +7,76 @@
          <top_modules>
             <top_module name="Fourier_transform_tb" />
             <top_module name="glbl" />
+            <top_module name="ipif_pkg" />
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="2566000000fs"></ZoomStartTime>
-      <ZoomEndTime time="17746000001fs"></ZoomEndTime>
-      <Cursor1Time time="5116000000fs"></Cursor1Time>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="3330037880fs"></ZoomEndTime>
+      <Cursor1Time time="7596100000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="212"></NameColumnWidth>
-      <ValueColumnWidth column_width="146"></ValueColumnWidth>
+      <ValueColumnWidth column_width="98"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="12" />
-   <wvobject fp_name="/Fourier_transform_tb/aclk" type="logic">
-      <obj_property name="ElementShortName">aclk</obj_property>
-      <obj_property name="ObjectShortName">aclk</obj_property>
-   </wvobject>
-   <wvobject fp_name="/Fourier_transform_tb/aresetn" type="logic">
-      <obj_property name="ElementShortName">aresetn</obj_property>
-      <obj_property name="ObjectShortName">aresetn</obj_property>
-   </wvobject>
-   <wvobject fp_name="/Fourier_transform_tb/value" type="array">
-      <obj_property name="ElementShortName">value[15:0]</obj_property>
-      <obj_property name="ObjectShortName">value[15:0]</obj_property>
-      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
-      <obj_property name="CellHeight">100</obj_property>
-      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata" type="array">
-      <obj_property name="ElementShortName">M_AXIS_fft_tdata[31:0]</obj_property>
-      <obj_property name="ObjectShortName">M_AXIS_fft_tdata[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="vbus353" type="vbus">
-      <obj_property name="label">real</obj_property>
-      <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
-      <obj_property name="CellHeight">100</obj_property>
-      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-      <obj_property name="AnalogYRangeMin">23287</obj_property>
-      <obj_property name="AnalogYRRangeMax">27193</obj_property>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[15]" type="logic">
-         <obj_property name="ElementShortName">[15]</obj_property>
-         <obj_property name="ObjectShortName">[15]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[14]" type="logic">
-         <obj_property name="ElementShortName">[14]</obj_property>
-         <obj_property name="ObjectShortName">[14]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[13]" type="logic">
-         <obj_property name="ElementShortName">[13]</obj_property>
-         <obj_property name="ObjectShortName">[13]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[12]" type="logic">
-         <obj_property name="ElementShortName">[12]</obj_property>
-         <obj_property name="ObjectShortName">[12]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[11]" type="logic">
-         <obj_property name="ElementShortName">[11]</obj_property>
-         <obj_property name="ObjectShortName">[11]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[10]" type="logic">
-         <obj_property name="ElementShortName">[10]</obj_property>
-         <obj_property name="ObjectShortName">[10]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[9]" type="logic">
-         <obj_property name="ElementShortName">[9]</obj_property>
-         <obj_property name="ObjectShortName">[9]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[8]" type="logic">
-         <obj_property name="ElementShortName">[8]</obj_property>
-         <obj_property name="ObjectShortName">[8]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[7]" type="logic">
-         <obj_property name="ElementShortName">[7]</obj_property>
-         <obj_property name="ObjectShortName">[7]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[6]" type="logic">
-         <obj_property name="ElementShortName">[6]</obj_property>
-         <obj_property name="ObjectShortName">[6]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[5]" type="logic">
-         <obj_property name="ElementShortName">[5]</obj_property>
-         <obj_property name="ObjectShortName">[5]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[4]" type="logic">
-         <obj_property name="ElementShortName">[4]</obj_property>
-         <obj_property name="ObjectShortName">[4]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[3]" type="logic">
-         <obj_property name="ElementShortName">[3]</obj_property>
-         <obj_property name="ObjectShortName">[3]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[2]" type="logic">
-         <obj_property name="ElementShortName">[2]</obj_property>
-         <obj_property name="ObjectShortName">[2]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[1]" type="logic">
-         <obj_property name="ElementShortName">[1]</obj_property>
-         <obj_property name="ObjectShortName">[1]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[0]" type="logic">
-         <obj_property name="ElementShortName">[0]</obj_property>
-         <obj_property name="ObjectShortName">[0]</obj_property>
-      </wvobject>
-   </wvobject>
-   <wvobject fp_name="vbus336" type="vbus">
-      <obj_property name="label">imag</obj_property>
-      <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
-      <obj_property name="CellHeight">100</obj_property>
-      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-      <obj_property name="AnalogYRangeMin">-951475</obj_property>
-      <obj_property name="AnalogYRRangeMax">368268</obj_property>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[31]" type="logic">
-         <obj_property name="ElementShortName">[31]</obj_property>
-         <obj_property name="ObjectShortName">[31]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[30]" type="logic">
-         <obj_property name="ElementShortName">[30]</obj_property>
-         <obj_property name="ObjectShortName">[30]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[29]" type="logic">
-         <obj_property name="ElementShortName">[29]</obj_property>
-         <obj_property name="ObjectShortName">[29]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[28]" type="logic">
-         <obj_property name="ElementShortName">[28]</obj_property>
-         <obj_property name="ObjectShortName">[28]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[27]" type="logic">
-         <obj_property name="ElementShortName">[27]</obj_property>
-         <obj_property name="ObjectShortName">[27]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[26]" type="logic">
-         <obj_property name="ElementShortName">[26]</obj_property>
-         <obj_property name="ObjectShortName">[26]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[25]" type="logic">
-         <obj_property name="ElementShortName">[25]</obj_property>
-         <obj_property name="ObjectShortName">[25]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[24]" type="logic">
-         <obj_property name="ElementShortName">[24]</obj_property>
-         <obj_property name="ObjectShortName">[24]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[23]" type="logic">
-         <obj_property name="ElementShortName">[23]</obj_property>
-         <obj_property name="ObjectShortName">[23]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[22]" type="logic">
-         <obj_property name="ElementShortName">[22]</obj_property>
-         <obj_property name="ObjectShortName">[22]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[21]" type="logic">
-         <obj_property name="ElementShortName">[21]</obj_property>
-         <obj_property name="ObjectShortName">[21]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[20]" type="logic">
-         <obj_property name="ElementShortName">[20]</obj_property>
-         <obj_property name="ObjectShortName">[20]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[19]" type="logic">
-         <obj_property name="ElementShortName">[19]</obj_property>
-         <obj_property name="ObjectShortName">[19]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[18]" type="logic">
-         <obj_property name="ElementShortName">[18]</obj_property>
-         <obj_property name="ObjectShortName">[18]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[17]" type="logic">
-         <obj_property name="ElementShortName">[17]</obj_property>
-         <obj_property name="ObjectShortName">[17]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Fourier_transform_tb/M_AXIS_fft_tdata[16]" type="logic">
-         <obj_property name="ElementShortName">[16]</obj_property>
-         <obj_property name="ObjectShortName">[16]</obj_property>
-      </wvobject>
-   </wvobject>
-   <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/s_axis_config_tdata" type="array">
-      <obj_property name="ElementShortName">s_axis_config_tdata[7:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axis_config_tdata[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/Fourier_transform_tb/S_AXIS_filter_tvalid" type="logic">
-      <obj_property name="ElementShortName">S_AXIS_filter_tvalid</obj_property>
-      <obj_property name="ObjectShortName">S_AXIS_filter_tvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="group183" type="group">
+   <WVObjectSize size="10" />
+   <wvobject fp_name="group449" type="group">
       <obj_property name="label">input</obj_property>
       <obj_property name="DisplayName">label</obj_property>
       <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/Fourier_transform_tb/aclk" type="logic">
+         <obj_property name="ElementShortName">aclk</obj_property>
+         <obj_property name="ObjectShortName">aclk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/Fourier_transform_tb/aresetn" type="logic">
+         <obj_property name="ElementShortName">aresetn</obj_property>
+         <obj_property name="ObjectShortName">aresetn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/s_axis_config_tdata" type="array">
+         <obj_property name="ElementShortName">s_axis_config_tdata[7:0]</obj_property>
+         <obj_property name="ObjectShortName">s_axis_config_tdata[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/Fourier_transform_tb/S_AXIS_filter_tvalid" type="logic">
+         <obj_property name="ElementShortName">S_AXIS_filter_tvalid</obj_property>
+         <obj_property name="ObjectShortName">S_AXIS_filter_tvalid</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group216" type="group">
+      <obj_property name="label">data</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/Fourier_transform_tb/value" type="array">
+         <obj_property name="ElementShortName">value[15:0]</obj_property>
+         <obj_property name="ObjectShortName">value[15:0]</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group660" type="group">
+      <obj_property name="label">GPIO</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/Fourier_transform_tb/DUT/GPIO_config/aresetn_o" type="array">
+         <obj_property name="ElementShortName">aresetn_o[0:0]</obj_property>
+         <obj_property name="ObjectShortName">aresetn_o[0:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/Fourier_transform_tb/DUT/GPIO_config/data" type="array">
+         <obj_property name="ElementShortName">data[31:0]</obj_property>
+         <obj_property name="ObjectShortName">data[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/Fourier_transform_tb/DUT/GPIO_config/log_count_averages" type="array">
+         <obj_property name="ElementShortName">log_count_averages[4:0]</obj_property>
+         <obj_property name="ObjectShortName">log_count_averages[4:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/Fourier_transform_tb/DUT/GPIO_config/log_throttle" type="array">
+         <obj_property name="ElementShortName">log_throttle[4:0]</obj_property>
+         <obj_property name="ObjectShortName">log_throttle[4:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group183" type="group">
+      <obj_property name="label">fft_input</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
       <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/s_axis_data_tdata" type="array">
          <obj_property name="ElementShortName">s_axis_data_tdata[31:0]</obj_property>
          <obj_property name="ObjectShortName">s_axis_data_tdata[31:0]</obj_property>
@@ -225,14 +105,9 @@
       </wvobject>
    </wvobject>
    <wvobject fp_name="group184" type="group">
-      <obj_property name="label">output</obj_property>
+      <obj_property name="label">fft_output</obj_property>
       <obj_property name="DisplayName">label</obj_property>
       <obj_property name="isExpanded"></obj_property>
-      <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata" type="array">
-         <obj_property name="ElementShortName">m_axis_data_tdata[31:0]</obj_property>
-         <obj_property name="ObjectShortName">m_axis_data_tdata[31:0]</obj_property>
-         <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
-      </wvobject>
       <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tuser" type="array">
          <obj_property name="ElementShortName">m_axis_data_tuser[7:0]</obj_property>
          <obj_property name="ObjectShortName">m_axis_data_tuser[7:0]</obj_property>
@@ -249,11 +124,158 @@
          <obj_property name="ElementShortName">m_axis_data_tlast</obj_property>
          <obj_property name="ObjectShortName">m_axis_data_tlast</obj_property>
       </wvobject>
+      <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata" type="array">
+         <obj_property name="ElementShortName">m_axis_data_tdata[31:0]</obj_property>
+         <obj_property name="ObjectShortName">m_axis_data_tdata[31:0]</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+      </wvobject>
+      <wvobject fp_name="vbus862" type="vbus">
+         <obj_property name="label">real</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[15]" type="logic">
+            <obj_property name="ElementShortName">[15]</obj_property>
+            <obj_property name="ObjectShortName">[15]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[14]" type="logic">
+            <obj_property name="ElementShortName">[14]</obj_property>
+            <obj_property name="ObjectShortName">[14]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[13]" type="logic">
+            <obj_property name="ElementShortName">[13]</obj_property>
+            <obj_property name="ObjectShortName">[13]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[12]" type="logic">
+            <obj_property name="ElementShortName">[12]</obj_property>
+            <obj_property name="ObjectShortName">[12]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[11]" type="logic">
+            <obj_property name="ElementShortName">[11]</obj_property>
+            <obj_property name="ObjectShortName">[11]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[10]" type="logic">
+            <obj_property name="ElementShortName">[10]</obj_property>
+            <obj_property name="ObjectShortName">[10]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[9]" type="logic">
+            <obj_property name="ElementShortName">[9]</obj_property>
+            <obj_property name="ObjectShortName">[9]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[8]" type="logic">
+            <obj_property name="ElementShortName">[8]</obj_property>
+            <obj_property name="ObjectShortName">[8]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[7]" type="logic">
+            <obj_property name="ElementShortName">[7]</obj_property>
+            <obj_property name="ObjectShortName">[7]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[6]" type="logic">
+            <obj_property name="ElementShortName">[6]</obj_property>
+            <obj_property name="ObjectShortName">[6]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[5]" type="logic">
+            <obj_property name="ElementShortName">[5]</obj_property>
+            <obj_property name="ObjectShortName">[5]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[4]" type="logic">
+            <obj_property name="ElementShortName">[4]</obj_property>
+            <obj_property name="ObjectShortName">[4]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[3]" type="logic">
+            <obj_property name="ElementShortName">[3]</obj_property>
+            <obj_property name="ObjectShortName">[3]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[2]" type="logic">
+            <obj_property name="ElementShortName">[2]</obj_property>
+            <obj_property name="ObjectShortName">[2]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[1]" type="logic">
+            <obj_property name="ElementShortName">[1]</obj_property>
+            <obj_property name="ObjectShortName">[1]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[0]" type="logic">
+            <obj_property name="ElementShortName">[0]</obj_property>
+            <obj_property name="ObjectShortName">[0]</obj_property>
+         </wvobject>
+      </wvobject>
+      <wvobject fp_name="vbus863" type="vbus">
+         <obj_property name="label">imag</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[31]" type="logic">
+            <obj_property name="ElementShortName">[31]</obj_property>
+            <obj_property name="ObjectShortName">[31]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[30]" type="logic">
+            <obj_property name="ElementShortName">[30]</obj_property>
+            <obj_property name="ObjectShortName">[30]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[29]" type="logic">
+            <obj_property name="ElementShortName">[29]</obj_property>
+            <obj_property name="ObjectShortName">[29]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[28]" type="logic">
+            <obj_property name="ElementShortName">[28]</obj_property>
+            <obj_property name="ObjectShortName">[28]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[27]" type="logic">
+            <obj_property name="ElementShortName">[27]</obj_property>
+            <obj_property name="ObjectShortName">[27]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[26]" type="logic">
+            <obj_property name="ElementShortName">[26]</obj_property>
+            <obj_property name="ObjectShortName">[26]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[25]" type="logic">
+            <obj_property name="ElementShortName">[25]</obj_property>
+            <obj_property name="ObjectShortName">[25]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[24]" type="logic">
+            <obj_property name="ElementShortName">[24]</obj_property>
+            <obj_property name="ObjectShortName">[24]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[23]" type="logic">
+            <obj_property name="ElementShortName">[23]</obj_property>
+            <obj_property name="ObjectShortName">[23]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[22]" type="logic">
+            <obj_property name="ElementShortName">[22]</obj_property>
+            <obj_property name="ObjectShortName">[22]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[21]" type="logic">
+            <obj_property name="ElementShortName">[21]</obj_property>
+            <obj_property name="ObjectShortName">[21]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[20]" type="logic">
+            <obj_property name="ElementShortName">[20]</obj_property>
+            <obj_property name="ObjectShortName">[20]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[19]" type="logic">
+            <obj_property name="ElementShortName">[19]</obj_property>
+            <obj_property name="ObjectShortName">[19]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[18]" type="logic">
+            <obj_property name="ElementShortName">[18]</obj_property>
+            <obj_property name="ObjectShortName">[18]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[17]" type="logic">
+            <obj_property name="ElementShortName">[17]</obj_property>
+            <obj_property name="ObjectShortName">[17]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_data_tdata[16]" type="logic">
+            <obj_property name="ElementShortName">[16]</obj_property>
+            <obj_property name="ObjectShortName">[16]</obj_property>
+         </wvobject>
+      </wvobject>
    </wvobject>
    <wvobject fp_name="group182" type="group">
-      <obj_property name="label">status</obj_property>
+      <obj_property name="label">fft_status</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
       <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/m_axis_status_tdata" type="array">
          <obj_property name="ElementShortName">m_axis_status_tdata[7:0]</obj_property>
          <obj_property name="ObjectShortName">m_axis_status_tdata[7:0]</obj_property>
@@ -274,9 +296,8 @@
       </wvobject>
    </wvobject>
    <wvobject fp_name="group181" type="group">
-      <obj_property name="label">event</obj_property>
+      <obj_property name="label">fft_event</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
       <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/event_frame_started" type="logic">
          <obj_property name="ElementShortName">event_frame_started</obj_property>
          <obj_property name="ObjectShortName">event_frame_started</obj_property>
@@ -300,6 +321,218 @@
       <wvobject fp_name="/Fourier_transform_tb/DUT/xfft/event_data_out_channel_halt" type="logic">
          <obj_property name="ElementShortName">event_data_out_channel_halt</obj_property>
          <obj_property name="ObjectShortName">event_data_out_channel_halt</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group68" type="group">
+      <obj_property name="label">averager_input</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/S_AXIS_tdata" type="array">
+         <obj_property name="ElementShortName">S_AXIS_tdata[31:0]</obj_property>
+         <obj_property name="ObjectShortName">S_AXIS_tdata[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/S_AXIS_tvalid" type="logic">
+         <obj_property name="ElementShortName">S_AXIS_tvalid</obj_property>
+         <obj_property name="ObjectShortName">S_AXIS_tvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/S_AXIS_tready" type="logic">
+         <obj_property name="ElementShortName">S_AXIS_tready</obj_property>
+         <obj_property name="ObjectShortName">S_AXIS_tready</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group63" type="group">
+      <obj_property name="label">averager_output</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tready" type="logic">
+         <obj_property name="ElementShortName">M_AXIS_tready</obj_property>
+         <obj_property name="ObjectShortName">M_AXIS_tready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tvalid" type="logic">
+         <obj_property name="ElementShortName">M_AXIS_tvalid</obj_property>
+         <obj_property name="ObjectShortName">M_AXIS_tvalid</obj_property>
+      </wvobject>
+      <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata" type="array">
+         <obj_property name="ElementShortName">M_AXIS_tdata[31:0]</obj_property>
+         <obj_property name="ObjectShortName">M_AXIS_tdata[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tlast" type="logic">
+         <obj_property name="ElementShortName">M_AXIS_tlast</obj_property>
+         <obj_property name="ObjectShortName">M_AXIS_tlast</obj_property>
+      </wvobject>
+      <wvobject fp_name="vbus793" type="vbus">
+         <obj_property name="label">real</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[15]" type="logic">
+            <obj_property name="ElementShortName">[15]</obj_property>
+            <obj_property name="ObjectShortName">[15]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[14]" type="logic">
+            <obj_property name="ElementShortName">[14]</obj_property>
+            <obj_property name="ObjectShortName">[14]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[13]" type="logic">
+            <obj_property name="ElementShortName">[13]</obj_property>
+            <obj_property name="ObjectShortName">[13]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[12]" type="logic">
+            <obj_property name="ElementShortName">[12]</obj_property>
+            <obj_property name="ObjectShortName">[12]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[11]" type="logic">
+            <obj_property name="ElementShortName">[11]</obj_property>
+            <obj_property name="ObjectShortName">[11]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[10]" type="logic">
+            <obj_property name="ElementShortName">[10]</obj_property>
+            <obj_property name="ObjectShortName">[10]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[9]" type="logic">
+            <obj_property name="ElementShortName">[9]</obj_property>
+            <obj_property name="ObjectShortName">[9]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[8]" type="logic">
+            <obj_property name="ElementShortName">[8]</obj_property>
+            <obj_property name="ObjectShortName">[8]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[7]" type="logic">
+            <obj_property name="ElementShortName">[7]</obj_property>
+            <obj_property name="ObjectShortName">[7]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[6]" type="logic">
+            <obj_property name="ElementShortName">[6]</obj_property>
+            <obj_property name="ObjectShortName">[6]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[5]" type="logic">
+            <obj_property name="ElementShortName">[5]</obj_property>
+            <obj_property name="ObjectShortName">[5]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[4]" type="logic">
+            <obj_property name="ElementShortName">[4]</obj_property>
+            <obj_property name="ObjectShortName">[4]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[3]" type="logic">
+            <obj_property name="ElementShortName">[3]</obj_property>
+            <obj_property name="ObjectShortName">[3]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[2]" type="logic">
+            <obj_property name="ElementShortName">[2]</obj_property>
+            <obj_property name="ObjectShortName">[2]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[1]" type="logic">
+            <obj_property name="ElementShortName">[1]</obj_property>
+            <obj_property name="ObjectShortName">[1]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[0]" type="logic">
+            <obj_property name="ElementShortName">[0]</obj_property>
+            <obj_property name="ObjectShortName">[0]</obj_property>
+         </wvobject>
+      </wvobject>
+      <wvobject fp_name="vbus795" type="vbus">
+         <obj_property name="label">imag</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+         <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[31]" type="logic">
+            <obj_property name="ElementShortName">[31]</obj_property>
+            <obj_property name="ObjectShortName">[31]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[30]" type="logic">
+            <obj_property name="ElementShortName">[30]</obj_property>
+            <obj_property name="ObjectShortName">[30]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[29]" type="logic">
+            <obj_property name="ElementShortName">[29]</obj_property>
+            <obj_property name="ObjectShortName">[29]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[28]" type="logic">
+            <obj_property name="ElementShortName">[28]</obj_property>
+            <obj_property name="ObjectShortName">[28]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[27]" type="logic">
+            <obj_property name="ElementShortName">[27]</obj_property>
+            <obj_property name="ObjectShortName">[27]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[26]" type="logic">
+            <obj_property name="ElementShortName">[26]</obj_property>
+            <obj_property name="ObjectShortName">[26]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[25]" type="logic">
+            <obj_property name="ElementShortName">[25]</obj_property>
+            <obj_property name="ObjectShortName">[25]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[24]" type="logic">
+            <obj_property name="ElementShortName">[24]</obj_property>
+            <obj_property name="ObjectShortName">[24]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[23]" type="logic">
+            <obj_property name="ElementShortName">[23]</obj_property>
+            <obj_property name="ObjectShortName">[23]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[22]" type="logic">
+            <obj_property name="ElementShortName">[22]</obj_property>
+            <obj_property name="ObjectShortName">[22]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[21]" type="logic">
+            <obj_property name="ElementShortName">[21]</obj_property>
+            <obj_property name="ObjectShortName">[21]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[20]" type="logic">
+            <obj_property name="ElementShortName">[20]</obj_property>
+            <obj_property name="ObjectShortName">[20]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[19]" type="logic">
+            <obj_property name="ElementShortName">[19]</obj_property>
+            <obj_property name="ObjectShortName">[19]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[18]" type="logic">
+            <obj_property name="ElementShortName">[18]</obj_property>
+            <obj_property name="ObjectShortName">[18]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[17]" type="logic">
+            <obj_property name="ElementShortName">[17]</obj_property>
+            <obj_property name="ObjectShortName">[17]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/M_AXIS_tdata[16]" type="logic">
+            <obj_property name="ElementShortName">[16]</obj_property>
+            <obj_property name="ObjectShortName">[16]</obj_property>
+         </wvobject>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group1182" type="group">
+      <obj_property name="label">averager_bram</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/inst/bram_porta_addr" type="array">
+         <obj_property name="ElementShortName">bram_porta_addr[7:0]</obj_property>
+         <obj_property name="ObjectShortName">bram_porta_addr[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/inst/bram_porta_clk" type="logic">
+         <obj_property name="ElementShortName">bram_porta_clk</obj_property>
+         <obj_property name="ObjectShortName">bram_porta_clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/inst/bram_porta_wrdata" type="array">
+         <obj_property name="ElementShortName">bram_porta_wrdata[63:0]</obj_property>
+         <obj_property name="ObjectShortName">bram_porta_wrdata[63:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/inst/bram_porta_we" type="logic">
+         <obj_property name="ElementShortName">bram_porta_we</obj_property>
+         <obj_property name="ObjectShortName">bram_porta_we</obj_property>
+      </wvobject>
+      <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/inst/bram_portb_addr" type="array">
+         <obj_property name="ElementShortName">bram_portb_addr[7:0]</obj_property>
+         <obj_property name="ObjectShortName">bram_portb_addr[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/inst/bram_portb_clk" type="logic">
+         <obj_property name="ElementShortName">bram_portb_clk</obj_property>
+         <obj_property name="ObjectShortName">bram_portb_clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/Fourier_transform_tb/DUT/axis_complex_averager/inst/bram_portb_en" type="logic">
+         <obj_property name="ElementShortName">bram_portb_en</obj_property>
+         <obj_property name="ObjectShortName">bram_portb_en</obj_property>
       </wvobject>
    </wvobject>
 </wave_config>

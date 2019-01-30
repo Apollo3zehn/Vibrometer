@@ -2,7 +2,7 @@
 
 module Fourier_transform_tb #
 (
-    parameter integer                   AXIS_TDATA_WIDTH        = 16
+    parameter integer                   AXIS_TDATA_WIDTH        = 32
 );
     integer                             file_handle_in;
     integer                             file_handle_out;
@@ -11,6 +11,7 @@ module Fourier_transform_tb #
 
     reg                                 aclk                    = 0;
     reg                                 aresetn                 = 0;
+    reg  [31:0]                         GPIO                    = 0;
     reg  [AXIS_TDATA_WIDTH-1:0]         value                   = 0;
     reg                                 S_AXIS_filter_tvalid    = 1;
     reg                                 M_AXIS_fft_tready       = 1;
@@ -23,6 +24,7 @@ module Fourier_transform_tb #
     Fourier_Transform_imp_188Q41O DUT (
         .aclk(aclk),
         .aresetn(aresetn),
+        .GPIO(GPIO),
         .S_AXIS_filter_tdata(S_AXIS_filter_tdata),
         .S_AXIS_filter_tvalid(S_AXIS_filter_tvalid),
         .M_AXIS_fft_tready(M_AXIS_fft_tready),
@@ -46,11 +48,15 @@ module Fourier_transform_tb #
 
         repeat (3) @(posedge aclk); 
             aresetn         = 1'b1;
+
+        repeat (6) @(posedge aclk);
+            // 10-6 log_throttle, 5-1 log_count_averages, 0 enable
+            GPIO            <= 32'b00000000_00000000_00000000_00000101;
     end
 
     always @(posedge aclk) begin
         $fscanf(file_handle_in, "%d\n", value);
-        $fwrite(file_handle_out, "%h\n", M_AXIS_fft_tdata);
+        $fwrite(file_handle_out, "%d;%d\n", $signed(M_AXIS_fft_tdata[(AXIS_TDATA_WIDTH/2)-1:0]), $signed(M_AXIS_fft_tdata[AXIS_TDATA_WIDTH-1:AXIS_TDATA_WIDTH/2]));
 
         if ($feof(file_handle_in)) begin
             $fclose(file_handle_in);
