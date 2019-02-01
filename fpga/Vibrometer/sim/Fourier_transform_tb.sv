@@ -2,7 +2,8 @@
 
 module Fourier_transform_tb #
 (
-    parameter integer                   AXIS_TDATA_WIDTH        = 32
+    parameter integer                   AXIS_TDATA_WIDTH_IN        = 16,
+    parameter integer                   AXIS_TDATA_WIDTH_OUT       = 32
 );
     integer                             file_handle_in;
     integer                             file_handle_out;
@@ -12,12 +13,12 @@ module Fourier_transform_tb #
     reg                                 aclk                    = 0;
     reg                                 aresetn                 = 0;
     reg  [31:0]                         GPIO                    = 0;
-    reg  [AXIS_TDATA_WIDTH-1:0]         value                   = 0;
+    reg  [AXIS_TDATA_WIDTH_IN-1:0]      value                   = 0;
     reg                                 S_AXIS_filter_tvalid    = 1;
     reg                                 M_AXIS_fft_tready       = 1;
-    reg  [(AXIS_TDATA_WIDTH*2)-1:0]     M_AXIS_fft_tdata        = 0;
+    reg  [(AXIS_TDATA_WIDTH_OUT)-1:0]   M_AXIS_fft_tdata        = 0;
  
-    wire [AXIS_TDATA_WIDTH-1:0]         S_AXIS_filter_tdata;
+    wire [AXIS_TDATA_WIDTH_IN-1:0]      S_AXIS_filter_tdata;
  
     assign S_AXIS_filter_tdata          = value;
 
@@ -56,7 +57,14 @@ module Fourier_transform_tb #
 
     always @(posedge aclk) begin
         $fscanf(file_handle_in, "%d\n", value);
-        $fwrite(file_handle_out, "%d;%d\n", $signed(M_AXIS_fft_tdata[(AXIS_TDATA_WIDTH/2)-1:0]), $signed(M_AXIS_fft_tdata[AXIS_TDATA_WIDTH-1:AXIS_TDATA_WIDTH/2]));
+        $fwrite(
+            file_handle_out, 
+            "%d;%d;%d;%d\n", 
+            $signed(DUT.axis_complex_averager.S_AXIS_tdata[(AXIS_TDATA_WIDTH_OUT/2)-1:0]), 
+            $signed(DUT.axis_complex_averager.S_AXIS_tdata[AXIS_TDATA_WIDTH_OUT-1:AXIS_TDATA_WIDTH_OUT/2]), 
+            $signed(M_AXIS_fft_tdata[(AXIS_TDATA_WIDTH_OUT/2)-1:0]), 
+            $signed(M_AXIS_fft_tdata[AXIS_TDATA_WIDTH_OUT-1:AXIS_TDATA_WIDTH_OUT/2])
+        );
 
         if ($feof(file_handle_in)) begin
             $fclose(file_handle_in);
