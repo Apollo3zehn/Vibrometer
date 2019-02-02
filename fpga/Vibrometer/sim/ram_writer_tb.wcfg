@@ -12,13 +12,13 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="1236000001fs"></ZoomEndTime>
-      <Cursor1Time time="4530700000fs"></Cursor1Time>
+      <ZoomStartTime time="75500000fs"></ZoomStartTime>
+      <ZoomEndTime time="3205500001fs"></ZoomEndTime>
+      <Cursor1Time time="1348000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="220"></NameColumnWidth>
-      <ValueColumnWidth column_width="137"></ValueColumnWidth>
+      <ValueColumnWidth column_width="129"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="7" />
    <wave_markers>
@@ -60,6 +60,7 @@
    <wvobject fp_name="group2794" type="group">
       <obj_property name="label">states</obj_property>
       <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
       <wvobject fp_name="/ram_writer_tb/DUT/sync_manager/inst/state_read" type="array">
          <obj_property name="ElementShortName">state_read[3:0]</obj_property>
          <obj_property name="ObjectShortName">state_read[3:0]</obj_property>

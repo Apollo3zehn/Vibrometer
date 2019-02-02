@@ -1,7 +1,7 @@
 //Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2018.3 (win64) Build 2405991 Thu Dec  6 23:38:27 MST 2018
-//Date        : Sun Jan 13 18:02:22 2019
+//Date        : Sat Feb  2 16:07:37 2019
 //Host        : VINCENT_PC running 64-bit major release  (build 9200)
 //Command     : generate_target system_wrapper.bd
 //Design      : system_wrapper
@@ -73,7 +73,7 @@ module system_wrapper
   output [0:0]dac_rst_o;
   output dac_sel_o;
   output dac_wrt_o;
-  output [4:0]led_o;
+  output [3:0]led_o;
 
   wire [14:0]DDR_addr;
   wire [2:0]DDR_ba;
@@ -106,7 +106,7 @@ module system_wrapper
   wire [0:0]dac_rst_o;
   wire dac_sel_o;
   wire dac_wrt_o;
-  wire [4:0]led_o;
+  wire [3:0]led_o;
 
   system system_i
        (.DDR_addr(DDR_addr),
