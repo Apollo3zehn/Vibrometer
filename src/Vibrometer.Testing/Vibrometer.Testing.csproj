@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Mono.Posix.NETStandard" Version="1.0.0" />
+    <ProjectReference Include="..\Vibrometer.Shared\Vibrometer.Shared.csproj" />
   </ItemGroup>
 
 </Project>

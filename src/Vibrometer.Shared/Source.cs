@@ -1,4 +1,4 @@
-﻿namespace Vibrometer.Testing
+﻿namespace Vibrometer.Shared
 {
     public enum Source : uint
     {

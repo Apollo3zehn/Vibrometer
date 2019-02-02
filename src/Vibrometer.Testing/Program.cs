@@ -2,17 +2,21 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Vibrometer.Shared;
+using Vibrometer.Shared.API;
 
 namespace Vibrometer.Testing
 {
     class Program
     {
+        static VibrometerApi _api;
+
         static void Main(string[] args)
         {
             bool exit = false;
 
-            API.Init();
-
+            _api = new VibrometerApi();
+        
             while (!exit)
             {
                 Console.Clear();
@@ -23,7 +27,7 @@ namespace Vibrometer.Testing
 
                 Console.WriteLine("General");
 
-                switch (API.General.Source)
+                switch (_api.General.Source)
                 {
                     case Source.Raw:
                         Program.WriteColored($"[0] - set source (source: raw)\n");
@@ -51,7 +55,7 @@ namespace Vibrometer.Testing
 
                 Console.WriteLine("Data Acquisition");
 
-                if (API.DataAcquisition.SwitchEnabled)
+                if (_api.DataAcquisition.SwitchEnabled)
                     Program.WriteColored($"[2] - disable switch\n");
                 else
                     Console.Write($"[2] - enable switch\n");
@@ -72,7 +76,7 @@ namespace Vibrometer.Testing
                 Console.WriteLine();
 
                 Console.WriteLine("Fourier Transform");
-                if (API.RamWriter.Enabled)
+                if (_api.FourierTransform.Enabled)
                     Program.WriteColored($"[8] - disable Fourier Transform\n");
                 else
                     Console.Write($"[8] - enable Fourier Transform\n");
@@ -84,12 +88,12 @@ namespace Vibrometer.Testing
 
                 Console.WriteLine("RAM Writer");
 
-                if (API.RamWriter.Enabled)
+                if (_api.RamWriter.Enabled)
                     Program.WriteColored($"[B] - disable RAM writer\n");
                 else
                     Console.Write($"[B] - enable RAM writer\n");
 
-                if (API.RamWriter.RequestEnabled)
+                if (_api.RamWriter.RequestEnabled)
                     Program.WriteColored($"[C] - disable buffer request\n");
                 else
                     Console.Write($"[C] - enable buffer request\n");
@@ -102,7 +106,7 @@ namespace Vibrometer.Testing
                 Console.WriteLine();
 
                 Console.WriteLine("RAM");
-                Console.WriteLine($"[H] - get data ({Math.Min(Math.Pow(2, API.RamWriter.LogLength), 1024)} values)");
+                Console.WriteLine($"[H] - get data ({Math.Min(Math.Pow(2, _api.RamWriter.LogLength), 1024)} values)");
                 Console.WriteLine($"[I] - get stream");
                 Console.WriteLine($"[J] - clear");
 
@@ -114,7 +118,7 @@ namespace Vibrometer.Testing
                         Program.LoadFPGAImage();
                         break;
                     case ConsoleKey.P:
-                        API.SetDefaults();
+                        _api.SetDefaults();
                         break;
                     case ConsoleKey.NumPad0:
                     case ConsoleKey.D0:
@@ -184,7 +188,7 @@ namespace Vibrometer.Testing
                         Program.RAM_Get_Stream();
                         break;
                     case ConsoleKey.J:
-                        API.ClearRam();
+                        _api.ClearRam();
                         break;
                     case ConsoleKey.Escape:
                         exit = true;
@@ -194,7 +198,7 @@ namespace Vibrometer.Testing
                 }
             }
 
-            API.Free();
+            _api.Dispose();
         }
 
         // helper
@@ -210,7 +214,7 @@ namespace Vibrometer.Testing
             {
                 if (File.Exists(filePath))
                 {
-                    API.LoadFPGAImage(filePath);
+                    _api.LoadFPGAImage(filePath);
                     break;
                 }
             }
@@ -227,11 +231,15 @@ namespace Vibrometer.Testing
             Console.ForegroundColor = color;
         }
 
-        private static void PrintDialogFloat(ref double value, double min, double max, string name, string unit = "")
+        private static void PrintDialogFloat(ApiMethod method, ref double value, double min, double max, string unit)
         {
+            ApiRecord record;
+
+            record = SystemParameters.ApiInfo[method];
+
             Console.Clear();
             Console.WriteLine($"{min:F2} <= value <= {max:F2} {unit}\ncurrent: {value:F2} {unit}\n");
-            Console.WriteLine($"Please enter the desired {name}:");
+            Console.WriteLine($"Please enter the desired '{record.DisplayName}':");
             Console.WriteLine();
 
             while (!double.TryParse(Console.ReadLine(), out value) || value < min || value > max)
@@ -240,14 +248,18 @@ namespace Vibrometer.Testing
             }
         }
 
-        private static void PrintDialogInteger(ref uint value, uint min, uint max, string name, string unit = "")
+        private static void PrintDialogInteger(ApiMethod method, ref uint value)
         {
+            ApiRecord record;
+
+            record = SystemParameters.ApiInfo[method];
+
             Console.Clear();
-            Console.WriteLine($"{min} <= value <= {max} {unit}\ncurrent: {value} {unit}\n");
-            Console.WriteLine($"Please enter the desired {name}:");
+            Console.WriteLine($"{record.Min} <= value <= {record.Max}\ncurrent: {value}\n");
+            Console.WriteLine($"Please enter the desired '{record.DisplayName}':");
             Console.WriteLine();
 
-            while (!uint.TryParse(Console.ReadLine(), out value) || value < min || value > max)
+            while (!uint.TryParse(Console.ReadLine(), out value) || value < record.Min || value > record.Max)
             {
                 //
             }
@@ -256,62 +268,55 @@ namespace Vibrometer.Testing
         // API
         private static void GE_Set_Source()
         {
-            uint min = 0;
-            uint max = 4;
-            uint value = (uint)API.General.Source;
+            uint value = (uint)_api.General.Source;
 
-            Program.PrintDialogInteger(ref value, min, max, "source");
+            // TODO: max is 4
+            Program.PrintDialogInteger(ApiMethod.GE_Source, ref value);
 
-            API.General.Source = (Source)value;
+            _api.General.Source = (Source)value;
         }
 
         private static void SG_Set_Phase()
         {
             double min = 0;
-            double max = API.CLOCK_RATE;
-            double value = API.SignalGenerator.Phase / Math.Pow(2, 28) * API.CLOCK_RATE;
+            double max = SystemParameters.CLOCK_RATE;
+            double value = _api.SignalGenerator.Phase / Math.Pow(2, 28) * SystemParameters.CLOCK_RATE;
 
-            Program.PrintDialogFloat(ref value, min, max, "signal generator frequency", "Hz");
+            Program.PrintDialogFloat(ApiMethod.SG_Phase, ref value, min, max, "Hz");
 
-            API.SignalGenerator.Phase = (uint)(value * Math.Pow(2, 28) / API.CLOCK_RATE);
+            _api.SignalGenerator.Phase = (uint)(value * Math.Pow(2, 28) / SystemParameters.CLOCK_RATE);
         }
 
         private static void DA_Toggle_Switch()
         {
-            API.DataAcquisition.SwitchEnabled = !API.DataAcquisition.SwitchEnabled;
+            _api.DataAcquisition.SwitchEnabled = !_api.DataAcquisition.SwitchEnabled;
         }
 
         private static void PT_Set_LogScale()
         {
-            uint min = 0;
-            uint max = (uint)Math.Pow(2, 5) - 1;
-            uint value = API.PositionTracker.LogScale;
+            uint value = _api.PositionTracker.LogScale;
 
-            Program.PrintDialogInteger(ref value, min, max, "log scale");
+            Program.PrintDialogInteger(ApiMethod.PT_LogScale, ref value);
 
-            API.PositionTracker.LogScale = value;
+            _api.PositionTracker.LogScale = value;
         }
 
         private static void PT_Set_LogCountExtremum()
         {
-            uint min = 0;
-            uint max = (uint)Math.Pow(2, 5) - 1;
-            uint value = API.PositionTracker.LogCountExtremum;
+            uint value = _api.PositionTracker.LogCountExtremum;
 
-            Program.PrintDialogInteger(ref value, min, max, "log count extremum");
+            Program.PrintDialogInteger(ApiMethod.PT_LogCountExtremum, ref value);
 
-            API.PositionTracker.LogCountExtremum = value;
+            _api.PositionTracker.LogCountExtremum = value;
         }
 
         private static void PT_Set_ShiftExtremum()
         {
-            uint min = 0;
-            uint max = (uint)Math.Pow(2, 3) - 1;
-            uint value = API.PositionTracker.ShiftExtremum;
+            uint value = _api.PositionTracker.ShiftExtremum;
 
-            Program.PrintDialogInteger(ref value, min, max, "shift extremum");
+            Program.PrintDialogInteger(ApiMethod.PT_ShiftExtremum, ref value);
 
-            API.PositionTracker.ShiftExtremum = value;
+            _api.PositionTracker.ShiftExtremum = value;
         }
 
         private static void PT_Get_Threshold()
@@ -329,7 +334,7 @@ namespace Vibrometer.Testing
             {
                 while (!cts.IsCancellationRequested)
                 {
-                    (a, b) = API.PositionTracker.Threshold;
+                    (a, b) = _api.PositionTracker.Threshold;
 
                     Console.WriteLine($"high: {b,10}, low: {a,10}");
                     Thread.Sleep(100);
@@ -343,90 +348,74 @@ namespace Vibrometer.Testing
 
         private static void FI_Set_LogThrottle()
         {
-            uint min = 0;
-            uint max = (uint)Math.Pow(2, 5) - 1;
-            uint value = API.Filter.LogThrottle;
+            uint value = _api.Filter.LogThrottle;
 
-            Program.PrintDialogInteger(ref value, min, max, "log throttle");
+            Program.PrintDialogInteger(ApiMethod.FI_LogThrottle, ref value);
 
-            API.Filter.LogThrottle = value;
+            _api.Filter.LogThrottle = value;
         }
 
         private static void FT_Toggle_Enable()
         {
-            API.FourierTransform.Enabled = !API.FourierTransform.Enabled;
+            _api.FourierTransform.Enabled = !_api.FourierTransform.Enabled;
         }
 
         private static void FT_Set_LogCountAverages()
         {
-            uint min = 0;
-            uint max = (uint)Math.Pow(2, 5) - 1;
-            uint value = API.FourierTransform.LogCountAverages;
+            uint value = _api.FourierTransform.LogCountAverages;
 
-            Program.PrintDialogInteger(ref value, min, max, "log count averages");
+            Program.PrintDialogInteger(ApiMethod.FT_LogCountAverages, ref value);
 
-            API.FourierTransform.LogCountAverages = value;
+            _api.FourierTransform.LogCountAverages = value;
         }
 
         private static void FT_Set_LogThrottle()
         {
-            uint min = 1;
-            uint max = (uint)Math.Pow(2, 5) - 1;
-            uint value = API.FourierTransform.LogThrottle;
+            uint value = _api.FourierTransform.LogThrottle;
 
-            Program.PrintDialogInteger(ref value, min, max, "log throttle");
+            Program.PrintDialogInteger(ApiMethod.FT_LogThrottle, ref value);
 
-            API.FourierTransform.LogThrottle = value;
+            _api.FourierTransform.LogThrottle = value;
         }
 
         private static void RW_Toggle_Enable()
         {
-            API.RamWriter.Enabled = !API.RamWriter.Enabled;
+            _api.RamWriter.Enabled = !_api.RamWriter.Enabled;
         }
 
         private static void RW_Toggle_RequestEnable()
         {
-            API.RamWriter.RequestEnabled = !API.RamWriter.RequestEnabled;
+            _api.RamWriter.RequestEnabled = !_api.RamWriter.RequestEnabled;
         }
 
         private static void RW_Set_LogLength()
         {
-            uint min = 0;
-            uint max = (uint)Math.Pow(2, 5) - 1;
-            uint value = API.RamWriter.LogLength;
+            uint value = _api.RamWriter.LogLength;
 
-            if (API.RamWriter.Enabled)
-            {
-                Console.Clear();
-                Console.WriteLine();
-            }
+            Program.PrintDialogInteger(ApiMethod.RW_LogLength, ref value);
 
-            Program.PrintDialogInteger(ref value, min, max, "log length");
-
-            API.RamWriter.LogLength = value;
+            _api.RamWriter.LogLength = value;
         }
 
         private static void RW_Set_LogThrottle()
         {
-            uint min = 1;
-            uint max = (uint)Math.Pow(2, 5) - 1;
-            uint value = API.RamWriter.LogThrottle;
+            uint value = _api.RamWriter.LogThrottle;
 
-            Program.PrintDialogInteger(ref value, min, max, "log throttle");
+            Program.PrintDialogInteger(ApiMethod.RW_LogThrottle, ref value);
 
-            API.RamWriter.LogThrottle = value;
+            _api.RamWriter.LogThrottle = value;
         }
 
         private static void RW_Set_Address()
         {
-            API.RamWriter.Address = API.DATA_BASE;
+            _api.RamWriter.Address = SystemParameters.DATA_BASE;
         }
 
         private static void RW_Get_ReadBuffer()
         {
             uint address;
 
-            address = API.RamWriter.ReadBuffer;
+            address = _api.RamWriter.ReadBuffer;
 
             Console.Clear();
             Console.WriteLine($"0x{address,8:X}");
@@ -435,13 +424,43 @@ namespace Vibrometer.Testing
 
         private static void RAM_Get_Data()
         {
-            Span<int> dataSet;
+            Source source;
+            uint bufferAddress;
+            Span<int> buffer;
+            ushort a;
+            ushort b;
 
-            dataSet = API.GetBuffer((int)(API.RamWriter.ReadBuffer - API.DATA_BASE));
+            source = _api.General.Source;
+            bufferAddress = _api.RamWriter.ReadBuffer;
 
-            foreach (int data in dataSet)
+            _api.RamWriter.RequestEnabled = true;
+            buffer = _api.GetBuffer();
+            _api.RamWriter.RequestEnabled = false;
+
+            for (int i = 0; i < Math.Min(buffer.Length, 128); i++)
             {
-                Console.WriteLine($"{data,10}");
+                switch (source)
+                {
+                    case Source.Raw:
+                        a = unchecked((ushort)(buffer[i] & ~0xFFFF0000));
+                        b = unchecked((ushort)(buffer[i] >> 16));
+                        Console.WriteLine($"Buffer: {bufferAddress,8:X} | Raw data: {(short)b,10} (b), {(short)a,10} (a)");
+                        break;
+                    case Source.Position:
+                        Console.WriteLine($"Buffer: {bufferAddress,8:X} | Position: {buffer[i],10}");
+                        break;
+                    case Source.Filter:
+                        Console.WriteLine($"Buffer: {bufferAddress,8:X} | Filter: {buffer[i],10}");
+                        break;
+                    case Source.FourierTransform:
+                        a = unchecked((ushort)(buffer[0] & ~0xFFFF0000));
+                        b = unchecked((ushort)(buffer[0] >> 16));
+                        Console.WriteLine($"Buffer: {bufferAddress,8:X} | Raw data: {(short)b,10} (imag), {(short)a,10} (real)");
+                        break;
+                    default:
+                        Console.WriteLine($"Buffer: {bufferAddress,8:X} | (undefined): {buffer[i],10}");
+                        break;
+                }
             }
 
             Console.ReadKey(true);
@@ -462,32 +481,32 @@ namespace Vibrometer.Testing
                 {
                     ushort a;
                     ushort b;
-                    int value;
+                    Span<int> buffer;
 
-                    API.RamWriter.RequestEnabled = true;
+                    _api.RamWriter.RequestEnabled = true;
+                    buffer = _api.GetBuffer();
+                    _api.RamWriter.RequestEnabled = false;
 
-                    value = (int)API.Ram.GetData((int)(API.RamWriter.ReadBuffer - API.DATA_BASE));
-                    a = unchecked((ushort)(value & ~0xFFFF0000));
-                    b = unchecked((ushort)(value >> 16));
-
-                    API.RamWriter.RequestEnabled = false;
-
-                    switch (API.General.Source)
+                    switch (_api.General.Source)
                     {
                         case Source.Raw:
-                            Console.WriteLine($"Buffer: {API.RamWriter.ReadBuffer,8:X} | Raw data: {b,10} (b), {a,10} (a)");
+                            a = unchecked((ushort)(buffer[0] & ~0xFFFF0000));
+                            b = unchecked((ushort)(buffer[0] >> 16));
+                            Console.WriteLine($"Buffer: {_api.RamWriter.ReadBuffer,8:X} | Raw data: {(short)b,10} (b), {(short)a,10} (a)");
                             break;
                         case Source.Position:
-                            Console.WriteLine($"Buffer: {API.RamWriter.ReadBuffer,8:X} | Position: {value,10}");
+                            Console.WriteLine($"Buffer: {_api.RamWriter.ReadBuffer,8:X} | Position: {buffer[0],10}");
                             break;
                         case Source.Filter:
-                            Console.WriteLine($"Buffer: {API.RamWriter.ReadBuffer,8:X} | Filter: {value,10}");
+                            Console.WriteLine($"Buffer: {_api.RamWriter.ReadBuffer,8:X} | Filter: {buffer[0],10}");
                             break;
                         case Source.FourierTransform:
-                            Console.WriteLine($"Buffer: {API.RamWriter.ReadBuffer,8:X} | Fourier: {value,10}");
+                            a = unchecked((ushort)(buffer[0] & ~0xFFFF0000));
+                            b = unchecked((ushort)(buffer[0] >> 16));
+                            Console.WriteLine($"Buffer: {_api.RamWriter.ReadBuffer,8:X} | Raw data: {(short)b,10} (imag), {(short)a,10} (real)");
                             break;
                         default:
-                            Console.WriteLine($"Buffer: {API.RamWriter.ReadBuffer,8:X} | (undefined): {value,10}");
+                            Console.WriteLine($"Buffer: {_api.RamWriter.ReadBuffer,8:X} | (undefined): {buffer[0],10}");
                             break;
                     }
 
