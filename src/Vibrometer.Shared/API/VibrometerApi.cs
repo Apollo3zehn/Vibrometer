@@ -75,10 +75,10 @@ namespace Vibrometer.Shared.API
         public void SetDefaults()
         {
             // source
-            this.General.Source = Source.Position;
+            this.General.Source = Source.FourierTransform;
 
-            // 100 Hz
-            this.SignalGenerator.Phase = (uint)(100 * Math.Pow(2, 28) / SystemParameters.CLOCK_RATE);
+            // 1000 Hz
+            this.SignalGenerator.PhaseCarrier = (uint)(1000 * Math.Pow(2, 27) / SystemParameters.CLOCK_RATE);
 
             // approx. 1s
             this.PositionTracker.LogCountExtremum = 27;
@@ -86,20 +86,29 @@ namespace Vibrometer.Shared.API
             // central value +- max / (2^4)
             this.PositionTracker.ShiftExtremum = 4;
 
+            // throttle data by factor 2^12 = 4096 to get into the kHz range
+            //this.Filter.LogThrottle = 12;
+
+            // calculate the average of 2^2 = 4 FFTs
+            this.FourierTransform.LogCountAverages = 2;
+
+            // TBD
+            this.FourierTransform.LogThrottle = 14;
+
             // physical RAM address
             this.RamWriter.Address = SystemParameters.DATA_BASE;
 
-            // buffer length = 2^10 = 1024 => 1024 * 4 byte = 4096 byte
-            this.RamWriter.LogLength = 10;
+            // buffer length = 2^8 = 256 => 256 * 4 byte = 1024 byte
+            this.RamWriter.LogLength = 8;
 
             // clear ram
             this.ClearRam();
 
-            // throttle data by factor 2^12 = 4096 to get into the kHz range
-            this.RamWriter.LogThrottle = 12;
-
             // enable RAM writer
             this.RamWriter.Enabled = true;
+
+            // enable Fourier Transform
+            this.FourierTransform.Enabled = true;
         }
 
         public int[] GetBuffer()

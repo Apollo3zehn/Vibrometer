@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -26,8 +25,18 @@ namespace Vibrometer.Shared.API
 
                 // Signal Generator
                 new ApiRecord(
-                        ApiMethod.SG_Phase, ApiGroup.SignalGenerator, "Phase",
-                        offset: 0x00, shift: 0, size: 32, min: 0, max: SystemParameters.CLOCK_RATE
+                        ApiMethod.SG_FmEnabled, ApiGroup.SignalGenerator, "Frequency Modulation Enabled",
+                        offset: 0x00, shift: 0, size: 1
+                    ),
+
+                new ApiRecord(
+                        ApiMethod.SG_PhaseSignal, ApiGroup.SignalGenerator, "Phase Signal",
+                        offset: 0x00, shift: 1, size: 27
+                    ),
+
+                new ApiRecord(
+                        ApiMethod.SG_PhaseCarrier, ApiGroup.SignalGenerator, "Phase Carrier",
+                        offset: 0x08, shift: 0, size: 27
                     ),
 
                 // Data Acquisition
@@ -90,7 +99,7 @@ namespace Vibrometer.Shared.API
                 ),
                 new ApiRecord(
                         ApiMethod.RW_LogThrottle, ApiGroup.RamWriter, "Log Throttle",
-                        offset: 0x00, shift: 7, size: 5, min: 1, max: (uint)(Math.Pow(2, 5) - 1)
+                        offset: 0x00, shift: 7, size: 5
                 ),
                 new ApiRecord(
                         ApiMethod.RW_Address, ApiGroup.RamWriter, "Address",

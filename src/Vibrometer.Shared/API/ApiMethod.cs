@@ -3,7 +3,9 @@
     public enum ApiMethod
     {
         GE_Source,
-        SG_Phase,
+        SG_FmEnabled,
+        SG_PhaseSignal,
+        SG_PhaseCarrier,
         DA_SwitchEnabled,
         PT_LogScale,
         PT_LogCountExtremum,

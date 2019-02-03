@@ -2,6 +2,8 @@
 {
     public interface ISignalGenerator
     {
-        uint Phase { get; set; }
+        bool FmEnabled { get; set; }
+        uint PhaseSignal { get; set; }
+        uint PhaseCarrier { get; set; }
     }
 }

@@ -19,15 +19,39 @@ namespace Vibrometer.Shared.API.Linux
 
         #endregion
 
-        public uint Phase
+        public bool FmEnabled
         {
             get
             {
-                return ApiHelper.GetValue(ApiMethod.SG_Phase, _address);
+                return ApiHelper.GetValue(ApiMethod.SG_FmEnabled, _address) > 0;
             }
             set
             {
-                ApiHelper.SetValue(ApiMethod.SG_Phase, _address, value);
+                ApiHelper.SetValue(ApiMethod.SG_FmEnabled, _address, value ? 1U : 0U);
+            }
+        }
+
+        public uint PhaseSignal
+        {
+            get
+            {
+                return ApiHelper.GetValue(ApiMethod.SG_PhaseSignal, _address);
+            }
+            set
+            {
+                ApiHelper.SetValue(ApiMethod.SG_PhaseSignal, _address, value);
+            }
+        }
+
+        public uint PhaseCarrier
+        {
+            get
+            {
+                return ApiHelper.GetValue(ApiMethod.SG_PhaseCarrier, _address);
+            }
+            set
+            {
+                ApiHelper.SetValue(ApiMethod.SG_PhaseCarrier, _address, value);
             }
         }
     }

@@ -20,8 +20,8 @@ namespace Vibrometer.Testing
             while (!exit)
             {
                 Console.Clear();
-                Console.WriteLine($"[L] - load FPGA image");
-                Console.WriteLine($"[P] - set defaults");
+                Console.WriteLine($"[Y] - load FPGA image");
+                Console.WriteLine($"[Z] - set defaults");
 
                 Console.WriteLine();
 
@@ -49,75 +49,82 @@ namespace Vibrometer.Testing
                 Console.WriteLine();
 
                 Console.WriteLine("Signal Generator");
-                Console.WriteLine($"[1] - set phase");
+
+                if (_api.SignalGenerator.FmEnabled)
+                    Program.WriteColored($"[1] - disable frequency modulation\n");
+                else
+                    Console.Write($"[1] - enable frequency modulation\n");
+
+                Console.WriteLine($"[2] - set phase signal");
+                Console.WriteLine($"[3] - set phase carrier");
 
                 Console.WriteLine();
 
                 Console.WriteLine("Data Acquisition");
 
                 if (_api.DataAcquisition.SwitchEnabled)
-                    Program.WriteColored($"[2] - disable switch\n");
+                    Program.WriteColored($"[4] - disable switch\n");
                 else
-                    Console.Write($"[2] - enable switch\n");
+                    Console.Write($"[4] - enable switch\n");
 
                 Console.WriteLine();
 
                 Console.WriteLine("Position Tracker");
-                Console.WriteLine($"[3] - set log scale");
-                Console.WriteLine($"[4] - set log count extremum");
-                Console.WriteLine($"[5] - set shift extremum");
-                Console.WriteLine($"[6] - get threshold");
+                Console.WriteLine($"[5] - set log scale");
+                Console.WriteLine($"[6] - set log count extremum");
+                Console.WriteLine($"[7] - set shift extremum");
+                Console.WriteLine($"[8] - get threshold");
 
                 Console.WriteLine();
 
                 Console.WriteLine("Filter");
-                Console.WriteLine($"[7] - set log throttle");
+                Console.WriteLine($"[9] - set log throttle");
 
                 Console.WriteLine();
 
                 Console.WriteLine("Fourier Transform");
                 if (_api.FourierTransform.Enabled)
-                    Program.WriteColored($"[8] - disable Fourier Transform\n");
+                    Program.WriteColored($"[A] - disable Fourier transform\n");
                 else
-                    Console.Write($"[8] - enable Fourier Transform\n");
+                    Console.Write($"[A] - enable Fourier Transform\n");
 
-                Console.WriteLine($"[9] - set log count averages");
-                Console.WriteLine($"[A] - set log throttle");
+                Console.WriteLine($"[B] - set log count averages");
+                Console.WriteLine($"[C] - set log throttle");
 
                 Console.WriteLine();
 
                 Console.WriteLine("RAM Writer");
 
                 if (_api.RamWriter.Enabled)
-                    Program.WriteColored($"[B] - disable RAM writer\n");
+                    Program.WriteColored($"[D] - disable RAM writer\n");
                 else
-                    Console.Write($"[B] - enable RAM writer\n");
+                    Console.Write($"[D] - enable RAM writer\n");
 
                 if (_api.RamWriter.RequestEnabled)
-                    Program.WriteColored($"[C] - disable buffer request\n");
+                    Program.WriteColored($"[E] - disable buffer request\n");
                 else
-                    Console.Write($"[C] - enable buffer request\n");
+                    Console.Write($"[E] - enable buffer request\n");
 
-                Console.WriteLine($"[D] - set log length");
-                Console.WriteLine($"[E] - set log throttle");
-                Console.WriteLine($"[F] - set address");
-                Console.WriteLine($"[G] - get read buffer");
+                Console.WriteLine($"[F] - set log length");
+                Console.WriteLine($"[G] - set log throttle");
+                Console.WriteLine($"[H] - set address");
+                Console.WriteLine($"[I] - get read buffer");
 
                 Console.WriteLine();
 
                 Console.WriteLine("RAM");
-                Console.WriteLine($"[H] - get data ({Math.Min(Math.Pow(2, _api.RamWriter.LogLength), 1024)} values)");
-                Console.WriteLine($"[I] - get stream");
-                Console.WriteLine($"[J] - clear");
+                Console.WriteLine($"[J] - get data ({Math.Min(Math.Pow(2, _api.RamWriter.LogLength), 1024)} values)");
+                Console.WriteLine($"[K] - get stream");
+                Console.WriteLine($"[L] - clear");
 
                 var keyInfo = Console.ReadKey(true);
 
                 switch(keyInfo.Key)
                 {
-                    case ConsoleKey.L:
+                    case ConsoleKey.Y:
                         Program.LoadFPGAImage();
                         break;
-                    case ConsoleKey.P:
+                    case ConsoleKey.Z:
                         _api.SetDefaults();
                         break;
                     case ConsoleKey.NumPad0:
@@ -126,68 +133,74 @@ namespace Vibrometer.Testing
                         break;
                     case ConsoleKey.NumPad1:
                     case ConsoleKey.D1:
-                        Program.SG_Set_Phase();
+                        Program.SG_Toggle_FM();
                         break;
                     case ConsoleKey.NumPad2:
                     case ConsoleKey.D2:
-                        Program.DA_Toggle_Switch();
+                        Program.SG_Set_Phase_Signal();
                         break;
                     case ConsoleKey.NumPad3:
                     case ConsoleKey.D3:
-                        Program.PT_Set_LogScale();
+                        Program.SG_Set_Phase_Carrier();
                         break;
                     case ConsoleKey.NumPad4:
                     case ConsoleKey.D4:
-                        Program.PT_Set_LogCountExtremum();
+                        Program.DA_Toggle_Switch();
                         break;
                     case ConsoleKey.NumPad5:
                     case ConsoleKey.D5:
-                        Program.PT_Set_ShiftExtremum();
+                        Program.PT_Set_LogScale();
                         break;
                     case ConsoleKey.NumPad6:
                     case ConsoleKey.D6:
-                        Program.PT_Get_Threshold();
+                        Program.PT_Set_LogCountExtremum();
                         break;
                     case ConsoleKey.NumPad7:
                     case ConsoleKey.D7:
-                        Program.FI_Set_LogThrottle();
+                        Program.PT_Set_ShiftExtremum();
                         break;
                     case ConsoleKey.NumPad8:
                     case ConsoleKey.D8:
-                        Program.FT_Toggle_Enable();
+                        Program.PT_Get_Threshold();
                         break;
                     case ConsoleKey.NumPad9:
                     case ConsoleKey.D9:
-                        Program.FT_Set_LogCountAverages();
+                        Program.FI_Set_LogThrottle();
                         break;
                     case ConsoleKey.A:
-                        Program.FT_Set_LogThrottle();
+                        Program.FT_Toggle_Enable();
                         break;
                     case ConsoleKey.B:
-                        Program.RW_Toggle_Enable();
+                        Program.FT_Set_LogCountAverages();
                         break;
                     case ConsoleKey.C:
-                        Program.RW_Toggle_RequestEnable();
+                        Program.FT_Set_LogThrottle();
                         break;
                     case ConsoleKey.D:
-                        Program.RW_Set_LogLength();
+                        Program.RW_Toggle_Enable();
                         break;
                     case ConsoleKey.E:
-                        Program.RW_Set_LogThrottle();
+                        Program.RW_Toggle_RequestEnable();
                         break;
                     case ConsoleKey.F:
-                        Program.RW_Set_Address();
+                        Program.RW_Set_LogLength();
                         break;
                     case ConsoleKey.G:
-                        Program.RW_Get_ReadBuffer();
+                        Program.RW_Set_LogThrottle();
                         break;
                     case ConsoleKey.H:
-                        Program.RAM_Get_Data();
+                        Program.RW_Set_Address();
                         break;
                     case ConsoleKey.I:
-                        Program.RAM_Get_Stream();
+                        Program.RW_Get_ReadBuffer();
                         break;
                     case ConsoleKey.J:
+                        Program.RAM_Get_Data();
+                        break;
+                    case ConsoleKey.K:
+                        Program.RAM_Get_Stream();
+                        break;
+                    case ConsoleKey.L:
                         _api.ClearRam();
                         break;
                     case ConsoleKey.Escape:
@@ -276,15 +289,31 @@ namespace Vibrometer.Testing
             _api.General.Source = (Source)value;
         }
 
-        private static void SG_Set_Phase()
+        private static void SG_Toggle_FM()
+        {
+            _api.SignalGenerator.FmEnabled = !_api.SignalGenerator.FmEnabled;
+        }
+
+        private static void SG_Set_Phase_Signal()
         {
             double min = 0;
             double max = SystemParameters.CLOCK_RATE;
-            double value = _api.SignalGenerator.Phase / Math.Pow(2, 28) * SystemParameters.CLOCK_RATE;
+            double value = _api.SignalGenerator.PhaseSignal / Math.Pow(2, 27) * SystemParameters.CLOCK_RATE;
 
-            Program.PrintDialogFloat(ApiMethod.SG_Phase, ref value, min, max, "Hz");
+            Program.PrintDialogFloat(ApiMethod.SG_PhaseSignal, ref value, min, max, "Hz");
 
-            _api.SignalGenerator.Phase = (uint)(value * Math.Pow(2, 28) / SystemParameters.CLOCK_RATE);
+            _api.SignalGenerator.PhaseSignal = (uint)(value * Math.Pow(2, 27) / SystemParameters.CLOCK_RATE);
+        }
+
+        private static void SG_Set_Phase_Carrier()
+        {
+            double min = 0;
+            double max = SystemParameters.CLOCK_RATE;
+            double value = _api.SignalGenerator.PhaseCarrier / Math.Pow(2, 27) * SystemParameters.CLOCK_RATE;
+
+            Program.PrintDialogFloat(ApiMethod.SG_PhaseCarrier, ref value, min, max, "Hz");
+
+            _api.SignalGenerator.PhaseCarrier = (uint)(value * Math.Pow(2, 27) / SystemParameters.CLOCK_RATE);
         }
 
         private static void DA_Toggle_Switch()
@@ -427,8 +456,8 @@ namespace Vibrometer.Testing
             Source source;
             uint bufferAddress;
             Span<int> buffer;
-            ushort a;
-            ushort b;
+            short a;
+            short b;
 
             source = _api.General.Source;
             bufferAddress = _api.RamWriter.ReadBuffer;
@@ -437,25 +466,24 @@ namespace Vibrometer.Testing
             buffer = _api.GetBuffer();
             _api.RamWriter.RequestEnabled = false;
 
-            for (int i = 0; i < Math.Min(buffer.Length, 128); i++)
+            for (int i = 0; i < Math.Min(buffer.Length, 256); i++)
             {
+                a = unchecked((short)(buffer[i] & ~0xFFFF0000));
+                b = unchecked((short)(buffer[i] >> 16));
+
                 switch (source)
                 {
                     case Source.Raw:
-                        a = unchecked((ushort)(buffer[i] & ~0xFFFF0000));
-                        b = unchecked((ushort)(buffer[i] >> 16));
-                        Console.WriteLine($"Buffer: {bufferAddress,8:X} | Raw data: {(short)b,10} (b), {(short)a,10} (a)");
+                        Console.WriteLine($"Buffer: {bufferAddress,8:X} | Raw data: {b,10} (b), {a,10} (a)");
                         break;
                     case Source.Position:
-                        Console.WriteLine($"Buffer: {bufferAddress,8:X} | Position: {buffer[i],10}");
+                        Console.WriteLine($"Buffer: {bufferAddress,8:X} | Position: {a,10}");
                         break;
                     case Source.Filter:
-                        Console.WriteLine($"Buffer: {bufferAddress,8:X} | Filter: {buffer[i],10}");
+                        Console.WriteLine($"Buffer: {bufferAddress,8:X} | Filter: {a,10}");
                         break;
                     case Source.FourierTransform:
-                        a = unchecked((ushort)(buffer[0] & ~0xFFFF0000));
-                        b = unchecked((ushort)(buffer[0] >> 16));
-                        Console.WriteLine($"Buffer: {bufferAddress,8:X} | Raw data: {(short)b,10} (imag), {(short)a,10} (real)");
+                        Console.WriteLine($"Buffer: {bufferAddress,8:X} | Raw data: {b,10} (imag), {a,10} (real)");
                         break;
                     default:
                         Console.WriteLine($"Buffer: {bufferAddress,8:X} | (undefined): {buffer[i],10}");
@@ -479,31 +507,30 @@ namespace Vibrometer.Testing
             {
                 while (!cts.IsCancellationRequested)
                 {
-                    ushort a;
-                    ushort b;
+                    short a;
+                    short b;
                     Span<int> buffer;
 
                     _api.RamWriter.RequestEnabled = true;
                     buffer = _api.GetBuffer();
                     _api.RamWriter.RequestEnabled = false;
 
+                    a = unchecked((short)(buffer[0] & ~0xFFFF0000));
+                    b = unchecked((short)(buffer[0] >> 16));
+
                     switch (_api.General.Source)
                     {
                         case Source.Raw:
-                            a = unchecked((ushort)(buffer[0] & ~0xFFFF0000));
-                            b = unchecked((ushort)(buffer[0] >> 16));
-                            Console.WriteLine($"Buffer: {_api.RamWriter.ReadBuffer,8:X} | Raw data: {(short)b,10} (b), {(short)a,10} (a)");
+                            Console.WriteLine($"Buffer: {_api.RamWriter.ReadBuffer,8:X} | Raw data: {b,10} (b), {a,10} (a)");
                             break;
                         case Source.Position:
-                            Console.WriteLine($"Buffer: {_api.RamWriter.ReadBuffer,8:X} | Position: {buffer[0],10}");
+                            Console.WriteLine($"Buffer: {_api.RamWriter.ReadBuffer,8:X} | Position: {a,10}");
                             break;
                         case Source.Filter:
-                            Console.WriteLine($"Buffer: {_api.RamWriter.ReadBuffer,8:X} | Filter: {buffer[0],10}");
+                            Console.WriteLine($"Buffer: {_api.RamWriter.ReadBuffer,8:X} | Filter: {a,10}");
                             break;
                         case Source.FourierTransform:
-                            a = unchecked((ushort)(buffer[0] & ~0xFFFF0000));
-                            b = unchecked((ushort)(buffer[0] >> 16));
-                            Console.WriteLine($"Buffer: {_api.RamWriter.ReadBuffer,8:X} | Raw data: {(short)b,10} (imag), {(short)a,10} (real)");
+                            Console.WriteLine($"Buffer: {_api.RamWriter.ReadBuffer,8:X} | Raw data: {b,10} (imag), {a,10} (real)");
                             break;
                         default:
                             Console.WriteLine($"Buffer: {_api.RamWriter.ReadBuffer,8:X} | (undefined): {buffer[0],10}");

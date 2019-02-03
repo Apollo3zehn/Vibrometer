@@ -28,6 +28,9 @@ module axis_differentiator #
     reg  signed [AXIS_TDATA_WIDTH-1:0]      result,                 result_next;
     reg  signed [AXIS_TDATA_WIDTH-1:0]      shift_register[4:0],    shift_register_next[4:0];
 
+    wire signed [AXIS_TDATA_WIDTH:0]        sum1;                   // size = AXIS_TDATA_WIDTH + 1
+    wire signed [AXIS_TDATA_WIDTH:0]        sum2;                   // size = AXIS_TDATA_WIDTH + 1
+
     assign sum1             = shift_register[4] - shift_register[0];
     assign sum2             = shift_register[1] - shift_register[3];    
     assign M_AXIS_tdata     = result;
