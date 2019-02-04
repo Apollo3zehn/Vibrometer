@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using Vibrometer.BaseTypes;
 
 namespace Vibrometer.Shared.API
 {
@@ -168,7 +169,7 @@ namespace Vibrometer.Shared.API
             }
         }
 
-        public void LoadFPGAImage(string filePath)
+        public void LoadFpgaImage(string filePath)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
@@ -180,6 +181,30 @@ namespace Vibrometer.Shared.API
                     }
                 }
             }
+        }
+
+        public VibrometerState GetState()
+        {
+            return new VibrometerState()
+            {
+                AS_Source = this.AxisSwitch.Source,
+                SG_FmEnabled = this.SignalGenerator.FmEnabled,
+                SG_PhaseSignal = this.SignalGenerator.PhaseSignal,
+                SG_PhaseCarrier = this.SignalGenerator.PhaseCarrier,
+                DA_SwitchEnabled = this.DataAcquisition.SwitchEnabled,
+                PT_LogScale = this.PositionTracker.LogScale,
+                PT_LogCountExtremum = this.PositionTracker.LogCountExtremum,
+                PT_ShiftExtremum = this.PositionTracker.ShiftExtremum,
+                FI_LogThrottle = this.Filter.LogThrottle,
+                FT_Enabled = this.FourierTransform.Enabled,
+                FT_LogCountAverages = this.FourierTransform.LogCountAverages,
+                FT_LogThrottle = this.FourierTransform.LogThrottle,
+                RW_Enabled = this.RamWriter.Enabled,
+                RW_RequestEnabled = this.RamWriter.RequestEnabled,
+                RW_LogLength = this.RamWriter.LogLength,
+                RW_LogThrottle = this.RamWriter.LogThrottle,
+                RW_ReadBuffer = this.RamWriter.ReadBuffer
+            };
         }
 
         #endregion

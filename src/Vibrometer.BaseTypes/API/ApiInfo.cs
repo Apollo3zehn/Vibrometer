@@ -6,6 +6,13 @@ namespace Vibrometer.Shared.API
 {
     public class ApiInfo : ReadOnlyDictionary<ApiMethod, ApiRecord>
     {
+        public static ReadOnlyDictionary<ApiMethod, ApiRecord> Instance { get; }
+
+        static ApiInfo()
+        {
+            ApiInfo.Instance = new ApiInfo();
+        }
+
         public ApiInfo() : base(ApiInfo.GetDictionary())
         { 
             //
@@ -19,12 +26,12 @@ namespace Vibrometer.Shared.API
             {
                 // AxisSwitch
                 new ApiRecord(
-                        ApiMethod.GE_Commit, ApiGroup.AxisSwitch, "Commit",
+                        ApiMethod.AS_Commit, ApiGroup.AxisSwitch, "Commit",
                         offset: 0x0000, shift: 0, size: 32
                     ),
 
                 new ApiRecord(
-                        ApiMethod.GE_Source, ApiGroup.AxisSwitch, "Source",
+                        ApiMethod.AS_Source, ApiGroup.AxisSwitch, "Source",
                         offset: 0x0040, shift: 0, size: 32 // actually max = 4, but 0 is converted to 0x8000000, so this check would fail
                     ),
 

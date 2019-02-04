@@ -40,10 +40,10 @@ namespace Vibrometer.WebServer
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.UseSignalR(routes =>
-            //{
-            //    routes.MapHub<ChatHub>("/chathub");
-            //});
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<VibrometerHub>("/vibrometerhub");
+            });
 
             app.UseMvc(routes =>
             {

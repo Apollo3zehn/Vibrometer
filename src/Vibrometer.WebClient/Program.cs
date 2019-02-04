@@ -16,13 +16,12 @@ namespace Vibrometer.WebClient
             JSRuntime.Current.InvokeAsync<object>("OnLoaded");
 
             Program._connection = new HubConnectionBuilder()
-            .WithUrl("/chathub")
+            .WithUrl("/vibrometerhub")
             .AddMessagePackProtocol()
             .Build();
 
-            Program._connection.On<string>("Send", (stringa) => Task.Run(() => Console.WriteLine(stringa)));
+            Program._connection.On<string>("Send", (message) => Task.Run(() => Console.WriteLine(message)));
             Program._connection.StartAsync();
-
         }
 
         public static IWebAssemblyHostBuilder CreateHostBuilder(string[] args) =>

@@ -27,7 +27,7 @@ namespace Vibrometer.Shared.API
             ApiRecord record;
             IntPtr realAddress;
 
-            record = SystemParameters.ApiInfo[method];
+            record = ApiInfo.Instance[method];
             realAddress = ApiHelper.GetAddress(record.Group, address);
 
             ApiHelper.SetValueInternal(record, IntPtr.Add(realAddress, record.Offset), value);
@@ -38,7 +38,7 @@ namespace Vibrometer.Shared.API
             ApiRecord record;
             IntPtr realAddress;
 
-            record = SystemParameters.ApiInfo[method];
+            record = ApiInfo.Instance[method];
             realAddress = ApiHelper.GetAddress(record.Group, address);
 
             return ApiHelper.GetValueInternal(record.Shift, record.Size, IntPtr.Add(realAddress, record.Offset));

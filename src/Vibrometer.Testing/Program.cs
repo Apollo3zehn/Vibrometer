@@ -227,7 +227,7 @@ namespace Vibrometer.Testing
             {
                 if (File.Exists(filePath))
                 {
-                    _api.LoadFPGAImage(filePath);
+                    _api.LoadFpgaImage(filePath);
                     break;
                 }
             }
@@ -248,7 +248,7 @@ namespace Vibrometer.Testing
         {
             ApiRecord record;
 
-            record = SystemParameters.ApiInfo[method];
+            record = ApiInfo.Instance[method];
 
             Console.Clear();
             Console.WriteLine($"{min:F2} <= value <= {max:F2} {unit}\ncurrent: {value:F2} {unit}\n");
@@ -265,7 +265,7 @@ namespace Vibrometer.Testing
         {
             ApiRecord record;
 
-            record = SystemParameters.ApiInfo[method];
+            record = ApiInfo.Instance[method];
 
             Console.Clear();
             Console.WriteLine($"{record.Min} <= value <= {record.Max}\ncurrent: {value}\n");
@@ -284,7 +284,7 @@ namespace Vibrometer.Testing
             uint value = (uint)_api.AxisSwitch.Source;
 
             // TODO: max is 4
-            Program.PrintDialogInteger(ApiMethod.GE_Source, ref value);
+            Program.PrintDialogInteger(ApiMethod.AS_Source, ref value);
 
             _api.AxisSwitch.Source = (ApiSource)value;
         }

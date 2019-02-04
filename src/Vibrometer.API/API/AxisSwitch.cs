@@ -25,7 +25,7 @@ namespace Vibrometer.Shared.API
             {
                 uint value;
 
-                value = ApiHelper.GetValue(ApiMethod.GE_Source, _address);
+                value = ApiHelper.GetValue(ApiMethod.AS_Source, _address);
 
                 // return 0, if switch is disabled
                 if (value >= 0x80000000)
@@ -42,12 +42,12 @@ namespace Vibrometer.Shared.API
                 if (value == 0)
                 {
                     // disable switch
-                    ApiHelper.SetValue(ApiMethod.GE_Source, _address, 0x8000_0000);
+                    ApiHelper.SetValue(ApiMethod.AS_Source, _address, 0x8000_0000);
                 }
                 else if (value <= ApiSource.FourierTransform)
                 {
                     // connect slave[value - 1] with master[0]
-                    ApiHelper.SetValue(ApiMethod.GE_Source, _address, (uint)value - 1);
+                    ApiHelper.SetValue(ApiMethod.AS_Source, _address, (uint)value - 1);
                 }
                 else
                 {
@@ -55,7 +55,7 @@ namespace Vibrometer.Shared.API
                 }
 
                 // commit settings
-                ApiHelper.SetValue(ApiMethod.GE_Commit, _address, 0x0000_0002);
+                ApiHelper.SetValue(ApiMethod.AS_Commit, _address, 0x0000_0002);
             }
         }
     }

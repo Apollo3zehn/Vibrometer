@@ -1,6 +1,4 @@
-﻿using Vibrometer.Shared.API;
-
-namespace Vibrometer.Shared
+﻿namespace Vibrometer.Shared
 {
     public static class SystemParameters
     {
@@ -25,16 +23,5 @@ namespace Vibrometer.Shared
         public const int GPIO_FILTER = 0x0003_0000;
         public const int GPIO_FOURIER_TRANSFORM = 0x0004_0000;
         public const int GPIO_RAM_WRITER = 0x0005_0000;
-
-        public static ApiInfo ApiInfo { get; }
-
-        #region Constructors
-
-        static SystemParameters()
-        {
-            SystemParameters.ApiInfo = new ApiInfo();
-        }
-
-        #endregion
     }
 }

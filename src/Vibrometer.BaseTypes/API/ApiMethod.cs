@@ -2,8 +2,8 @@
 {
     public enum ApiMethod
     {
-        GE_Commit,
-        GE_Source,
+        AS_Commit,
+        AS_Source,
         SG_FmEnabled,
         SG_PhaseSignal,
         SG_PhaseCarrier,

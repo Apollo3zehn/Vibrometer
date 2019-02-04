@@ -15,6 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Vibrometer.BaseTypes\Vibrometer.BaseTypes.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="Shared\NavItem.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
