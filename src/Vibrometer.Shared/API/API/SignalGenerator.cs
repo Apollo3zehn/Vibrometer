@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Vibrometer.Shared.API.Linux
+namespace Vibrometer.Shared.API
 {
-    public class SignalGenerator : ISignalGenerator
+    public class SignalGenerator
     {
         #region Fields
 

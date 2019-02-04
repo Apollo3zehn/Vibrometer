@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Vibrometer.Shared.API.Linux
+namespace Vibrometer.Shared.API
 {
-    public class General : IGeneral
+    public class AxisSwitch
     {
         #region Fields
 
@@ -12,20 +12,20 @@ namespace Vibrometer.Shared.API.Linux
 
         #region Constructors
 
-        public General(IntPtr address)
+        public AxisSwitch(IntPtr address)
         {
             _address = address;
         }
 
         #endregion
 
-        public Source Source
+        public ApiSource Source
         {
             get
             {
                 uint value;
 
-                value = ApiHelper.GetValue(ApiMethod.GE_Source, _address + 0x0040);
+                value = ApiHelper.GetValue(ApiMethod.GE_Source, _address);
 
                 // return 0, if switch is disabled
                 if (value >= 0x80000000)
@@ -34,7 +34,7 @@ namespace Vibrometer.Shared.API.Linux
                 }
                 else
                 {
-                    return (Source)(value + 1);
+                    return (ApiSource)(value + 1);
                 }
             }
             set
@@ -42,12 +42,12 @@ namespace Vibrometer.Shared.API.Linux
                 if (value == 0)
                 {
                     // disable switch
-                    ApiHelper.SetValue(ApiMethod.GE_Source, _address + 0x0040, 0x8000_0000);
+                    ApiHelper.SetValue(ApiMethod.GE_Source, _address, 0x8000_0000);
                 }
-                else if (value <= Source.FourierTransform)
+                else if (value <= ApiSource.FourierTransform)
                 {
                     // connect slave[value - 1] with master[0]
-                    ApiHelper.SetValue(ApiMethod.GE_Source, _address + 0x0040, (uint)value - 1);
+                    ApiHelper.SetValue(ApiMethod.GE_Source, _address, (uint)value - 1);
                 }
                 else
                 {
@@ -55,7 +55,7 @@ namespace Vibrometer.Shared.API.Linux
                 }
 
                 // commit settings
-                ApiHelper.SetValue(ApiMethod.GE_Source, _address + 0x0000, 0x0000_0002);
+                ApiHelper.SetValue(ApiMethod.GE_Commit, _address, 0x0000_0002);
             }
         }
     }

@@ -25,20 +25,20 @@ namespace Vibrometer.Testing
 
                 Console.WriteLine();
 
-                Console.WriteLine("General");
+                Program.WriteColored("AXIS Switch\n", ConsoleColor.Cyan);
 
-                switch (_api.General.Source)
+                switch (_api.AxisSwitch.Source)
                 {
-                    case Source.Raw:
+                    case ApiSource.Raw:
                         Program.WriteColored($"[0] - set source (source: raw)\n");
                         break;
-                    case Source.Position:
+                    case ApiSource.Position:
                         Program.WriteColored($"[0] - set source (source: position)\n");
                         break;
-                    case Source.Filter:
+                    case ApiSource.Filter:
                         Program.WriteColored($"[0] - set source (source: filter)\n");
                         break;
-                    case Source.FourierTransform:
+                    case ApiSource.FourierTransform:
                         Program.WriteColored($"[0] - set source (source: Fourier)\n");
                         break;
                     default:
@@ -48,7 +48,7 @@ namespace Vibrometer.Testing
 
                 Console.WriteLine();
 
-                Console.WriteLine("Signal Generator");
+                Program.WriteColored("Signal Generator\n", ConsoleColor.Cyan);
 
                 if (_api.SignalGenerator.FmEnabled)
                     Program.WriteColored($"[1] - disable frequency modulation\n");
@@ -60,7 +60,7 @@ namespace Vibrometer.Testing
 
                 Console.WriteLine();
 
-                Console.WriteLine("Data Acquisition");
+                Program.WriteColored("Data Acquisition\n", ConsoleColor.Cyan);
 
                 if (_api.DataAcquisition.SwitchEnabled)
                     Program.WriteColored($"[4] - disable switch\n");
@@ -69,7 +69,7 @@ namespace Vibrometer.Testing
 
                 Console.WriteLine();
 
-                Console.WriteLine("Position Tracker");
+                Program.WriteColored("Position Tracker\n", ConsoleColor.Cyan);
                 Console.WriteLine($"[5] - set log scale");
                 Console.WriteLine($"[6] - set log count extremum");
                 Console.WriteLine($"[7] - set shift extremum");
@@ -77,12 +77,12 @@ namespace Vibrometer.Testing
 
                 Console.WriteLine();
 
-                Console.WriteLine("Filter");
+                Program.WriteColored("Filter\n", ConsoleColor.Cyan);
                 Console.WriteLine($"[9] - set log throttle");
 
                 Console.WriteLine();
 
-                Console.WriteLine("Fourier Transform");
+                Program.WriteColored("Fourier Transform\n", ConsoleColor.Cyan);
                 if (_api.FourierTransform.Enabled)
                     Program.WriteColored($"[A] - disable Fourier transform\n");
                 else
@@ -93,7 +93,7 @@ namespace Vibrometer.Testing
 
                 Console.WriteLine();
 
-                Console.WriteLine("RAM Writer");
+                Program.WriteColored("RAM Writer\n", ConsoleColor.Cyan);
 
                 if (_api.RamWriter.Enabled)
                     Program.WriteColored($"[D] - disable RAM writer\n");
@@ -112,7 +112,7 @@ namespace Vibrometer.Testing
 
                 Console.WriteLine();
 
-                Console.WriteLine("RAM");
+                Program.WriteColored("RAM\n", ConsoleColor.Cyan);
                 Console.WriteLine($"[J] - get data ({Math.Min(Math.Pow(2, _api.RamWriter.LogLength), 1024)} values)");
                 Console.WriteLine($"[K] - get stream");
                 Console.WriteLine($"[L] - clear");
@@ -233,15 +233,15 @@ namespace Vibrometer.Testing
             }
         }
 
-        private static void WriteColored(string text)
+        private static void WriteColored(string text, ConsoleColor color = ConsoleColor.Green)
         {
-            ConsoleColor color;
+            ConsoleColor original;
 
-            color = Console.ForegroundColor;
+            original = Console.ForegroundColor;
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write(text);
             Console.ForegroundColor = color;
+            Console.Write(text);
+            Console.ForegroundColor = original;
         }
 
         private static void PrintDialogFloat(ApiMethod method, ref double value, double min, double max, string unit)
@@ -281,12 +281,12 @@ namespace Vibrometer.Testing
         // API
         private static void GE_Set_Source()
         {
-            uint value = (uint)_api.General.Source;
+            uint value = (uint)_api.AxisSwitch.Source;
 
             // TODO: max is 4
             Program.PrintDialogInteger(ApiMethod.GE_Source, ref value);
 
-            _api.General.Source = (Source)value;
+            _api.AxisSwitch.Source = (ApiSource)value;
         }
 
         private static void SG_Toggle_FM()
@@ -453,13 +453,13 @@ namespace Vibrometer.Testing
 
         private static void RAM_Get_Data()
         {
-            Source source;
+            ApiSource source;
             uint bufferAddress;
             Span<int> buffer;
             short a;
             short b;
 
-            source = _api.General.Source;
+            source = _api.AxisSwitch.Source;
             bufferAddress = _api.RamWriter.ReadBuffer;
 
             _api.RamWriter.RequestEnabled = true;
@@ -473,16 +473,16 @@ namespace Vibrometer.Testing
 
                 switch (source)
                 {
-                    case Source.Raw:
+                    case ApiSource.Raw:
                         Console.WriteLine($"Buffer: {bufferAddress,8:X} | Raw data: {b,10} (b), {a,10} (a)");
                         break;
-                    case Source.Position:
+                    case ApiSource.Position:
                         Console.WriteLine($"Buffer: {bufferAddress,8:X} | Position: {a,10}");
                         break;
-                    case Source.Filter:
+                    case ApiSource.Filter:
                         Console.WriteLine($"Buffer: {bufferAddress,8:X} | Filter: {a,10}");
                         break;
-                    case Source.FourierTransform:
+                    case ApiSource.FourierTransform:
                         Console.WriteLine($"Buffer: {bufferAddress,8:X} | Raw data: {b,10} (imag), {a,10} (real)");
                         break;
                     default:
@@ -518,18 +518,18 @@ namespace Vibrometer.Testing
                     a = unchecked((short)(buffer[0] & ~0xFFFF0000));
                     b = unchecked((short)(buffer[0] >> 16));
 
-                    switch (_api.General.Source)
+                    switch (_api.AxisSwitch.Source)
                     {
-                        case Source.Raw:
+                        case ApiSource.Raw:
                             Console.WriteLine($"Buffer: {_api.RamWriter.ReadBuffer,8:X} | Raw data: {b,10} (b), {a,10} (a)");
                             break;
-                        case Source.Position:
+                        case ApiSource.Position:
                             Console.WriteLine($"Buffer: {_api.RamWriter.ReadBuffer,8:X} | Position: {a,10}");
                             break;
-                        case Source.Filter:
+                        case ApiSource.Filter:
                             Console.WriteLine($"Buffer: {_api.RamWriter.ReadBuffer,8:X} | Filter: {a,10}");
                             break;
-                        case Source.FourierTransform:
+                        case ApiSource.FourierTransform:
                             Console.WriteLine($"Buffer: {_api.RamWriter.ReadBuffer,8:X} | Raw data: {b,10} (imag), {a,10} (real)");
                             break;
                         default:

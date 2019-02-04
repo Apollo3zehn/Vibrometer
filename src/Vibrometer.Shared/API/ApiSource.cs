@@ -1,6 +1,6 @@
-﻿namespace Vibrometer.Shared
+﻿namespace Vibrometer.Shared.API
 {
-    public enum Source : uint
+    public enum ApiSource : uint
     {
         NoSource = 0,
         Raw = 1,

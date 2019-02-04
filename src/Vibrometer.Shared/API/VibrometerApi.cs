@@ -1,6 +1,5 @@
 ﻿using Mono.Unix.Native;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 
@@ -20,10 +19,10 @@ namespace Vibrometer.Shared.API
 
         public VibrometerApi()
         {
+            int fd;
+
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                int fd;
-
                 fd = Syscall.open("/dev/mem", OpenFlags.O_RDWR);
 
                 _GPIO = Syscall.mmap(IntPtr.Zero, SystemParameters.GPIO_SIZE, MmapProts.PROT_READ | MmapProts.PROT_WRITE, MmapFlags.MAP_SHARED, fd, SystemParameters.GPIO_BASE);
@@ -31,42 +30,28 @@ namespace Vibrometer.Shared.API
                 _SWITCH = Syscall.mmap(IntPtr.Zero, SystemParameters.SWITCH_SIZE, MmapProts.PROT_READ | MmapProts.PROT_WRITE, MmapFlags.MAP_SHARED, fd, SystemParameters.SWITCH_BASE);
 
                 Syscall.close(fd);
+            }
 
-                this.General = new Linux.General(_SWITCH);
-                this.SignalGenerator = new Linux.SignalGenerator(_GPIO + SystemParameters.GPIO_SIGNAL_GENERATOR);
-                this.DataAcquisition = new Linux.DataAcquisition(_GPIO + SystemParameters.GPIO_DATA_ACQUISITION);
-                this.PositionTracker = new Linux.PositionTracker(_GPIO + SystemParameters.GPIO_POSITION_TRACKER);
-                this.Filter = new Linux.Filter(_GPIO + SystemParameters.GPIO_FILTER);
-                this.FourierTransform = new Linux.FourierTransform(_GPIO + SystemParameters.GPIO_FOURIER_TRANSFORM);
-                this.RamWriter = new Linux.RamWriter(_GPIO + SystemParameters.GPIO_RAM_WRITER);
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                this.General = new Linux.General(_SWITCH);
-                this.SignalGenerator = new Linux.SignalGenerator(_GPIO + SystemParameters.GPIO_SIGNAL_GENERATOR);
-                this.DataAcquisition = new Linux.DataAcquisition(_GPIO + SystemParameters.GPIO_DATA_ACQUISITION);
-                this.PositionTracker = new Linux.PositionTracker(_GPIO + SystemParameters.GPIO_POSITION_TRACKER);
-                this.Filter = new Linux.Filter(_GPIO + SystemParameters.GPIO_FILTER);
-                this.FourierTransform = new Linux.FourierTransform(_GPIO + SystemParameters.GPIO_FOURIER_TRANSFORM);
-                this.RamWriter = new Linux.RamWriter(_GPIO + SystemParameters.GPIO_RAM_WRITER);
-            }
-            else
-            {
-                throw new PlatformNotSupportedException();
-            }
+            this.AxisSwitch = new AxisSwitch(_SWITCH);
+            this.SignalGenerator = new SignalGenerator(_GPIO + SystemParameters.GPIO_SIGNAL_GENERATOR);
+            this.DataAcquisition = new DataAcquisition(_GPIO + SystemParameters.GPIO_DATA_ACQUISITION);
+            this.PositionTracker = new PositionTracker(_GPIO + SystemParameters.GPIO_POSITION_TRACKER);
+            this.Filter = new Filter(_GPIO + SystemParameters.GPIO_FILTER);
+            this.FourierTransform = new FourierTransform(_GPIO + SystemParameters.GPIO_FOURIER_TRANSFORM);
+            this.RamWriter = new RamWriter(_GPIO + SystemParameters.GPIO_RAM_WRITER);
         }
 
         #endregion
 
         #region Properties
 
-        public IGeneral General { get; }
-        public ISignalGenerator SignalGenerator { get; }
-        public IDataAcquisition DataAcquisition { get; }
-        public IPositionTracker PositionTracker { get; }
-        public IFilter Filter { get; }
-        public IFourierTransform FourierTransform { get; }
-        public IRamWriter RamWriter { get; }
+        public AxisSwitch AxisSwitch { get; }
+        public SignalGenerator SignalGenerator { get; }
+        public DataAcquisition DataAcquisition { get; }
+        public PositionTracker PositionTracker { get; }
+        public Filter Filter { get; }
+        public FourierTransform FourierTransform { get; }
+        public RamWriter RamWriter { get; }
 
         #endregion
 
@@ -75,7 +60,7 @@ namespace Vibrometer.Shared.API
         public void SetDefaults()
         {
             // source
-            this.General.Source = Source.FourierTransform;
+            this.AxisSwitch.Source = ApiSource.FourierTransform;
 
             // 1000 Hz
             this.SignalGenerator.PhaseCarrier = (uint)(1000 * Math.Pow(2, 27) / SystemParameters.CLOCK_RATE);
@@ -91,7 +76,7 @@ namespace Vibrometer.Shared.API
 
             // calculate the average of 2^2 = 4 FFTs
             this.FourierTransform.LogCountAverages = 2;
-
+            
             // TBD
             this.FourierTransform.LogThrottle = 14;
 
@@ -116,22 +101,29 @@ namespace Vibrometer.Shared.API
             int length;
             int offset;
             int[] buffer;
+            Random random;
 
             this.RamWriter.RequestEnabled = true;
 
             offset = (int)(this.RamWriter.ReadBuffer - SystemParameters.DATA_BASE);
-            length = (int)(Math.Pow(2, this.RamWriter.LogLength) * SystemParameters.BYTE_COUNT);
+            length = (int)Math.Pow(2, this.RamWriter.LogLength);
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 unsafe
                 {
-                    buffer = new Span<int>((int*)IntPtr.Add(_DATA, offset), length).ToArray();
+                    buffer = new Span<int>(IntPtr.Add(_DATA, offset).ToPointer(), length).ToArray();
                 }
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                buffer = new int[length / SystemParameters.BYTE_COUNT];
+                buffer = new int[length];
+                random = new Random();
+
+                for (int i = 0; i < buffer.Length; i++)
+                {
+                    buffer[i] = random.Next(0, 100);
+                }
             }
             else
             {
@@ -149,28 +141,31 @@ namespace Vibrometer.Shared.API
             bool enabled;
             Span<byte> buffer;
 
-            byteCount = (int)Math.Pow(2, this.RamWriter.LogLength) * SystemParameters.BYTE_COUNT * SystemParameters.BUFFER_COUNT;
-            enabled = this.RamWriter.Enabled;
-            this.RamWriter.Enabled = false;
-
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                unsafe
-                {
-                    buffer = new Span<byte>((byte*)_DATA, byteCount);
-                }
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                buffer = new Span<byte>(new byte[byteCount]);
-            }
-            else
-            {
-                throw new PlatformNotSupportedException();
-            }
+                byteCount = (int)Math.Pow(2, this.RamWriter.LogLength) * SystemParameters.BYTE_COUNT * SystemParameters.BUFFER_COUNT;
+                enabled = this.RamWriter.Enabled;
+                this.RamWriter.Enabled = false;
 
-            buffer.Clear();
-            this.RamWriter.Enabled = enabled;
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    unsafe
+                    {
+                        buffer = new Span<byte>((byte*)_DATA, byteCount);
+                    }
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    buffer = new Span<byte>(new byte[byteCount]);
+                }
+                else
+                {
+                    throw new PlatformNotSupportedException();
+                }
+
+                buffer.Clear();
+                this.RamWriter.Enabled = enabled;
+            }
         }
 
         public void LoadFPGAImage(string filePath)
@@ -184,14 +179,6 @@ namespace Vibrometer.Shared.API
                         sourceFileStream.CopyTo(targetFileStream);
                     }
                 }
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                //
-            }
-            else
-            {
-                throw new PlatformNotSupportedException();
             }
         }
 

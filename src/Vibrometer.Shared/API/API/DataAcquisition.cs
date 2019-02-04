@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Vibrometer.Shared.API.Linux
+namespace Vibrometer.Shared.API
 {
-    public class DataAcquisition : IDataAcquisition
+    public class DataAcquisition
     {
         #region Fields
 

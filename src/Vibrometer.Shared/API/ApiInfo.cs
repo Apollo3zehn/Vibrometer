@@ -17,10 +17,15 @@ namespace Vibrometer.Shared.API
 
             apiRecordSet = new List<ApiRecord>()
             {
-                // General
+                // AxisSwitch
                 new ApiRecord(
-                        ApiMethod.GE_Source, ApiGroup.General, "Source",
-                        offset: 0x0000, shift: 0, size: 32 // actually max = 4, but 0 is converted to 0x8000000, so this check would fail
+                        ApiMethod.GE_Commit, ApiGroup.AxisSwitch, "Commit",
+                        offset: 0x0000, shift: 0, size: 32
+                    ),
+
+                new ApiRecord(
+                        ApiMethod.GE_Source, ApiGroup.AxisSwitch, "Source",
+                        offset: 0x0040, shift: 0, size: 32 // actually max = 4, but 0 is converted to 0x8000000, so this check would fail
                     ),
 
                 // Signal Generator

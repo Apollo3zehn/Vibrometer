@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Vibrometer.Shared.API.Linux
+namespace Vibrometer.Shared.API
 {
-    public class FourierTransform : IFourierTransform
+    public class FourierTransform
     {
         #region Fields
 

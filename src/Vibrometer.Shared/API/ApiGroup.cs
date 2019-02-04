@@ -2,12 +2,12 @@
 {
     public enum ApiGroup
     {
-        General,
-        SignalGenerator,
-        DataAcquisition,
-        PositionTracker,
-        Filter,
-        FourierTransform,
-        RamWriter
+        AxisSwitch = 0,
+        SignalGenerator = 1,
+        DataAcquisition = 2,
+        PositionTracker = 3,
+        Filter = 4,
+        FourierTransform = 5,
+        RamWriter = 6
     }
 }
