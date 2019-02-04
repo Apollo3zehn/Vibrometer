@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Vibrometer.API\Vibrometer.API.csproj" />
     <ProjectReference Include="..\Vibrometer.WebClient\Vibrometer.WebClient.csproj" />
   </ItemGroup>
 
