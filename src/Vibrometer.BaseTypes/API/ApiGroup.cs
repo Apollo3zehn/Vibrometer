@@ -1,4 +1,4 @@
-﻿namespace Vibrometer.Shared.API
+﻿namespace Vibrometer.BaseTypes.API
 {
     public enum ApiGroup
     {

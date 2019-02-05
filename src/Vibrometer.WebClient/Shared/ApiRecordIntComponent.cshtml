@@ -1,0 +1,12 @@
+﻿@using Vibrometer.BaseTypes.API
+
+<li class="list-group-item">@Record.DisplayName = @Value</li>
+
+@functions 
+{
+    [Parameter]
+    private int Value { get; set; }
+
+    [Parameter]
+    private ApiRecord Record { get; set; }
+}

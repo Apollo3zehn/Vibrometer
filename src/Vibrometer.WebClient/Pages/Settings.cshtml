@@ -1,0 +1,33 @@
+﻿@using Vibrometer.WebClient.Model
+@using Vibrometer.BaseTypes.API
+@page "/settings"
+@inject AppState state
+@inject SignalRService signalR
+
+<h1>Advanced Settings</h1>
+
+<ul class="list-group">
+    <ApiRecordIntComponent Record="ApiInfo.Instance[ApiMethod.FI_LogThrottle]" Value="@state.VibrometerState.FI_LogThrottle" />
+</ul>
+
+FFT is enabled: @state.VibrometerState.FT_Enabled
+
+<button class="btn btn-primary" onclick="@IncrementCount">Enable FFT</button>
+
+@functions
+{
+    protected override Task OnInitAsync()
+    {
+        state.PropertyChanged += (sender, e) =>
+        {
+            base.StateHasChanged();
+        };
+
+        return base.OnInitAsync();
+    }
+
+    void IncrementCount()
+    {
+        signalR.Connection.InvokeAsync("ToggleHubEnabled");
+    }
+}

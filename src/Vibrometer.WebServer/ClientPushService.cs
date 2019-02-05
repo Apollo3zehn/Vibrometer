@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Timers;
-using Vibrometer.Shared.API;
+using Vibrometer.BaseTypes.API;
 
 namespace Vibrometer.WebServer
 {
@@ -9,7 +9,6 @@ namespace Vibrometer.WebServer
     {
         #region "Fields"
 
-        private int _nextSubscriptionId;
         private Timer _updateBufferContentTimer;
         private VibrometerApi _api;
         private IHubContext<VibrometerHub> _hubContext;
@@ -23,7 +22,7 @@ namespace Vibrometer.WebServer
             _hubContext = hubContext;
             _api = api;
 
-            _updateBufferContentTimer = new Timer() { AutoReset = true, Enabled = true, Interval = TimeSpan.FromSeconds(1).TotalMilliseconds };
+            _updateBufferContentTimer = new Timer() { AutoReset = true, Enabled = true, Interval = TimeSpan.FromMilliseconds(500).TotalMilliseconds };
             _updateBufferContentTimer.Elapsed += OnUpdateBufferContent;
         }
 
@@ -33,7 +32,7 @@ namespace Vibrometer.WebServer
 
         private void OnUpdateBufferContent(object sender, ElapsedEventArgs e)
         {
-            _hubContext.Clients.All.SendAsync("SendBufferContent", _api.GetState());
+            _hubContext.Clients.All.SendAsync("SendBufferContent", _api.GetBuffer());
         }
 
         #endregion

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vibrometer.Shared.API
+namespace Vibrometer.BaseTypes.API
 {
     public class AxisSwitch
     {

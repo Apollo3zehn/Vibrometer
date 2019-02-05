@@ -1,4 +1,4 @@
-﻿namespace Vibrometer.Shared
+﻿namespace Vibrometer.BaseTypes
 {
     public static class SystemParameters
     {

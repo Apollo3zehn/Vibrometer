@@ -2,9 +2,8 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using Vibrometer.BaseTypes;
 
-namespace Vibrometer.Shared.API
+namespace Vibrometer.BaseTypes.API
 {
     public class VibrometerApi : IDisposable
     {
@@ -187,23 +186,23 @@ namespace Vibrometer.Shared.API
         {
             return new VibrometerState()
             {
-                AS_Source = this.AxisSwitch.Source,
+                AS_Source = (int)this.AxisSwitch.Source,
                 SG_FmEnabled = this.SignalGenerator.FmEnabled,
-                SG_PhaseSignal = this.SignalGenerator.PhaseSignal,
-                SG_PhaseCarrier = this.SignalGenerator.PhaseCarrier,
+                SG_PhaseSignal = (int)this.SignalGenerator.PhaseSignal,
+                SG_PhaseCarrier = (int)this.SignalGenerator.PhaseCarrier,
                 DA_SwitchEnabled = this.DataAcquisition.SwitchEnabled,
-                PT_LogScale = this.PositionTracker.LogScale,
-                PT_LogCountExtremum = this.PositionTracker.LogCountExtremum,
-                PT_ShiftExtremum = this.PositionTracker.ShiftExtremum,
-                FI_LogThrottle = this.Filter.LogThrottle,
+                PT_LogScale = (int)this.PositionTracker.LogScale,
+                PT_LogCountExtremum = (int)this.PositionTracker.LogCountExtremum,
+                PT_ShiftExtremum = (int)this.PositionTracker.ShiftExtremum,
+                FI_LogThrottle = (int)this.Filter.LogThrottle,
                 FT_Enabled = this.FourierTransform.Enabled,
-                FT_LogCountAverages = this.FourierTransform.LogCountAverages,
-                FT_LogThrottle = this.FourierTransform.LogThrottle,
+                FT_LogCountAverages = (int)this.FourierTransform.LogCountAverages,
+                FT_LogThrottle = (int)this.FourierTransform.LogThrottle,
                 RW_Enabled = this.RamWriter.Enabled,
                 RW_RequestEnabled = this.RamWriter.RequestEnabled,
-                RW_LogLength = this.RamWriter.LogLength,
-                RW_LogThrottle = this.RamWriter.LogThrottle,
-                RW_ReadBuffer = this.RamWriter.ReadBuffer
+                RW_LogLength = (int)this.RamWriter.LogLength,
+                RW_LogThrottle = (int)this.RamWriter.LogThrottle,
+                RW_ReadBuffer = (int)this.RamWriter.ReadBuffer
             };
         }
 

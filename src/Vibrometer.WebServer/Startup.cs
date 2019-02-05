@@ -6,13 +6,12 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Net.Mime;
+using Vibrometer.BaseTypes.API;
 
 namespace Vibrometer.WebServer
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
@@ -28,9 +27,11 @@ namespace Vibrometer.WebServer
                     WasmMediaTypeNames.Application.Wasm,
                 });
             });
+
+            services.AddSingleton<ClientPushService>();
+            services.AddSingleton<VibrometerApi>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseResponseCompression();

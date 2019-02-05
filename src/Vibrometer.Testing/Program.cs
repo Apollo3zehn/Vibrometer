@@ -2,8 +2,8 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Vibrometer.Shared;
-using Vibrometer.Shared.API;
+using Vibrometer.BaseTypes;
+using Vibrometer.BaseTypes.API;
 
 namespace Vibrometer.Testing
 {

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using Vibrometer.BaseTypes;
 
-namespace Vibrometer.Shared.API
+namespace Vibrometer.BaseTypes.API
 {
     public static class ApiHelper
     {

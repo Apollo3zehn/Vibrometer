@@ -19,6 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Shared\ApiRecordIntComponent.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Shared\NavItem.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
