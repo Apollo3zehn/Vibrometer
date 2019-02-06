@@ -1,0 +1,21 @@
+﻿@using Vibrometer.BaseTypes.API
+
+<li class="list-group-item">@Record.DisplayName
+    @if (Value)
+    {
+        <button class="btn btn-success">Enabled</button>
+    }
+    else
+    {
+        <button class="btn btn-danger">Disabled</button>
+    }
+</li>
+
+@functions 
+{
+    [Parameter]
+    private bool Value { get; set; }
+
+    [Parameter]
+    private ApiRecord Record { get; set; }
+}
