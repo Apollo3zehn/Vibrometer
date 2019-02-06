@@ -1,0 +1,35 @@
+﻿@using Vibrometer.BaseTypes.API
+
+<div class="row mt-2">
+    <div class="col">
+        <h5 style="margin-bottom:0px">@Record.DisplayName</h5>
+    </div>
+</div>
+<div class="row mb-2">
+    <div class="col-md-10">
+        <div class="form-group bmd-form-group">
+            <label class="bmd-label-floating">@Record.Description</label>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group bmd-form-group">
+            @if (this.Value)
+            {
+                <button class="btn btn-sm btn-success">Enabled</button>
+            }
+            else
+            {
+                <button class="btn btn-sm btn-danger">Disabled</button>
+            }
+        </div>
+    </div>
+</div>
+
+@functions
+{
+[Parameter]
+private bool Value { get; set; }
+
+[Parameter]
+private ApiRecord Record { get; set; }
+}

@@ -1,0 +1,40 @@
+﻿@using Vibrometer.BaseTypes.API
+
+<div class="row mt-2">
+    <div class="col">
+        <h5 style="margin-bottom:0px">@Record.DisplayName</h5>
+    </div>
+</div>
+<div class="row mb-2">
+    <div class="col-md-10">
+        <div class="form-group bmd-form-group">
+            <label class="bmd-label-floating">@Record.Description</label>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group bmd-form-group">
+            @if (this.Record.Method == ApiMethod.AS_Source)
+            {
+                <select class="form-control" bind="@this.Value">
+                    @foreach (ApiSource source in Enum.GetValues(typeof(ApiSource)))
+                    {
+                        <option value=@source>@Enum.GetName(typeof(ApiSource), source)</option>
+                    }
+                </select>
+            }
+            else
+            {
+                <input type="text" class="form-control" bind="@Value" />
+            }
+        </div>
+    </div>
+</div>
+
+@functions
+{
+[Parameter]
+private int Value { get; set; }
+
+[Parameter]
+private ApiRecord Record { get; set; }
+}

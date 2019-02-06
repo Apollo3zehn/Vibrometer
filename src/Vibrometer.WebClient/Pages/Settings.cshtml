@@ -4,7 +4,7 @@
 @inject AppState state
 @inject SignalRService signalR
 
-<h1>Settings</h1>
+<h1>FPGA Settings</h1>
 
 <div class="row">
     <div class="col-6">
@@ -12,23 +12,22 @@
             <div class="card-header card-header-tabs card-header-info">
                 <div class="nav-tabs-navigation">
                     <div class="nav-tabs-wrapper">
-                        <span class="nav-tabs-title">Advanced settings:</span>
                         <ul class="nav nav-tabs" data-tabs="tabs">
                             <li class="nav-item">
-                                <a class="nav-link @((this.SelectedGroup == ApiGroup.AxisSwitch ? "active" : ""))" onclick="@(() => SelectGroup(ApiGroup.AxisSwitch))">
-                                    <i class="material-icons">bug_report</i> AXIS Switch
+                                <a class="nav-link @((this.SelectedGroup == SettingsGroup.ADC_DAC ? "active" : ""))" style="cursor:pointer" onclick="@(() => SelectGroup(SettingsGroup.ADC_DAC))">
+                                    <i class="material-icons">graphic_eq</i> ADC / DAC
                                     <div class="ripple-container"></div>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link @((this.SelectedGroup == ApiGroup.SignalGenerator ? "active" : ""))" onclick="@(() => SelectGroup(ApiGroup.SignalGenerator))">
-                                    <i class="material-icons">bug_report</i> Signal Generator
+                                <a class="nav-link @((this.SelectedGroup == SettingsGroup.Processing ? "active" : ""))" style="cursor:pointer" onclick="@(() => SelectGroup(SettingsGroup.Processing))">
+                                    <i class="material-icons">polymer</i> Processing
                                     <div class="ripple-container"></div>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link @((this.SelectedGroup == ApiGroup.DataAcquisition ? "active" : ""))" onclick="@(() => SelectGroup(ApiGroup.DataAcquisition))">
-                                    <i class="material-icons">bug_report</i> Data Acquisition
+                                <a class="nav-link @((this.SelectedGroup == SettingsGroup.System ? "active" : ""))" style="cursor:pointer" onclick="@(() => SelectGroup(SettingsGroup.System))">
+                                    <i class="material-icons">settings</i> System
                                     <div class="ripple-container"></div>
                                 </a>
                             </li>
@@ -39,27 +38,66 @@
             <div class="card-body">
                 <div class="tab-content">
                     <div class="tab-pane active">
-                        <ul class="list-group">
+                        <div class="list-group">
                             @switch (this.SelectedGroup)
                             {
-                                case ApiGroup.AxisSwitch:
-                                    <ApiRecordIntComponent Record="ApiInfo.Instance[ApiMethod.AS_Source]" Value="@state.VibrometerState.AS_Source" />
-                                    break;
-                                case ApiGroup.SignalGenerator:
-                                    <ApiRecordBoolComponent Record="ApiInfo.Instance[ApiMethod.SG_FmEnabled]" Value="@state.VibrometerState.SG_FmEnabled" />
+                                case SettingsGroup.ADC_DAC:
+
+                                    <!--DAC-->
+                                    <ApiRecordHeader DisplayName="Digital-Analog-Converter" Description="The DAC is used to generate test signals. In default operating mode, this componet is driven by a DDS compiler that generates a sine (channel A) and a cosine (channel B). With frequency modulation mode these signals are modulated with an additional signal." />
+                                    <ApiRecordComponentBool Record="ApiInfo.Instance[ApiMethod.SG_FmEnabled]" Value="@state.VibrometerState.SG_FmEnabled" />
                                     @if (state.VibrometerState.SG_FmEnabled)
                                     {
-                                        <ApiRecordIntComponent Record="ApiInfo.Instance[ApiMethod.SG_PhaseSignal]" Value="@state.VibrometerState.SG_PhaseSignal" />
+                                        <ApiRecordComponent Record="ApiInfo.Instance[ApiMethod.SG_PhaseSignal]" Value="@state.VibrometerState.SG_PhaseSignal" />
                                     }
-                                    <ApiRecordIntComponent Record="ApiInfo.Instance[ApiMethod.SG_PhaseCarrier]" Value="@state.VibrometerState.SG_PhaseCarrier" />
+                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiMethod.SG_PhaseCarrier]" Value="@state.VibrometerState.SG_PhaseCarrier" />
+
+                                    <!--ADC-->
+                                    <ApiRecordHeader DisplayName="Analog-Digital-Converter" Description="The ADC is the main data source of the vibrometer. It is driven by an 125 MHz oscillator and consists of the two 16-bit channels A and B." />
+                                    <ApiRecordComponentBool Record="ApiInfo.Instance[ApiMethod.DA_SwitchEnabled]" Value="@state.VibrometerState.DA_SwitchEnabled" />
+
                                     break;
-                                case ApiGroup.DataAcquisition:
-                                    <ApiRecordBoolComponent Record="ApiInfo.Instance[ApiMethod.DA_SwitchEnabled]" Value="@state.VibrometerState.DA_SwitchEnabled" />
+
+                                case SettingsGroup.Processing:
+
+                                    <!--Position Tracker-->
+                                    <ApiRecordHeader DisplayName="Position Tracker" Description="The position tracker module receives its input data from the ADC. It consists of an 'extremum finder' that constantly monitors the signal levels and the position tracker itself which is simply counting the signal waves. If the input signal of channel B is shifted by 90 deg it is also capable to distinguish different directions." />
+                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiMethod.PT_LogScale]" Value="@state.VibrometerState.PT_LogScale" />
+                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiMethod.PT_LogCountExtremum]" Value="@state.VibrometerState.PT_LogCountExtremum" />
+                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiMethod.PT_ShiftExtremum]" Value="@state.VibrometerState.PT_ShiftExtremum" />
+
+                                    <!--Filter-->
+                                    <ApiRecordHeader DisplayName="Filter" Description="The purpose of this module is to apply a high pass filter to avoid variable overflow and it additionally consists of an differentiator that is required if signal B is not shifted by 90 deg." />
+                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiMethod.FI_LogThrottle]" Value="@state.VibrometerState.FI_LogThrottle" />
+
+                                    <!--Fourier Transform-->
+                                    <ApiRecordHeader DisplayName="Fourier Transform" Description="Every 265 data points, a Fourier transform is calculated and averaged. The resulting dataset is pushed regularly to the RAM writer module." />
+                                    <ApiRecordComponentBool Record="ApiInfo.Instance[ApiMethod.FT_Enabled]" Value="@state.VibrometerState.FT_Enabled" />
+                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiMethod.FT_LogCountAverages]" Value="@state.VibrometerState.FT_LogCountAverages" />
+                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiMethod.FT_LogThrottle]" Value="@state.VibrometerState.FT_LogThrottle" />
+
                                     break;
+
+                                case SettingsGroup.System:
+
+                                    <!--AXIS Switch-->
+                                    <ApiRecordHeader DisplayName="AXIS Switch" Description="The AXIS switch allows the data streams of the ADC, position tracker, filter and Fourier Transform to be written into the RAM." />
+                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiMethod.AS_Source]" Value="@state.VibrometerState.AS_Source" />
+
+                                    <!--RAM Writer-->
+                                    <ApiRecordHeader DisplayName="RAM Writer" Description="The RAM writer consists of an sync manager module and the RAM writer itself. The sync manager handles the buffer management to ensure there is always a buffer for reading and for writing available." />
+                                    <ApiRecordComponentBool Record="ApiInfo.Instance[ApiMethod.RW_Enabled]" Value="@state.VibrometerState.RW_Enabled" />
+                                    <ApiRecordComponentBool Record="ApiInfo.Instance[ApiMethod.RW_RequestEnabled]" Value="@state.VibrometerState.RW_RequestEnabled" />
+                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiMethod.RW_LogLength]" Value="@state.VibrometerState.RW_LogLength" />
+                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiMethod.RW_LogThrottle]" Value="@state.VibrometerState.RW_LogThrottle" />
+                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiMethod.RW_ReadBuffer]" Value="@state.VibrometerState.RW_ReadBuffer" />
+
+                                    break;
+
                                 default:
                                     break;
                             }
-                        </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -67,84 +105,16 @@
     </div>
 
     <div class="col-6">
-        <div class="card">
-            <div class="card-header card-header-tabs card-header-info">
-                <div class="nav-tabs-navigation">
-                    <div class="nav-tabs-wrapper">
-                        <span class="nav-tabs-title">Advanced settings:</span>
-                        <ul class="nav nav-tabs" data-tabs="tabs">
-                            <li class="nav-item">
-                                <a class="nav-link @((this.SelectedGroup == ApiGroup.PositionTracker ? "active" : ""))" onclick="@(() => SelectGroup(ApiGroup.PositionTracker))">
-                                    <i class="material-icons">bug_report</i> Position Tracker
-                                    <div class="ripple-container"></div>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link @((this.SelectedGroup == ApiGroup.Filter ? "active" : ""))" onclick="@(() => SelectGroup(ApiGroup.Filter))">
-                                    <i class="material-icons">bug_report</i> Filter
-                                    <div class="ripple-container"></div>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link @((this.SelectedGroup == ApiGroup.FourierTransform ? "active" : ""))" onclick="@(() => SelectGroup(ApiGroup.FourierTransform))">
-                                    <i class="material-icons">bug_report</i> Fourier Transform
-                                    <div class="ripple-container"></div>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link @((this.SelectedGroup == ApiGroup.RamWriter ? "active" : ""))" onclick="@(() => SelectGroup(ApiGroup.RamWriter))">
-                                    <i class="material-icons">bug_report</i> RAM Writer
-                                    <div class="ripple-container"></div>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="tab-content">
-                    <div class="tab-pane active">
-                        <ul class="list-group">
-                            @switch (this.SelectedGroup)
-                            {
-                                case ApiGroup.PositionTracker:
-                                    <ApiRecordIntComponent Record="ApiInfo.Instance[ApiMethod.PT_LogScale]" Value="@state.VibrometerState.PT_LogScale" />
-                                    <ApiRecordIntComponent Record="ApiInfo.Instance[ApiMethod.PT_LogCountExtremum]" Value="@state.VibrometerState.PT_LogCountExtremum" />
-                                    <ApiRecordIntComponent Record="ApiInfo.Instance[ApiMethod.PT_ShiftExtremum]" Value="@state.VibrometerState.PT_ShiftExtremum" />
-                                    break;
-                                case ApiGroup.Filter:
-                                    <ApiRecordIntComponent Record="ApiInfo.Instance[ApiMethod.FI_LogThrottle]" Value="@state.VibrometerState.FI_LogThrottle" />
-                                    break;
-                                case ApiGroup.FourierTransform:
-                                    <ApiRecordBoolComponent Record="ApiInfo.Instance[ApiMethod.FT_Enabled]" Value="@state.VibrometerState.FT_Enabled" />
-                                    <ApiRecordIntComponent Record="ApiInfo.Instance[ApiMethod.FT_LogCountAverages]" Value="@state.VibrometerState.FT_LogCountAverages" />
-                                    <ApiRecordIntComponent Record="ApiInfo.Instance[ApiMethod.FT_LogThrottle]" Value="@state.VibrometerState.FT_LogThrottle" />
-                                    break;
-                                case ApiGroup.RamWriter:
-                                    <ApiRecordBoolComponent Record="ApiInfo.Instance[ApiMethod.RW_Enabled]" Value="@state.VibrometerState.RW_Enabled" />
-                                    <ApiRecordBoolComponent Record="ApiInfo.Instance[ApiMethod.RW_RequestEnabled]" Value="@state.VibrometerState.RW_RequestEnabled" />
-                                    <ApiRecordIntComponent Record="ApiInfo.Instance[ApiMethod.RW_LogLength]" Value="@state.VibrometerState.RW_LogLength" />
-                                    <ApiRecordIntComponent Record="ApiInfo.Instance[ApiMethod.RW_LogThrottle]" Value="@state.VibrometerState.RW_LogThrottle" />
-                                    <ApiRecordIntComponent Record="ApiInfo.Instance[ApiMethod.RW_ReadBuffer]" Value="@state.VibrometerState.RW_ReadBuffer" />
-                                    break;
-                                default:
-                                    break;
-                            }
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 
 @functions
 {
-    private ApiGroup SelectedGroup { get; set; }
+    private SettingsGroup SelectedGroup { get; set; }
 
     protected override void OnInit()
     {
-        this.SelectedGroup = ApiGroup.AxisSwitch;
+        this.SelectedGroup = SettingsGroup.ADC_DAC;
 
         state.PropertyChanged += (sender, e) =>
         {
@@ -152,7 +122,7 @@
         };
     }
 
-    private void SelectGroup(ApiGroup group)
+    private void SelectGroup(SettingsGroup group)
     {
         this.SelectedGroup = group;
     }

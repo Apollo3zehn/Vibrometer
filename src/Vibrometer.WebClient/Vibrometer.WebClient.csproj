@@ -19,10 +19,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Shared\ApiRecordBoolComponent.cshtml">
+    <Content Update="Shared\ApiRecordComponentBool.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Shared\ApiRecordIntComponent.cshtml">
+    <Content Update="Shared\ApiRecordComponent.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Shared\ApiRecordHeader.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Shared\NavItem.cshtml">
