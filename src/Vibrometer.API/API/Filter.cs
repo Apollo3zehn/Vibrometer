@@ -23,11 +23,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiMethod.FI_LogThrottle, _address);
+                return ApiHelper.GetValue(ApiParameter.FI_LogThrottle, _address);
             }
             set
             {
-                ApiHelper.SetValue(ApiMethod.FI_LogThrottle, _address, value);
+                ApiHelper.SetValue(ApiParameter.FI_LogThrottle, _address, value);
             }
         }
     }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using Vibrometer.BaseTypes;
 
 namespace Vibrometer.BaseTypes.API
 {
@@ -14,6 +13,7 @@ namespace Vibrometer.BaseTypes.API
         {
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
+                // TODO: free array
                 fakeArray = Marshal.AllocHGlobal(ApiHelper.FAKE_BUFFER_SIZE * SystemParameters.BYTE_COUNT);
 
                 unsafe
@@ -23,23 +23,23 @@ namespace Vibrometer.BaseTypes.API
             }
         }
 
-        public static void SetValue(ApiMethod method, IntPtr address, uint value)
+        public static void SetValue(ApiParameter parameter, IntPtr address, uint value)
         {
             ApiRecord record;
             IntPtr realAddress;
 
-            record = ApiInfo.Instance[method];
+            record = ApiInfo.Instance[parameter];
             realAddress = ApiHelper.GetAddress(record.Group, address);
 
             ApiHelper.SetValueInternal(record, IntPtr.Add(realAddress, record.Offset), value);
         }
 
-        public static uint GetValue(ApiMethod method, IntPtr address)
+        public static uint GetValue(ApiParameter parameter, IntPtr address)
         {
             ApiRecord record;
             IntPtr realAddress;
 
-            record = ApiInfo.Instance[method];
+            record = ApiInfo.Instance[parameter];
             realAddress = ApiHelper.GetAddress(record.Group, address);
 
             return ApiHelper.GetValueInternal(record.Shift, record.Size, IntPtr.Add(realAddress, record.Offset));
@@ -96,7 +96,7 @@ namespace Vibrometer.BaseTypes.API
                 }
                 else
                 {
-                    realAddress = IntPtr.Add(fakeArray, (int)(group - 1) * SystemParameters.BYTE_COUNT);
+                    realAddress = IntPtr.Add(fakeArray, (int)(group - 1) * SystemParameters.BYTE_COUNT * 2);
                 }
             }
 

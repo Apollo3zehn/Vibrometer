@@ -23,11 +23,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiMethod.PT_LogScale, _address);
+                return ApiHelper.GetValue(ApiParameter.PT_LogScale, _address);
             }
             set
             {
-                ApiHelper.SetValue(ApiMethod.PT_LogScale, _address, value);
+                ApiHelper.SetValue(ApiParameter.PT_LogScale, _address, value);
             }
         }
 
@@ -35,11 +35,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiMethod.PT_LogCountExtremum, _address);
+                return ApiHelper.GetValue(ApiParameter.PT_LogCountExtremum, _address);
             }
             set
             {
-                ApiHelper.SetValue(ApiMethod.PT_LogCountExtremum, _address, value);
+                ApiHelper.SetValue(ApiParameter.PT_LogCountExtremum, _address, value);
             }
         }
 
@@ -47,11 +47,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiMethod.PT_ShiftExtremum, _address);
+                return ApiHelper.GetValue(ApiParameter.PT_ShiftExtremum, _address);
             }
             set
             {
-                ApiHelper.SetValue(ApiMethod.PT_ShiftExtremum, _address, value);
+                ApiHelper.SetValue(ApiParameter.PT_ShiftExtremum, _address, value);
             }
         }
 
@@ -63,7 +63,7 @@ namespace Vibrometer.BaseTypes.API
                 short b;
                 uint value;
 
-                value = ApiHelper.GetValue(ApiMethod.PT_Threshold, _address);
+                value = ApiHelper.GetValue(ApiParameter.PT_Threshold, _address);
 
                 a = unchecked((short)(value & ~0xFFFF0000));
                 b = unchecked((short)(value >> 16));

@@ -4,7 +4,7 @@ namespace Vibrometer.BaseTypes.API
 {
     public class ApiRecord
     {
-        public ApiMethod Method { get; }
+        public ApiParameter Parameter { get; }
         public ApiGroup Group { get; }
         public string DisplayName { get; }
         public string Description { get; }
@@ -14,9 +14,9 @@ namespace Vibrometer.BaseTypes.API
         public uint Min { get; }
         public uint Max { get; }
 
-        public ApiRecord(ApiMethod method, ApiGroup group, string displayName, string description, int offset, int shift, int size)
+        public ApiRecord(ApiParameter parameter, ApiGroup group, string displayName, string description, int offset, int shift, int size)
         {
-            this.Method = method;
+            this.Parameter = parameter;
             this.Group = group;
             this.DisplayName = displayName;
             this.Description = description;
@@ -27,9 +27,9 @@ namespace Vibrometer.BaseTypes.API
             this.Max = (uint)(Math.Pow(2, size) - 1);
         }
 
-        public ApiRecord(ApiMethod method, ApiGroup group, string displayName, string description, int offset, int shift, int size, uint min, uint max)
+        public ApiRecord(ApiParameter parameter, ApiGroup group, string displayName, string description, int offset, int shift, int size, uint min, uint max)
         {
-            this.Method = method;
+            this.Parameter = parameter;
             this.Group = group;
             this.DisplayName = displayName;
             this.Description = description;

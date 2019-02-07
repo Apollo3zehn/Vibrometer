@@ -1,4 +1,6 @@
-﻿@using Vibrometer.BaseTypes.API
+﻿@using Vibrometer.BaseTypes
+@using Vibrometer.BaseTypes.API
+@using Vibrometer.WebClient.Localization
 
 <div class="row mt-2">
     <div class="col">
@@ -13,18 +15,18 @@
     </div>
     <div class="col-md-2">
         <div class="form-group bmd-form-group">
-            @if (this.Record.Method == ApiMethod.AS_Source)
+            @if (this.Record.Parameter == ApiParameter.AS_Source)
             {
                 <select class="form-control" bind="@this.Value">
                     @foreach (ApiSource source in Enum.GetValues(typeof(ApiSource)))
                     {
-                        <option value=@source>@Enum.GetName(typeof(ApiSource), source)</option>
+                        <option value=@((int)source)>@Utilities.GetEnumLocalization((ApiSource)source, typeof(EnumerationDescription))</option>
                     }
                 </select>
             }
             else
             {
-                <input type="text" class="form-control" bind="@Value" />
+                <input type="number" class="form-control" bind="@Value" step="1" min="@this.Record.Min" max="@this.Record.Max" />
             }
         </div>
     </div>
@@ -32,9 +34,28 @@
 
 @functions
 {
-[Parameter]
-private int Value { get; set; }
+    private int _value;
 
-[Parameter]
-private ApiRecord Record { get; set; }
+    [Parameter]
+    private int Value
+    {
+        get
+        {
+            return _value;
+        }
+        set
+        {
+            if (this.Record.Min <= value && value <= this.Record.Max)
+            {
+                _value = value;
+                this.OnValueChanged?.Invoke(this.Record.Parameter, value);
+            }
+        }
+    }
+
+    [Parameter]
+    private ApiRecord Record { get; set; }
+
+    [Parameter]
+    private Action<ApiParameter, int> OnValueChanged { get; set; }
 }

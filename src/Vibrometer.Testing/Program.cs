@@ -244,11 +244,11 @@ namespace Vibrometer.Testing
             Console.ForegroundColor = original;
         }
 
-        private static void PrintDialogFloat(ApiMethod method, ref double value, double min, double max, string unit)
+        private static void PrintDialogFloat(ApiParameter parameter, ref double value, double min, double max, string unit)
         {
             ApiRecord record;
 
-            record = ApiInfo.Instance[method];
+            record = ApiInfo.Instance[parameter];
 
             Console.Clear();
             Console.WriteLine($"{min:F2} <= value <= {max:F2} {unit}\ncurrent: {value:F2} {unit}\n");
@@ -261,11 +261,11 @@ namespace Vibrometer.Testing
             }
         }
 
-        private static void PrintDialogInteger(ApiMethod method, ref uint value)
+        private static void PrintDialogInteger(ApiParameter parameter, ref uint value)
         {
             ApiRecord record;
 
-            record = ApiInfo.Instance[method];
+            record = ApiInfo.Instance[parameter];
 
             Console.Clear();
             Console.WriteLine($"{record.Min} <= value <= {record.Max}\ncurrent: {value}\n");
@@ -284,7 +284,7 @@ namespace Vibrometer.Testing
             uint value = (uint)_api.AxisSwitch.Source;
 
             // TODO: max is 4
-            Program.PrintDialogInteger(ApiMethod.AS_Source, ref value);
+            Program.PrintDialogInteger(ApiParameter.AS_Source, ref value);
 
             _api.AxisSwitch.Source = (ApiSource)value;
         }
@@ -300,7 +300,7 @@ namespace Vibrometer.Testing
             double max = SystemParameters.CLOCK_RATE;
             double value = _api.SignalGenerator.PhaseSignal / Math.Pow(2, 27) * SystemParameters.CLOCK_RATE;
 
-            Program.PrintDialogFloat(ApiMethod.SG_PhaseSignal, ref value, min, max, "Hz");
+            Program.PrintDialogFloat(ApiParameter.SG_PhaseSignal, ref value, min, max, "Hz");
 
             _api.SignalGenerator.PhaseSignal = (uint)(value * Math.Pow(2, 27) / SystemParameters.CLOCK_RATE);
         }
@@ -311,7 +311,7 @@ namespace Vibrometer.Testing
             double max = SystemParameters.CLOCK_RATE;
             double value = _api.SignalGenerator.PhaseCarrier / Math.Pow(2, 27) * SystemParameters.CLOCK_RATE;
 
-            Program.PrintDialogFloat(ApiMethod.SG_PhaseCarrier, ref value, min, max, "Hz");
+            Program.PrintDialogFloat(ApiParameter.SG_PhaseCarrier, ref value, min, max, "Hz");
 
             _api.SignalGenerator.PhaseCarrier = (uint)(value * Math.Pow(2, 27) / SystemParameters.CLOCK_RATE);
         }
@@ -325,7 +325,7 @@ namespace Vibrometer.Testing
         {
             uint value = _api.PositionTracker.LogScale;
 
-            Program.PrintDialogInteger(ApiMethod.PT_LogScale, ref value);
+            Program.PrintDialogInteger(ApiParameter.PT_LogScale, ref value);
 
             _api.PositionTracker.LogScale = value;
         }
@@ -334,7 +334,7 @@ namespace Vibrometer.Testing
         {
             uint value = _api.PositionTracker.LogCountExtremum;
 
-            Program.PrintDialogInteger(ApiMethod.PT_LogCountExtremum, ref value);
+            Program.PrintDialogInteger(ApiParameter.PT_LogCountExtremum, ref value);
 
             _api.PositionTracker.LogCountExtremum = value;
         }
@@ -343,7 +343,7 @@ namespace Vibrometer.Testing
         {
             uint value = _api.PositionTracker.ShiftExtremum;
 
-            Program.PrintDialogInteger(ApiMethod.PT_ShiftExtremum, ref value);
+            Program.PrintDialogInteger(ApiParameter.PT_ShiftExtremum, ref value);
 
             _api.PositionTracker.ShiftExtremum = value;
         }
@@ -379,7 +379,7 @@ namespace Vibrometer.Testing
         {
             uint value = _api.Filter.LogThrottle;
 
-            Program.PrintDialogInteger(ApiMethod.FI_LogThrottle, ref value);
+            Program.PrintDialogInteger(ApiParameter.FI_LogThrottle, ref value);
 
             _api.Filter.LogThrottle = value;
         }
@@ -393,7 +393,7 @@ namespace Vibrometer.Testing
         {
             uint value = _api.FourierTransform.LogCountAverages;
 
-            Program.PrintDialogInteger(ApiMethod.FT_LogCountAverages, ref value);
+            Program.PrintDialogInteger(ApiParameter.FT_LogCountAverages, ref value);
 
             _api.FourierTransform.LogCountAverages = value;
         }
@@ -402,7 +402,7 @@ namespace Vibrometer.Testing
         {
             uint value = _api.FourierTransform.LogThrottle;
 
-            Program.PrintDialogInteger(ApiMethod.FT_LogThrottle, ref value);
+            Program.PrintDialogInteger(ApiParameter.FT_LogThrottle, ref value);
 
             _api.FourierTransform.LogThrottle = value;
         }
@@ -421,7 +421,7 @@ namespace Vibrometer.Testing
         {
             uint value = _api.RamWriter.LogLength;
 
-            Program.PrintDialogInteger(ApiMethod.RW_LogLength, ref value);
+            Program.PrintDialogInteger(ApiParameter.RW_LogLength, ref value);
 
             _api.RamWriter.LogLength = value;
         }
@@ -430,7 +430,7 @@ namespace Vibrometer.Testing
         {
             uint value = _api.RamWriter.LogThrottle;
 
-            Program.PrintDialogInteger(ApiMethod.RW_LogThrottle, ref value);
+            Program.PrintDialogInteger(ApiParameter.RW_LogThrottle, ref value);
 
             _api.RamWriter.LogThrottle = value;
         }

@@ -23,11 +23,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiMethod.DA_SwitchEnabled, _address) > 0;
+                return ApiHelper.GetValue(ApiParameter.DA_SwitchEnabled, _address) > 0;
             }
             set
             {
-                ApiHelper.SetValue(ApiMethod.DA_SwitchEnabled, _address, value ? 1U : 0U);
+                ApiHelper.SetValue(ApiParameter.DA_SwitchEnabled, _address, value ? 1U : 0U);
             }
         }
     }

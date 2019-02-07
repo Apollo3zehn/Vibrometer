@@ -2,8 +2,8 @@
 {
     public enum SettingsGroup
     {
-        ADC_DAC = 1,
-        Processing = 2,
-        System = 3
+        System = 1,
+        ADC_DAC = 2,
+        Processing = 3,
     }
 }

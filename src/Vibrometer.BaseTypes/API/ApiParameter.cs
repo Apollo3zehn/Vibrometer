@@ -1,6 +1,6 @@
 ﻿namespace Vibrometer.BaseTypes.API
 {
-    public enum ApiMethod
+    public enum ApiParameter
     {
         AS_Commit,
         AS_Source,

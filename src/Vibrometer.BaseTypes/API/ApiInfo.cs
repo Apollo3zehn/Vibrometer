@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace Vibrometer.BaseTypes.API
 {
-    public class ApiInfo : ReadOnlyDictionary<ApiMethod, ApiRecord>
+    public class ApiInfo : ReadOnlyDictionary<ApiParameter, ApiRecord>
     {
-        public static ReadOnlyDictionary<ApiMethod, ApiRecord> Instance { get; }
+        public static ReadOnlyDictionary<ApiParameter, ApiRecord> Instance { get; }
 
         static ApiInfo()
         {
@@ -18,7 +18,7 @@ namespace Vibrometer.BaseTypes.API
             //
         }
 
-        private static IDictionary<ApiMethod, ApiRecord> GetDictionary()
+        private static IDictionary<ApiParameter, ApiRecord> GetDictionary()
         {
             List<ApiRecord> apiRecordSet;
 
@@ -26,120 +26,120 @@ namespace Vibrometer.BaseTypes.API
             {
                 // AxisSwitch
                 new ApiRecord(
-                        ApiMethod.AS_Commit, ApiGroup.AxisSwitch,
+                        ApiParameter.AS_Commit, ApiGroup.AxisSwitch,
                         "Commit", "<no description available>",
                         offset: 0x0000, shift: 0, size: 32
                     ),
                 new ApiRecord(
-                        ApiMethod.AS_Source, ApiGroup.AxisSwitch,
+                        ApiParameter.AS_Source, ApiGroup.AxisSwitch,
                         "Source", "Choose the data stream to be written into the RAM.",
                         offset: 0x0040, shift: 0, size: 32 // actually max = 4, but 0 is converted to 0x8000000, so this check would fail
                     ),
 
                 // Signal Generator
                 new ApiRecord(
-                        ApiMethod.SG_FmEnabled, ApiGroup.SignalGenerator,
+                        ApiParameter.SG_FmEnabled, ApiGroup.SignalGenerator,
                         "Frequency Modulation", "Enables or disables the frequency modulation feature to generate test signals.",
                         offset: 0x00, shift: 0, size: 1
                     ),
                 new ApiRecord(
-                        ApiMethod.SG_PhaseSignal, ApiGroup.SignalGenerator,
+                        ApiParameter.SG_PhaseSignal, ApiGroup.SignalGenerator,
                         "Phase Signal", "Sets the phase incrementation value of the frequency modulated signal.",
                         offset: 0x00, shift: 1, size: 27
                     ),
                 new ApiRecord(
-                        ApiMethod.SG_PhaseCarrier, ApiGroup.SignalGenerator,
+                        ApiParameter.SG_PhaseCarrier, ApiGroup.SignalGenerator,
                         "Phase Carrier", "Sets the phase incrementation value of the carrier signals.",
                         offset: 0x08, shift: 0, size: 27
                     ),
 
                 // Data Acquisition
                 new ApiRecord(
-                        ApiMethod.DA_SwitchEnabled, ApiGroup.DataAcquisition,
+                        ApiParameter.DA_SwitchEnabled, ApiGroup.DataAcquisition,
                         "Switch", "Enables or disables the interchange of ADC signals A and B.",
                         offset: 0x00, shift: 0, size: 1
                     ),
 
                 // Position Tracker
                 new ApiRecord(
-                        ApiMethod.PT_LogScale, ApiGroup.PositionTracker,
+                        ApiParameter.PT_LogScale, ApiGroup.PositionTracker,
                         "Log Scale", "Sets the logarithmic scaling factor of the added or subtracted position.",
                         offset: 0x00, shift: 8, size: 5
                 ),
                 new ApiRecord(
-                        ApiMethod.PT_LogCountExtremum, ApiGroup.PositionTracker, 
+                        ApiParameter.PT_LogCountExtremum, ApiGroup.PositionTracker, 
                         "Log Count Extremum", "Sets the logarithmic maximum number of measurements to determine the extrema.",
                         offset: 0x00, shift: 3, size: 5
                 ),
                 new ApiRecord(
-                        ApiMethod.PT_ShiftExtremum, ApiGroup.PositionTracker, 
+                        ApiParameter.PT_ShiftExtremum, ApiGroup.PositionTracker, 
                         "Shift Extremum", "Sets number of right shifts to reduce the upper and lower signal limits for the position tracker.",
                         offset: 0x00, shift: 0, size: 3
                 ),
                 new ApiRecord(
-                        ApiMethod.PT_Threshold, ApiGroup.PositionTracker, 
+                        ApiParameter.PT_Threshold, ApiGroup.PositionTracker, 
                         "Threshold", "Gets the current position tracker thresholds.",
                         offset: 0x08, shift: 0, size: 32
                 ),
 
                 // Filter
                 new ApiRecord(
-                        ApiMethod.FI_LogThrottle, ApiGroup.Filter, 
+                        ApiParameter.FI_LogThrottle, ApiGroup.Filter, 
                         "Log Throttle", "Sets the logarithmic data stream throttle for the filter.",
                         offset: 0x00, shift: 0, size: 5
                 ),
 
                 // FourierTransform
                 new ApiRecord(
-                        ApiMethod.FT_Enabled, ApiGroup.FourierTransform, 
+                        ApiParameter.FT_Enabled, ApiGroup.FourierTransform, 
                         "Enabled", "Enables or disables the Fourier Transform.",
                         offset: 0x00, shift: 0, size: 1
                 ),
                 new ApiRecord(
-                        ApiMethod.FT_LogCountAverages, ApiGroup.FourierTransform,
+                        ApiParameter.FT_LogCountAverages, ApiGroup.FourierTransform,
                         "Log Count Averages", "Sets the logarithmic number of Fourier transform frame averages.",
                         offset: 0x00, shift: 1, size: 5
                 ),
                 new ApiRecord(
-                        ApiMethod.FT_LogThrottle, ApiGroup.FourierTransform,
+                        ApiParameter.FT_LogThrottle, ApiGroup.FourierTransform,
                         "Log Throttle", "Sets the logarithmic data stream throttle for the Fourier Transform.",
                         offset: 0x00, shift: 6, size: 5
                 ),
 
                 // RAM Writer
                 new ApiRecord(
-                        ApiMethod.RW_Enabled, ApiGroup.RamWriter, 
+                        ApiParameter.RW_Enabled, ApiGroup.RamWriter, 
                         "Enabled", "Enables or disables the RAM writer.",
                         offset: 0x00, shift: 0, size: 1
                 ),
                 new ApiRecord(
-                        ApiMethod.RW_RequestEnabled, ApiGroup.RamWriter, 
+                        ApiParameter.RW_RequestEnabled, ApiGroup.RamWriter, 
                         "Request", "Enables or disables the RAM writer read buffer request.",
                         offset: 0x00, shift: 1, size: 1
                 ),
                 new ApiRecord(
-                        ApiMethod.RW_LogLength, ApiGroup.RamWriter,
+                        ApiParameter.RW_LogLength, ApiGroup.RamWriter,
                         "Log Length", "Sets the logarithmic length of the buffer in multiples of uint32.",
                         offset: 0x00, shift: 2, size: 5
                 ),
                 new ApiRecord(
-                        ApiMethod.RW_LogThrottle, ApiGroup.RamWriter,
+                        ApiParameter.RW_LogThrottle, ApiGroup.RamWriter,
                         "Log Throttle", "Sets the logarithmic data stream throttle for the RAM writer.",
                         offset: 0x00, shift: 7, size: 5
                 ),
                 new ApiRecord(
-                        ApiMethod.RW_Address, ApiGroup.RamWriter, 
+                        ApiParameter.RW_Address, ApiGroup.RamWriter, 
                         "Address", "Sets the base address of the RAM writer.",
                         offset: 0x08, shift: 0, size: 32
                 ),
                 new ApiRecord(
-                        ApiMethod.RW_ReadBuffer, ApiGroup.RamWriter, 
+                        ApiParameter.RW_ReadBuffer, ApiGroup.RamWriter, 
                         "ReadBuffer", "Gets the address of the currently ready buffer.",
                         offset: 0x08, shift: 0, size: 32
                 ),
             };
 
-            return apiRecordSet.ToDictionary(x => x.Method, x => x);
+            return apiRecordSet.ToDictionary(x => x.Parameter, x => x);
         }
     }
 }

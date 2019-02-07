@@ -23,11 +23,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiMethod.FT_Enabled, _address) > 0;
+                return ApiHelper.GetValue(ApiParameter.FT_Enabled, _address) > 0;
             }
             set
             {
-                ApiHelper.SetValue(ApiMethod.FT_Enabled, _address, value ? 1U : 0U);
+                ApiHelper.SetValue(ApiParameter.FT_Enabled, _address, value ? 1U : 0U);
             }
         }
 
@@ -35,11 +35,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiMethod.FT_LogCountAverages, _address);
+                return ApiHelper.GetValue(ApiParameter.FT_LogCountAverages, _address);
             }
             set
             {
-                ApiHelper.SetValue(ApiMethod.FT_LogCountAverages, _address, value);
+                ApiHelper.SetValue(ApiParameter.FT_LogCountAverages, _address, value);
             }
         }
 
@@ -47,11 +47,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiMethod.FT_LogThrottle, _address);
+                return ApiHelper.GetValue(ApiParameter.FT_LogThrottle, _address);
             }
             set
             {
-                ApiHelper.SetValue(ApiMethod.FT_LogThrottle, _address, value);
+                ApiHelper.SetValue(ApiParameter.FT_LogThrottle, _address, value);
             }
         }
     }

@@ -1,7 +1,4 @@
-﻿using System;
-using Vibrometer.BaseTypes.API;
-
-namespace Vibrometer.BaseTypes
+﻿namespace Vibrometer.BaseTypes
 {
     public struct VibrometerState
     {

@@ -23,11 +23,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiMethod.RW_Enabled, _address) > 0;
+                return ApiHelper.GetValue(ApiParameter.RW_Enabled, _address) > 0;
             }
             set
             {
-                ApiHelper.SetValue(ApiMethod.RW_Enabled, _address, value ? 1U : 0U);
+                ApiHelper.SetValue(ApiParameter.RW_Enabled, _address, value ? 1U : 0U);
             }
         }
 
@@ -35,11 +35,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiMethod.RW_RequestEnabled, _address) > 0;
+                return ApiHelper.GetValue(ApiParameter.RW_RequestEnabled, _address) > 0;
             }
             set
             {
-                ApiHelper.SetValue(ApiMethod.RW_RequestEnabled, _address, value ? 1U : 0U);
+                ApiHelper.SetValue(ApiParameter.RW_RequestEnabled, _address, value ? 1U : 0U);
             }
         }
 
@@ -47,11 +47,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiMethod.RW_LogLength, _address);
+                return ApiHelper.GetValue(ApiParameter.RW_LogLength, _address);
             }
             set
             {
-                ApiHelper.SetValue(ApiMethod.RW_LogLength, _address, value);
+                ApiHelper.SetValue(ApiParameter.RW_LogLength, _address, value);
             }
         }
 
@@ -59,11 +59,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiMethod.RW_LogThrottle, _address);
+                return ApiHelper.GetValue(ApiParameter.RW_LogThrottle, _address);
             }
             set
             {
-                ApiHelper.SetValue(ApiMethod.RW_LogThrottle, _address, value);
+                ApiHelper.SetValue(ApiParameter.RW_LogThrottle, _address, value);
             }
         }
 
@@ -71,7 +71,7 @@ namespace Vibrometer.BaseTypes.API
         {
             set
             {
-                ApiHelper.SetValue(ApiMethod.RW_Address, _address, value);
+                ApiHelper.SetValue(ApiParameter.RW_Address, _address, value);
             }
         }
 
@@ -79,7 +79,7 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiMethod.RW_ReadBuffer, _address);
+                return ApiHelper.GetValue(ApiParameter.RW_ReadBuffer, _address);
             }
         }
     }

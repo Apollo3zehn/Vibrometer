@@ -19,6 +19,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Localization\EnumerationDescription.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>EnumerationDescription.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="Shared\ApiRecordComponentBool.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
@@ -34,6 +42,14 @@
     <Content Update="Shared\Navbar.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Localization\EnumerationDescription.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EnumerationDescription.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Vibrometer.WebClient.Localization</CustomToolNamespace>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

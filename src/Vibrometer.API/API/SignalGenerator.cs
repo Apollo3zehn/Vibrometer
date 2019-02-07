@@ -23,11 +23,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiMethod.SG_FmEnabled, _address) > 0;
+                return ApiHelper.GetValue(ApiParameter.SG_FmEnabled, _address) > 0;
             }
             set
             {
-                ApiHelper.SetValue(ApiMethod.SG_FmEnabled, _address, value ? 1U : 0U);
+                ApiHelper.SetValue(ApiParameter.SG_FmEnabled, _address, value ? 1U : 0U);
             }
         }
 
@@ -35,11 +35,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiMethod.SG_PhaseSignal, _address);
+                return ApiHelper.GetValue(ApiParameter.SG_PhaseSignal, _address);
             }
             set
             {
-                ApiHelper.SetValue(ApiMethod.SG_PhaseSignal, _address, value);
+                ApiHelper.SetValue(ApiParameter.SG_PhaseSignal, _address, value);
             }
         }
 
@@ -47,11 +47,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiMethod.SG_PhaseCarrier, _address);
+                return ApiHelper.GetValue(ApiParameter.SG_PhaseCarrier, _address);
             }
             set
             {
-                ApiHelper.SetValue(ApiMethod.SG_PhaseCarrier, _address, value);
+                ApiHelper.SetValue(ApiParameter.SG_PhaseCarrier, _address, value);
             }
         }
     }
