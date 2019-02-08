@@ -1,10 +1,12 @@
-﻿@using Vibrometer.WebClient.Model
-@using Vibrometer.BaseTypes.API
-@page "/settings"
+﻿@page "/settings"
 @inject AppState state
 @inject SignalRService signalR
 
-<h1>FPGA Settings</h1>
+@using System.Globalization
+@using Vibrometer.BaseTypes.API
+@using Vibrometer.WebClient.Model
+
+<h1 class="display-4">FPGA Settings</h1>
 
 <div class="row">
     <div class="col-lg-6">
@@ -26,7 +28,62 @@
             <div class="card-body">
                 <div class="tab-content">
                     <div class="tab-pane active">
-
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th><strong>Name</strong></th>
+                                    <th><strong>Value</strong></th>
+                                    <th><strong>Unit</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Base Sampling Frequency</td>
+                                    <td>@String.Format(this.NFI, "{0:n}", state.Summary.BaseSamplingFrequency)</td>
+                                    <td>Hz</td>
+                                </tr>
+                                <tr>
+                                    <td>Signal Generator Carrier Frequency</td>
+                                    <td>@String.Format(this.NFI, "{0:n}", state.Summary.SG_CarrierFrequency)</td>
+                                    <td>Hz</td>
+                                </tr>
+                                <tr>
+                                    <td>Signal Generator Signal Frequency</td>
+                                    <td>@String.Format(this.NFI, "{0:n}", state.Summary.SG_SignalFrequency)</td>
+                                    <td>Hz</td>
+                                </tr>
+                                <tr>
+                                    <td>Position Tracker Extremum Frequency</td>
+                                    <td>@String.Format(this.NFI, "{0:n}", state.Summary.PT_ExtremumFrequency)</td>
+                                    <td>Hz</td>
+                                </tr>
+                                <tr>
+                                    <td>Filter Sampling Frequency</td>
+                                    <td>@String.Format(this.NFI, "{0:n}", state.Summary.FI_SamplingFrequency)</td>
+                                    <td>Hz</td>
+                                </tr>
+                                <tr>
+                                    <td>Fourier Transform Sampling Frequency</td>
+                                    <td>@String.Format(this.NFI, "{0:n}", state.Summary.FT_SamplingFrequency)</td>
+                                    <td>Hz</td>
+                                </tr>
+                                <tr>
+                                    <td>Fourier Transform Frequency Resolution</td>
+                                    <td>@String.Format(this.NFI, "{0:n}", state.Summary.FT_FrequencyResolution)</td>
+                                    <td>Hz</td>
+                                </tr>
+                                <tr>
+                                    <td>RAM Writer Sampling Frequency</td>
+                                    <td>@String.Format(this.NFI, "{0:n}", state.Summary.RW_SamplingFrequency)</td>
+                                    <td>Hz</td>
+                                </tr>
+                                <tr>
+                                    <td>RAM Writer Buffer Frequency</td>
+                                    <td>@String.Format(this.NFI, "{0:n}", state.Summary.RW_BufferFrequency)</td>
+                                    <td>Hz</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -168,29 +225,35 @@
 @functions
 {
     private bool _suspend;
+    private NumberFormatInfo NFI { get; set; }
     private SettingsGroup SelectedGroup { get; set; }
 
     protected override void OnInit()
     {
         _suspend = false;
+
+        this.NFI = new NumberFormatInfo()
+        {
+            NumberGroupSeparator = ".",
+            NumberDecimalDigits = 0
+        };
+
         this.SelectedGroup = SettingsGroup.System;
 
         state.PropertyChanged += (sender, e) =>
         {
-            _suspend = true;
-            base.StateHasChanged();
-            _suspend = false;
+            if (e.PropertyName == nameof(state.VibrometerState))
+            {
+                _suspend = true;
+                base.StateHasChanged();
+                _suspend = false;
+            }
         };
     }
 
     private void SelectGroup(SettingsGroup group)
     {
         this.SelectedGroup = group;
-    }
-
-    private void IncrementCount()
-    {
-        signalR.Connection.InvokeAsync("ToggleHubEnabled");
     }
 
     private void OnValueChanged(ApiParameter parameter, int value)

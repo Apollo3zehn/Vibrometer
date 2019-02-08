@@ -1,7 +1,14 @@
 ﻿@page "/"
+@inject SignalRService signalR
 
-<h1>Hello, world!</h1>
+<h1 class="display-4">Welcome</h1>
 
-Welcome to your new app.
+<button class="btn btn-default" onclick="@this.ApplyDefaultSettings">Apply default settings</button>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@functions
+{
+    private async void ApplyDefaultSettings()
+    {
+        await signalR.Connection.InvokeAsync("ActivateProfile", "default");
+    }
+}

@@ -10,7 +10,8 @@ namespace Vibrometer.WebServer
     {
         private VibrometerApi _api;
 
-        public VibrometerHub(VibrometerApi api)
+        // clientPushService is only requested to create an instance
+        public VibrometerHub(VibrometerApi api, ClientPushService clientPushService)
         {
             _api = api;
         }
@@ -108,6 +109,14 @@ namespace Vibrometer.WebServer
                 }
 
                 this.OnVibrometerStateChanged();
+            });
+        }
+
+        public Task ActivateProfile(string profileName)
+        {
+            return Task.Run(() =>
+            {
+                _api.SetDefaults();
             });
         }
 

@@ -23,7 +23,7 @@ namespace Vibrometer.WebServer
             _api = api;
 
             _updateBufferContentTimer = new Timer() { AutoReset = true, Enabled = true, Interval = TimeSpan.FromMilliseconds(500).TotalMilliseconds };
-            _updateBufferContentTimer.Elapsed += OnUpdateBufferContent;
+            _updateBufferContentTimer.Elapsed += this.OnUpdateBufferContent;
         }
 
         #endregion

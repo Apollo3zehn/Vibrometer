@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width">
-    <title>BlazorBootstrap</title>
+    <title>Vibrometer</title>
     <base href="/" />
 
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
@@ -37,11 +37,13 @@
 
         function OnLoaded()
         {
-            LoadJavascript("./js/core/jquery.min.js")
-            LoadJavascript("./js/core/popper.min.js")
-            LoadJavascript("./js/core/bootstrap-material-design.min.js")
-            LoadJavascript("./js/plugins/perfect-scrollbar.jquery.min.js")
-            LoadJavascript("./js/material-dashboard.js")
+            this.LoadJavascript("https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js")
+            this.LoadJavascript("./js/core/jquery.min.js")
+            this.LoadJavascript("./js/core/popper.min.js")
+            this.LoadJavascript("./js/core/bootstrap-material-design.min.js")
+            this.LoadJavascript("./js/plugins/perfect-scrollbar.jquery.min.js")
+            this.LoadJavascript("./js/material-dashboard.js")
+            this.LoadJavascript("./js/site.js")
         }
 
     </script>

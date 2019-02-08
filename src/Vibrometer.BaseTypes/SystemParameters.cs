@@ -5,6 +5,7 @@
         public const int CLOCK_RATE = 125000000;
         public const int BUFFER_COUNT = 4;
         public const int BYTE_COUNT = 4;
+        public const int FFT_LENGTH = 256;
 
         public const int DATA_BASE = 0x1E00_0000;
         public const int DATA_SIZE = 0x0100_0000;

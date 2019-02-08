@@ -7,6 +7,7 @@ namespace Vibrometer.WebClient.Model
     {
         #region Field
 
+        int[] _bufferContent;
         VibrometerState _vibrometerState;
 
         #endregion
@@ -19,8 +20,8 @@ namespace Vibrometer.WebClient.Model
 
             this.PageDescriptionSet = new List<PageDescription>()
             {
-                new PageDescription("Page Test 1", "P1", "dashboard", "pagetest1", new List<PageDescription>() { new PageDescription("Page Test 1 Sub Page", "S1", "dashboard", "pagetest1/subpage") }),
-                new PageDescription("Settings", "SE", "dashboard", "settings")
+                new PageDescription("Analysis", "AN", "show_chart", "analysis"),
+                new PageDescription("Settings", "SE", "settings", "settings")
             };
         }
 
@@ -28,12 +29,26 @@ namespace Vibrometer.WebClient.Model
 
         #region Properties
 
-        public VibrometerState VibrometerState
+        public int[] BufferContent
         {
-            get { return _vibrometerState; }
-            set { base.SetProperty(ref _vibrometerState, value); }
+            get { return _bufferContent; }
+            set { base.SetProperty(ref _bufferContent, value); }
         }
 
+        public VibrometerState VibrometerState
+        {
+            get
+            {
+                return _vibrometerState;
+            }
+            set
+            {
+                this.Summary = new SettingsSummary(value);
+                base.SetProperty(ref _vibrometerState, value);
+            }
+        }
+
+        public SettingsSummary Summary { get; private set; }
         public List<PageDescription> PageDescriptionSet { get; }
 
         #endregion

@@ -29,6 +29,13 @@ namespace Vibrometer.WebClient
                 });
             });
 
+            this.Connection.On<int[]>("SendBufferContent", bufferContent =>
+            {
+                state.BufferContent = bufferContent;
+
+                return Task.CompletedTask;
+            });
+
             this.Connection.On<VibrometerState>("SendVibrometerState", vibrometerState =>
             {
                 state.VibrometerState = vibrometerState;
