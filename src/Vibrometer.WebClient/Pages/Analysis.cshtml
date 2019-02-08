@@ -1,13 +1,15 @@
 ﻿@page "/analysis"
 @inject AppState state
+@implements IDisposable
 
 @using Vibrometer.BaseTypes.API
 @using Vibrometer.WebClient.Model
+@using System.ComponentModel
 
 <h1 class="display-4">Analysis</h1>
 
 <div class="row">
-    <div class="col">
+    <div class="col-lg-8">
         <div class="card">
             <div class="card-header card-header-tabs card-header-info">
                 <div class="nav-tabs-navigation">
@@ -26,19 +28,24 @@
             <div class="card-body">
                 <div class="tab-content">
                     <div class="tab-pane active">
-                        <canvas height="150" id="chart"></canvas>
+                        <canvas height="130" id="chart"></canvas>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="col-lg-4">
+
+    </div>
 </div>
 
 @functions
 {
+    private PropertyChangedEventHandler handler;
+
     protected override void OnInit()
     {
-        state.PropertyChanged += async (sender, e) =>
+        handler = async (sender, e) =>
         {
             if (e.PropertyName == nameof(state.BufferContent))
             {
@@ -74,6 +81,8 @@
                 await this.InitializeChart();
             }
         };
+
+        state.PropertyChanged += handler;
     }
 
     protected override async Task OnAfterRenderAsync()
@@ -103,5 +112,10 @@
             default:
                 break;
         }
+    }
+
+    public void Dispose()
+    {
+        state.PropertyChanged -= handler;
     }
 }

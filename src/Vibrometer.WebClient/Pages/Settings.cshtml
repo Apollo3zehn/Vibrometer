@@ -1,10 +1,12 @@
 ﻿@page "/settings"
 @inject AppState state
 @inject SignalRService signalR
+@implements IDisposable
 
-@using System.Globalization
 @using Vibrometer.BaseTypes.API
 @using Vibrometer.WebClient.Model
+@using System.ComponentModel
+@using System.Globalization
 
 <h1 class="display-4">FPGA Settings</h1>
 
@@ -38,11 +40,6 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Base Sampling Frequency</td>
-                                    <td>@String.Format(this.NFI, "{0:n}", state.Summary.BaseSamplingFrequency)</td>
-                                    <td>Hz</td>
-                                </tr>
-                                <tr>
                                     <td>Signal Generator Carrier Frequency</td>
                                     <td>@String.Format(this.NFI, "{0:n}", state.Summary.SG_CarrierFrequency)</td>
                                     <td>Hz</td>
@@ -50,6 +47,11 @@
                                 <tr>
                                     <td>Signal Generator Signal Frequency</td>
                                     <td>@String.Format(this.NFI, "{0:n}", state.Summary.SG_SignalFrequency)</td>
+                                    <td>Hz</td>
+                                </tr>
+                                <tr>
+                                    <td>Base Sampling Frequency</td>
+                                    <td>@String.Format(this.NFI, "{0:n}", state.Summary.BaseSamplingFrequency)</td>
                                     <td>Hz</td>
                                 </tr>
                                 <tr>
@@ -225,8 +227,9 @@
 @functions
 {
     private bool _suspend;
-    private NumberFormatInfo NFI { get; set; }
     private SettingsGroup SelectedGroup { get; set; }
+    private NumberFormatInfo NFI { get; set; }
+    private PropertyChangedEventHandler handler;
 
     protected override void OnInit()
     {
@@ -240,7 +243,7 @@
 
         this.SelectedGroup = SettingsGroup.System;
 
-        state.PropertyChanged += (sender, e) =>
+        handler = (sender, e) =>
         {
             if (e.PropertyName == nameof(state.VibrometerState))
             {
@@ -249,6 +252,8 @@
                 _suspend = false;
             }
         };
+
+        state.PropertyChanged += handler;
     }
 
     private void SelectGroup(SettingsGroup group)
@@ -270,5 +275,10 @@
         {
             signalR.Connection.InvokeAsync("UpdateSettingBool", parameter.ToString(), value);
         }
+    }
+
+    public void Dispose()
+    {
+        state.PropertyChanged -= handler;
     }
 }

@@ -10,13 +10,14 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
 
     <link href="./css/material-dashboard.min.2.css" rel="stylesheet" />
-
     <link href="./demo/demo.css" rel="stylesheet" />
 
 </head>
 <body>
     <app>Loading...</app>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <script src="./js/site.js"></script>
     <script src="_framework/blazor.webassembly.js"></script>
 
     <script>
@@ -37,13 +38,13 @@
 
         function OnLoaded()
         {
-            this.LoadJavascript("https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js")
             this.LoadJavascript("./js/core/jquery.min.js")
             this.LoadJavascript("./js/core/popper.min.js")
             this.LoadJavascript("./js/core/bootstrap-material-design.min.js")
             this.LoadJavascript("./js/plugins/perfect-scrollbar.jquery.min.js")
             this.LoadJavascript("./js/material-dashboard.js")
-            this.LoadJavascript("./js/site.js")
+
+            return true;
         }
 
     </script>

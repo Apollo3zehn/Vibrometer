@@ -117,6 +117,7 @@ namespace Vibrometer.WebServer
             return Task.Run(() =>
             {
                 _api.SetDefaults();
+                this.OnVibrometerStateChanged();
             });
         }
 

@@ -49,14 +49,16 @@
 
     protected override void OnInit()
     {
-        this.UriHelper.OnLocationChanged += UriHelper_OnLocationChanged;
         _routeAbsolute = this.UriHelper.ToAbsoluteUri(this.PageDescription.Route).AbsoluteUri;
+
+        this.IsSelected = _routeAbsolute == this.UriHelper.GetAbsoluteUri();
+        this.UriHelper.OnLocationChanged += UriHelper_OnLocationChanged;
+
     }
 
     private void UriHelper_OnLocationChanged(object sender, string e)
     {
-        this.IsSelected = e == _routeAbsolute;
+        this.IsSelected = _routeAbsolute == e;
         this.StateHasChanged();
     }
-
 }

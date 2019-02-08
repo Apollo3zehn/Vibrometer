@@ -20,7 +20,9 @@ namespace Vibrometer.WebClient.Model
 
             this.PageDescriptionSet = new List<PageDescription>()
             {
-                new PageDescription("Analysis", "AN", "show_chart", "analysis"),
+                new PageDescription("Home", "HO", "home", ""),
+                new PageDescription("Analysis", "AN", "bar_chart", "analysis"),
+                new PageDescription("Recording", "RC", "timeline", "recording"),
                 new PageDescription("Settings", "SE", "settings", "settings")
             };
         }

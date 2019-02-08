@@ -23,6 +23,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Pages\Recording.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Update="Localization\EnumerationDescription.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>EnumerationDescription.Designer.cs</LastGenOutput>
