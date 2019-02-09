@@ -27,6 +27,11 @@ namespace Vibrometer.BaseTypes.API
             }
             set
             {
+                if (value)
+                {
+                    this.Address = SystemParameters.DATA_BASE;
+                }
+
                 ApiHelper.SetValue(ApiParameter.RW_Enabled, _address, value ? 1U : 0U);
             }
         }

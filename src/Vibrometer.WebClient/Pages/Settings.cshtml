@@ -3,7 +3,6 @@
 @inject SignalRService signalR
 @implements IDisposable
 
-@using Vibrometer.BaseTypes.API
 @using Vibrometer.WebClient.Model
 @using System.ComponentModel
 @using System.Globalization
@@ -11,6 +10,138 @@
 <h1 class="display-4">FPGA Settings</h1>
 
 <div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header card-header-tabs card-header-info">
+                <div class="nav-tabs-navigation">
+                    <div class="nav-tabs-wrapper">
+                        <ul class="nav nav-tabs" data-tabs="tabs">
+                            <li class="nav-item">
+                                <a class="nav-link @((this.SelectedGroup == SettingsGroup.System ? "active" : ""))" style="cursor:pointer" onclick="@(() => SelectGroup(SettingsGroup.System))">
+                                    <i class="material-icons">settings</i> System
+                                    <div class="ripple-container"></div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @((this.SelectedGroup == SettingsGroup.ADC_DAC ? "active" : ""))" style="cursor:pointer" onclick="@(() => SelectGroup(SettingsGroup.ADC_DAC))">
+                                    <i class="material-icons">graphic_eq</i> ADC / DAC
+                                    <div class="ripple-container"></div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @((this.SelectedGroup == SettingsGroup.Processing ? "active" : ""))" style="cursor:pointer" onclick="@(() => SelectGroup(SettingsGroup.Processing))">
+                                    <i class="material-icons">memory</i> Processing
+                                    <div class="ripple-container"></div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="tab-pane active">
+                        <div class="list-group">
+                            @switch (this.SelectedGroup)
+                            {
+                                case SettingsGroup.System:
+
+                                    <!--AXIS Switch-->
+                                    <ApiRecordHeader DisplayName="AXIS Switch"
+                                                     Description="The AXIS switch allows the data streams of the ADC, position tracker, filter and Fourier Transform to be written into the RAM." />
+                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.AS_Source]"
+                                                        Value="@state.VibrometerState.AS_Source"
+                                                        OnValueChanged="@OnValueChanged" />
+
+                                    <!--RAM Writer-->
+                                    <ApiRecordHeader DisplayName="RAM Writer"
+                                                     Description="The RAM writer consists of an sync manager module and the RAM writer itself. The sync manager handles the buffer management to ensure there is always a buffer for reading and for writing available." />
+                                    <ApiRecordComponentBool Record="ApiInfo.Instance[ApiParameter.RW_Enabled]"
+                                                            Value="@state.VibrometerState.RW_Enabled"
+                                                            OnValueChanged="@OnValueChangedBool" />
+                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.RW_LogLength]"
+                                                        Value="@state.VibrometerState.RW_LogLength"
+                                                        OnValueChanged="@OnValueChanged" />
+                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.RW_LogThrottle]"
+                                                        Value="@state.VibrometerState.RW_LogThrottle"
+                                                        OnValueChanged="@OnValueChanged" />
+
+                                    break;
+
+                                case SettingsGroup.ADC_DAC:
+
+                                    <!--DAC-->
+                                    <ApiRecordHeader DisplayName="Digital-Analog-Converter"
+                                                     Description="The DAC is used to generate test signals. In default operating mode, this component is driven by a DDS compiler that generates a sine (channel A) and a cosine (channel B). With frequency modulation mode these signals are modulated with an additional signal." />
+                                    <ApiRecordComponentBool Record="ApiInfo.Instance[ApiParameter.SG_FmEnabled]"
+                                                            Value="@state.VibrometerState.SG_FmEnabled"
+                                                            OnValueChanged="@OnValueChangedBool" />
+                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.SG_PhaseCarrier]"
+                                                        Value="@state.VibrometerState.SG_PhaseCarrier"
+                                                        OnValueChanged="@OnValueChanged" />
+
+                                    @if (state.VibrometerState.SG_FmEnabled)
+                                    {
+                                        <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.SG_PhaseSignal]"
+                                                            Value="@state.VibrometerState.SG_PhaseSignal"
+                                                            OnValueChanged="@OnValueChanged" />
+                                    }
+
+                                    <!--ADC-->
+                                    <ApiRecordHeader DisplayName="Analog-Digital-Converter"
+                                                     Description="The ADC is the main data source of the vibrometer. It is driven by an 125 MHz oscillator and consists of the two 14-bit channels A and B." />
+                                    <ApiRecordComponentBool Record="ApiInfo.Instance[ApiParameter.DA_SwitchEnabled]"
+                                                            Value="@state.VibrometerState.DA_SwitchEnabled"
+                                                            OnValueChanged="@OnValueChangedBool" />
+
+                                    break;
+
+                                case SettingsGroup.Processing:
+
+                                    <!--Position Tracker-->
+                                    <ApiRecordHeader DisplayName="Position Tracker"
+                                                     Description="The position tracker module receives its input data from the ADC. It consists of an 'extremum finder' that constantly monitors the signal levels and the position tracker itself which is simply counting the signal waves. If the input signal of channel B is shifted by 90 deg it is also capable to distinguish different directions." />
+                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.PT_LogScale]"
+                                                        Value="@state.VibrometerState.PT_LogScale"
+                                                        OnValueChanged="@OnValueChanged" />
+                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.PT_LogCountExtremum]"
+                                                        Value="@state.VibrometerState.PT_LogCountExtremum"
+                                                        OnValueChanged="@OnValueChanged" />
+                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.PT_ShiftExtremum]"
+                                                        Value="@state.VibrometerState.PT_ShiftExtremum"
+                                                        OnValueChanged="@OnValueChanged" />
+
+                                    <!--Filter-->
+                                    <ApiRecordHeader DisplayName="Filter"
+                                                     Description="The purpose of this module is to apply a high pass filter to avoid variable overflow and it additionally consists of an differentiator that is required if signal B is not shifted by 90 deg." />
+                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.FI_LogThrottle]"
+                                                        Value="@state.VibrometerState.FI_LogThrottle"
+                                                        OnValueChanged="@OnValueChanged" />
+
+                                    <!--Fourier Transform-->
+                                    <ApiRecordHeader DisplayName="Fourier Transform"
+                                                     Description="Every 265 data points, a Fourier transform is calculated and averaged. The resulting dataset is pushed regularly to the RAM writer module." />
+                                    <ApiRecordComponentBool Record="ApiInfo.Instance[ApiParameter.FT_Enabled]"
+                                                            Value="@state.VibrometerState.FT_Enabled"
+                                                            OnValueChanged="@OnValueChangedBool" />
+                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.FT_LogCountAverages]"
+                                                        Value="@state.VibrometerState.FT_LogCountAverages"
+                                                        OnValueChanged="@OnValueChanged" />
+                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.FT_LogThrottle]"
+                                                        Value="@state.VibrometerState.FT_LogThrottle"
+                                                        OnValueChanged="@OnValueChanged" />
+
+                                    break;
+
+                                default:
+                                    break;
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="col-lg-6">
         <div class="card">
             <div class="card-header card-header-tabs card-header-info">
@@ -91,137 +222,6 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-6">
-        <div class="card">
-            <div class="card-header card-header-tabs card-header-info">
-                <div class="nav-tabs-navigation">
-                    <div class="nav-tabs-wrapper">
-                        <ul class="nav nav-tabs" data-tabs="tabs">
-                            <li class="nav-item">
-                                <a class="nav-link @((this.SelectedGroup == SettingsGroup.System ? "active" : ""))" style="cursor:pointer" onclick="@(() => SelectGroup(SettingsGroup.System))">
-                                    <i class="material-icons">settings</i> System
-                                    <div class="ripple-container"></div>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link @((this.SelectedGroup == SettingsGroup.ADC_DAC ? "active" : ""))" style="cursor:pointer" onclick="@(() => SelectGroup(SettingsGroup.ADC_DAC))">
-                                    <i class="material-icons">graphic_eq</i> ADC / DAC
-                                    <div class="ripple-container"></div>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link @((this.SelectedGroup == SettingsGroup.Processing ? "active" : ""))" style="cursor:pointer" onclick="@(() => SelectGroup(SettingsGroup.Processing))">
-                                    <i class="material-icons">memory</i> Processing
-                                    <div class="ripple-container"></div>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="tab-content">
-                    <div class="tab-pane active">
-                        <div class="list-group">
-                            @switch (this.SelectedGroup)
-                            {
-                                case SettingsGroup.System:
-
-                                    <!--AXIS Switch-->
-                                    <ApiRecordHeader DisplayName="AXIS Switch"
-                                                     Description="The AXIS switch allows the data streams of the ADC, position tracker, filter and Fourier Transform to be written into the RAM." />
-                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.AS_Source]"
-                                                        Value="@state.VibrometerState.AS_Source"
-                                                        OnValueChanged="@OnValueChanged" />
-
-                                    <!--RAM Writer-->
-                                    <ApiRecordHeader DisplayName="RAM Writer"
-                                                     Description="The RAM writer consists of an sync manager module and the RAM writer itself. The sync manager handles the buffer management to ensure there is always a buffer for reading and for writing available." />
-                                    <ApiRecordComponentBool Record="ApiInfo.Instance[ApiParameter.RW_Enabled]"
-                                                            Value="@state.VibrometerState.RW_Enabled"
-                                                            OnValueChanged="@OnValueChangedBool" />
-                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.RW_LogLength]"
-                                                        Value="@state.VibrometerState.RW_LogLength"
-                                                        OnValueChanged="@OnValueChanged" />
-                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.RW_LogThrottle]"
-                                                        Value="@state.VibrometerState.RW_LogThrottle"
-                                                        OnValueChanged="@OnValueChanged" />
-
-                                    break;
-
-                                case SettingsGroup.ADC_DAC:
-
-                                    <!--DAC-->
-                                    <ApiRecordHeader DisplayName="Digital-Analog-Converter"
-                                                     Description="The DAC is used to generate test signals. In default operating mode, this component is driven by a DDS compiler that generates a sine (channel A) and a cosine (channel B). With frequency modulation mode these signals are modulated with an additional signal." />
-                                    <ApiRecordComponentBool Record="ApiInfo.Instance[ApiParameter.SG_FmEnabled]"
-                                                            Value="@state.VibrometerState.SG_FmEnabled"
-                                                            OnValueChanged="@OnValueChangedBool" />
-                                    @if (state.VibrometerState.SG_FmEnabled)
-                                    {
-                                        <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.SG_PhaseSignal]"
-                                                            Value="@state.VibrometerState.SG_PhaseSignal"
-                                                            OnValueChanged="@OnValueChanged" />
-                                    }
-                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.SG_PhaseCarrier]"
-                                                        Value="@state.VibrometerState.SG_PhaseCarrier"
-                                                        OnValueChanged="@OnValueChanged" />
-
-                                    <!--ADC-->
-                                    <ApiRecordHeader DisplayName="Analog-Digital-Converter"
-                                                     Description="The ADC is the main data source of the vibrometer. It is driven by an 125 MHz oscillator and consists of the two 16-bit channels A and B." />
-                                    <ApiRecordComponentBool Record="ApiInfo.Instance[ApiParameter.DA_SwitchEnabled]"
-                                                            Value="@state.VibrometerState.DA_SwitchEnabled"
-                                                            OnValueChanged="@OnValueChangedBool" />
-
-                                    break;
-
-                                case SettingsGroup.Processing:
-
-                                    <!--Position Tracker-->
-                                    <ApiRecordHeader DisplayName="Position Tracker"
-                                                     Description="The position tracker module receives its input data from the ADC. It consists of an 'extremum finder' that constantly monitors the signal levels and the position tracker itself which is simply counting the signal waves. If the input signal of channel B is shifted by 90 deg it is also capable to distinguish different directions." />
-                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.PT_LogScale]"
-                                                        Value="@state.VibrometerState.PT_LogScale"
-                                                        OnValueChanged="@OnValueChanged" />
-                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.PT_LogCountExtremum]"
-                                                        Value="@state.VibrometerState.PT_LogCountExtremum"
-                                                        OnValueChanged="@OnValueChanged" />
-                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.PT_ShiftExtremum]"
-                                                        Value="@state.VibrometerState.PT_ShiftExtremum"
-                                                        OnValueChanged="@OnValueChanged" />
-
-                                    <!--Filter-->
-                                    <ApiRecordHeader DisplayName="Filter"
-                                                     Description="The purpose of this module is to apply a high pass filter to avoid variable overflow and it additionally consists of an differentiator that is required if signal B is not shifted by 90 deg." />
-                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.FI_LogThrottle]"
-                                                        Value="@state.VibrometerState.FI_LogThrottle"
-                                                        OnValueChanged="@OnValueChanged" />
-
-                                    <!--Fourier Transform-->
-                                    <ApiRecordHeader DisplayName="Fourier Transform"
-                                                     Description="Every 265 data points, a Fourier transform is calculated and averaged. The resulting dataset is pushed regularly to the RAM writer module." />
-                                    <ApiRecordComponentBool Record="ApiInfo.Instance[ApiParameter.FT_Enabled]"
-                                                            Value="@state.VibrometerState.FT_Enabled"
-                                                            OnValueChanged="@OnValueChangedBool" />
-                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.FT_LogCountAverages]"
-                                                        Value="@state.VibrometerState.FT_LogCountAverages"
-                                                        OnValueChanged="@OnValueChanged" />
-                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.FT_LogThrottle]"
-                                                        Value="@state.VibrometerState.FT_LogThrottle"
-                                                        OnValueChanged="@OnValueChanged" />
-
-                                    break;
-
-                                default:
-                                    break;
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 @functions
@@ -237,8 +237,9 @@
 
         this.NFI = new NumberFormatInfo()
         {
+            NumberDecimalSeparator = ",",
             NumberGroupSeparator = ".",
-            NumberDecimalDigits = 0
+            NumberDecimalDigits = 2
         };
 
         this.SelectedGroup = SettingsGroup.System;
@@ -261,19 +262,19 @@
         this.SelectedGroup = group;
     }
 
-    private void OnValueChanged(ApiParameter parameter, int value)
+    private async void OnValueChanged(ApiParameter parameter, int value)
     {
         if (!_suspend)
         {
-            signalR.Connection.InvokeAsync("UpdateSetting", parameter.ToString(), value);
+            await signalR.Connection.InvokeAsync("UpdateSetting", parameter.ToString(), value);
         }
     }
 
-    private void OnValueChangedBool(ApiParameter parameter, bool value)
+    private async void OnValueChangedBool(ApiParameter parameter, bool value)
     {
         if (!_suspend)
         {
-            signalR.Connection.InvokeAsync("UpdateSettingBool", parameter.ToString(), value);
+            await signalR.Connection.InvokeAsync("UpdateSettingBool", parameter.ToString(), value);
         }
     }
 

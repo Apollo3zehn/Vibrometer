@@ -1,8 +1,5 @@
 ﻿@inherits BlazorLayoutComponent
-@inject SignalRService signalR
-@inject AppState state
 
-@using Vibrometer.BaseTypes
 @using Vibrometer.WebClient.Model
 
 <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top" id="navigation">
@@ -29,45 +26,6 @@
             <span class="navbar-toggler-icon icon-bar"></span>
         </button>
 
-        <div class="collapse navbar-collapse justify-content-end">
-
-            <div class="fileinput text-center" data-provides="fileinput">
-                <span class="btn btn-raised btn-round btn-outline-info btn-file">
-                    <i class="material-icons text_align-center visible-on-sidebar-regular">cloud_upload</i>
-                    <span class="fileinput-new">Load</span>
-                    <input type="file" onchange="@UploadFile" id="fileUpload" accept=".vib.json" />
-                </span>
-                <span class="btn btn-raised btn-round btn-outline-secondary btn-file" onclick="@this.DownloadFile">
-                    <i class="material-icons text_align-center visible-on-sidebar-regular">cloud_download</i>
-                    <span class="fileinput-new">Save</span>
-                </span>
-            </div>
-
-        </div>
-
     </div>
 
 </nav>
-
-@functions
-{
-    private async void UploadFile(UIChangeEventArgs e)
-    {
-        VibrometerState vibrometerState;
-
-        try
-        {
-            vibrometerState = await JSRuntime.Current.InvokeAsync<VibrometerState>("Vibrometer.ReadVibFile", "fileUpload");
-            await signalR.Connection.InvokeAsync("ApplyConfiguration", vibrometerState);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
-    }
-
-    private void DownloadFile()
-    {
-        JSRuntime.Current.InvokeAsync<VibrometerState>("Vibrometer.WriteVibFile", state.VibrometerState);
-    }
-}

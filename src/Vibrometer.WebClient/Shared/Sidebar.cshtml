@@ -1,5 +1,7 @@
-﻿@using Vibrometer.WebClient.Model
-@inject AppState state
+﻿@inject AppState state
+@inject SignalRService signalR
+
+@using Vibrometer.WebClient.Model
 
 <div class="sidebar" data-color="azure" data-background-color="black" data-image="./img/sidebar-1.jpg">
 
@@ -20,5 +22,43 @@
                 <NavItem PageDescription="pageDescription" />
             }
         </ul>
+        <div class="d-flex justify-content-between" style="position:absolute;bottom:0px">
+            <div class="fileinput text-center mx-1" data-provides="fileinput">
+                <span class="btn btn-raised btn-round btn-outline-info btn-file">
+                    <i class="material-icons text_align-center visible-on-sidebar-regular">cloud_upload</i>
+                    <span class="fileinput-new ml-1">Load</span>
+                    <input type="file" onchange="@UploadFile" id="fileUpload" accept=".vib.json" />
+                </span>
+            </div>
+            <div class="fileinput text-center mx-1" data-provides="fileinput">
+                <span class="btn btn-raised btn-round btn-outline-info btn-file" onclick="@this.DownloadFile">
+                    <i class="material-icons text_align-center visible-on-sidebar-regular">cloud_download</i>
+                    <span class="fileinput-new ml-1">Save</span>
+                </span>
+            </div>
+        </div>
     </div>
 </div>
+
+@functions
+{
+private async void UploadFile(UIChangeEventArgs e)
+{
+    VibrometerState vibrometerState;
+
+    try
+    {
+        vibrometerState = await JSRuntime.Current.InvokeAsync<VibrometerState>("Vibrometer.ReadVibFile", "fileUpload");
+        await signalR.Connection.InvokeAsync("ApplyConfiguration", vibrometerState);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+    }
+}
+
+private void DownloadFile()
+{
+    JSRuntime.Current.InvokeAsync<VibrometerState>("Vibrometer.WriteVibFile", state.VibrometerState);
+}
+}

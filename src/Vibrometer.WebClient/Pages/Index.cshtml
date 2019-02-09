@@ -1,14 +1,3 @@
 ﻿@page "/"
-@inject SignalRService signalR
 
 <h1 class="display-4">Welcome</h1>
-
-<button class="btn btn-default" onclick="@this.ApplyDefaultSettings">Apply default settings</button>
-
-@functions
-{
-    private async void ApplyDefaultSettings()
-    {
-        await signalR.Connection.InvokeAsync("ActivateProfile", "default");
-    }
-}

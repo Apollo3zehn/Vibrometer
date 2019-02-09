@@ -1,76 +1,111 @@
 window.Vibrometer = {
-    InitializeChart: function (id, title, xmin, xmax, xlabel, ymin, ymax, ylabel)
+    InitializeChart: function (id, xmin, xmax, xlabel, ymin, ymax, ylabel)
     {
-        context = document.getElementById(id);
+        let context = document.getElementById(id);
 
-        window.Vibrometer.Chart = new Chart(context,
-            {
-                type: "scatter",
-                data: {
-                    datasets: [{
+        let config = {
+            type: "scatter",
+            data: {
+                datasets: [
+                    {
                         data: [],
                         backgroundColor: "rgba(233, 30, 99, 0.2)",
                         borderColor: "rgba(233, 30, 99)",
-                        borderWidth: 1,
-                        lineTension: 0.25,
+                        lineTension: 0,
                         pointRadius: 1,
-                        showLine: true
+                        borderWidth: 1,
+                        showLine: true,
+                        fill: false
+                    },
+                    {
+                        data: [],
+                        backgroundColor: "rgba(0, 188, 212, 0.2)",
+                        borderColor: "rgba(0, 188, 212)",
+                        borderWidth: 1,
+                        lineTension: 0,
+                        pointRadius: 1,
+                        showLine: true,
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                animation: {
+                    duration: 0,
+                    hover: {
+                        animationDuration: 0
+                    },
+                    responsiveAnimationDuration: 0
+                },
+                elements: {
+                    line: {
+                        tension: 0
+                    }
+                },
+                legend: {
+                    display: false
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: xlabel
+                        },
+                        ticks: {
+                            autoSkip: true,
+                            min: xmin,
+                            max: xmax
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        position: "left",
+                        scaleLabel: {
+                            display: true,
+                            labelString: ylabel
+                        },
+                        ticks: {
+                            beginAtZero: true,
+                            min: ymin,
+                            max: ymax
+                        },
+                        type: "linear"
                     }]
                 },
-                options: {
-                    legend: {
-                        display: false
-                    },
-                    scales: {
-                        xAxes: [{
-                            display: true,
-                            scaleLabel: {
-                                display: true,
-                                labelString: xlabel
-                            },
-                            ticks: {
-                                autoSkip: true,
-                                min: xmin,
-                                max: xmax
-                            }
-                        }],
-                        yAxes: [{
-                            display: true,
-                            position: "left",
-                            scaleLabel: {
-                                display: true,
-                                labelString: ylabel
-                            },
-                            //ticks: {
-                            //    beginAtZero: true,
-                            //    min: ymin,
-                            //    max: ymax
-                            //},
-                            type: "linear"
-                        }]
-                    },
-                    title: {
-                        display: true,
-                        fontColor: "#555",
-                        fontSize: 17,
-                        fontStyle: "",
-                        padding: 25,
-                        text: title
-                    },
-                    tooltips: {
-                        enabled: false
-                    }
+                title: {
+                    display: false
+                },
+                tooltips: {
+                    enabled: false
+                },
+                hover: {
+                    mode: null
                 }
+            }
+        };
+
+        if (window.Vibrometer.Chart)
+        {
+            window.Vibrometer.Chart.options = config.options;
+            window.Vibrometer.Chart.data = config.data;
+            window.Vibrometer.Chart.update({
+                duration: 0
             });
-
-        return true;
+        }
+        else
+        {
+            window.Vibrometer.Chart = new Chart(context, config);
+        }
     },
-    UpdateChart: function (id, data)
+    UpdateChart: function (id, data1, data2)
     {
-        window.Vibrometer.Chart.config.data.datasets[0].data = data;
-        window.Vibrometer.Chart.update(0);
+        window.Vibrometer.Chart.config.data.datasets[0].data = data1;
+        window.Vibrometer.Chart.config.data.datasets[1].data = data2;
 
-        return true;
+        window.Vibrometer.Chart.update({
+            duration: 0
+        });
     },
     ReadVibFile: function (fileInputId)
     {

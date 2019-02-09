@@ -1,8 +1,8 @@
 ﻿@page "/analysis"
 @inject AppState state
+@inject SignalRService signalR
 @implements IDisposable
 
-@using Vibrometer.BaseTypes.API
 @using Vibrometer.WebClient.Model
 @using System.ComponentModel
 
@@ -14,11 +14,18 @@
             <div class="card-header card-header-tabs card-header-info">
                 <div class="nav-tabs-navigation">
                     <div class="nav-tabs-wrapper">
-                        <ul class="nav nav-tabs" data-tabs="tabs">
-                            <li class="nav-item">
-                                <a class="nav-link active" style="cursor:pointer">
-                                    <i class="material-icons">show_chart</i> Chart
-                                    <div class="ripple-container"></div>
+                        <ul class="nav nav-tabs w-100" data-tabs="tabs">
+                            @foreach (ApiSource source in Enum.GetValues(typeof(ApiSource)).Cast<ApiSource>().Skip(1))
+                            {
+                                <li class="nav-item" onclick="@(() => this.SelectSource(source))">
+                                    <a class="nav-link @((ApiSource)state.VibrometerState.AS_Source == source ? "active" : "")" style="cursor:pointer">
+                                        <i class="material-icons">show_chart</i> @this.GetTitle(source)
+                                    </a>
+                                </li>
+                            }
+                            <li class="nav-item ml-auto">
+                                <a class="nav-link" style="cursor:pointer">
+                                    <i class="material-icons" onclick="@this.ToggleRun">@(this.Run ? "pause_circle_filled" : "play_arrow")</i>
                                 </a>
                             </li>
                         </ul>
@@ -28,7 +35,15 @@
             <div class="card-body">
                 <div class="tab-content">
                     <div class="tab-pane active">
-                        <canvas height="130" id="chart"></canvas>
+                        @if ((ApiSource)state.VibrometerState.AS_Source == ApiSource.NoSource)
+                        {
+                            <div class="alert alert-info mx-auto" style="max-width:400px;margin-top:170px;margin-bottom:170px;">
+                                <span>
+                                    <b>Info - </b> No data source selected. Click on one of the headers or load a configuration file.
+                                </span>
+                            </div>
+                        }
+                        <canvas height="130" id="chart" style="@((ApiSource)state.VibrometerState.AS_Source == ApiSource.NoSource ? "display : none" : string.Empty)"></canvas>
                     </div>
                 </div>
             </div>
@@ -41,53 +56,90 @@
 
 @functions
 {
-    private PropertyChangedEventHandler handler;
+    private bool _initialized;
+
+    private bool Run { get; set; }
+    private PropertyChangedEventHandler Handler { get; set; }
 
     protected override void OnInit()
     {
-        handler = async (sender, e) =>
+        _initialized = false;
+
+        this.Handler = async (sender, e) =>
         {
+            List<ChartPoint> data1;
+            List<ChartPoint> data2;
+
             if (e.PropertyName == nameof(state.BufferContent))
             {
+                if (!this.Run)
+                {
+                    return;
+                }
+
+                data1 = null;
+                data2 = null;
+
                 switch ((ApiSource)state.VibrometerState.AS_Source)
                 {
                     case ApiSource.NoSource:
+                        data1 = new List<ChartPoint>();
+                        break;
+
                     case ApiSource.Raw:
+                        data1 = state.BufferContent.Select((value, i) => new ChartPoint(i + 1, unchecked((short)(value & 0x0000FFFF)))).ToList();
+                        data2 = state.BufferContent.Select((value, i) => new ChartPoint(i + 1, unchecked((short)(value >> 16)))).ToList();
+                        break;
+
                     case ApiSource.Position:
                     case ApiSource.Filter:
-
-                        var data1 = state.BufferContent.Select((value, i) => new { x = i + 1, y = value }).ToList();
-                        await JSRuntime.Current.InvokeAsync<bool>("Vibrometer.UpdateChart", "chart", data1);
+                        data1 = state.BufferContent.Select((value, i) => new ChartPoint(i + 1, unchecked((short)(value & 0x0000FFFF)))).ToList();
                         break;
 
                     case ApiSource.FourierTransform:
 
-                        var real = state.BufferContent.Select(value => (unchecked((uint)value) & 0xFFFF0000)).ToArray();
-                        var imag = state.BufferContent.Select(value => (unchecked((uint)value) >> 16)).ToArray();
-                        var ampl = real.Zip(imag, (x, y) => Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2)));
+                        Console.WriteLine("a: " + state.BufferContent[0]);
+                        Console.WriteLine("b: " + (state.BufferContent[0] & 0x0000FFFF));
+                        Console.WriteLine("c: " + unchecked((short)(state.BufferContent[0] >> 16)));
+
+                        var real = state.BufferContent.Select(value => unchecked((short)(value & 0x0000FFFF))).ToArray();
+                        var imag = state.BufferContent.Select(value => unchecked((short)(value >> 16))).ToArray();
+                        var ampl = real.Zip(imag, (x, y) => Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2))).ToArray();
                         var count = ampl.Count();
 
-                        var data2 = ampl.Select((value, i) => new { x = state.Summary.FT_SamplingFrequency * i / count, y = value }).ToList();
-                        await JSRuntime.Current.InvokeAsync<bool>("Vibrometer.UpdateChart", "chart", data2);
-
+                        data1 = ampl.Select((value, i) => new ChartPoint(state.Summary.FT_SamplingFrequency * i / count, value)).ToList();
                         break;
 
                     default:
                         throw new ArgumentException();
                 }
+
+                if (data2 is null)
+                {
+                    data2 = new List<ChartPoint>();
+                }
+
+                await JSRuntime.Current.InvokeAsync<object>("Vibrometer.UpdateChart", "chart", data1, data2);
             }
             else if (e.PropertyName == nameof(state.VibrometerState))
             {
                 await this.InitializeChart();
+                base.StateHasChanged();
             }
         };
 
-        state.PropertyChanged += handler;
+        state.PropertyChanged += this.Handler;
+
+        this.Run = true;
     }
 
     protected override async Task OnAfterRenderAsync()
     {
-        await this.InitializeChart();
+        if (!_initialized)
+        {
+            await this.InitializeChart();
+            _initialized = true;
+        }
     }
 
     private async Task InitializeChart()
@@ -95,27 +147,60 @@
         switch ((ApiSource)state.VibrometerState.AS_Source)
         {
             case ApiSource.NoSource:
-                await JSRuntime.Current.InvokeAsync<bool>("Vibrometer.InitializeChart", "chart", "no data source selected", 1, Math.Pow(2, state.VibrometerState.RW_LogLength), "-", 0, 1, "-");
                 break;
             case ApiSource.Raw:
-                await JSRuntime.Current.InvokeAsync<bool>("Vibrometer.InitializeChart", "chart", "RAW data", 1, Math.Pow(2, state.VibrometerState.RW_LogLength), "time", -32768, 32768, "raw");
+                await JSRuntime.Current.InvokeAsync<object>("Vibrometer.InitializeChart", "chart", 1, Math.Pow(2, state.VibrometerState.RW_LogLength), "time", -Math.Pow(2, 14 - 1), Math.Pow(2, 14 - 1) - 1, "raw");
                 break;
             case ApiSource.Position:
-                await JSRuntime.Current.InvokeAsync<bool>("Vibrometer.InitializeChart", "chart", "Position data", 1, Math.Pow(2, state.VibrometerState.RW_LogLength), "time", -32768, 32768, "position");
+                await JSRuntime.Current.InvokeAsync<object>("Vibrometer.InitializeChart", "chart", 1, Math.Pow(2, state.VibrometerState.RW_LogLength), "time", -Math.Pow(2, 16 - 1), Math.Pow(2, 16 - 1) - 1, "position");
                 break;
             case ApiSource.Filter:
-                await JSRuntime.Current.InvokeAsync<bool>("Vibrometer.InitializeChart", "chart", "Filter data", 1, Math.Pow(2, state.VibrometerState.RW_LogLength), "time", -32768, 32768, "filtered position");
+                await JSRuntime.Current.InvokeAsync<object>("Vibrometer.InitializeChart", "chart", 1, Math.Pow(2, state.VibrometerState.RW_LogLength), "time", -Math.Pow(2, 16 - 1), Math.Pow(2, 16 - 1) - 1, "filtered position");
                 break;
             case ApiSource.FourierTransform:
-                await JSRuntime.Current.InvokeAsync<bool>("Vibrometer.InitializeChart", "chart", "Spectrum", 0, state.Summary.FT_SamplingFrequency, "frequency in Hz", -32768, 32768, "amplitude");
+                await JSRuntime.Current.InvokeAsync<object>("Vibrometer.InitializeChart", "chart", 0, state.Summary.FT_SamplingFrequency, "frequency in Hz", 0, Math.Pow(2, 16) - 1, "amplitude");
                 break;
             default:
-                break;
+                throw new ArgumentException();
         }
+    }
+
+    private async void SelectSource(ApiSource source)
+    {
+        await signalR.Connection.InvokeAsync("UpdateSetting", ApiParameter.AS_Source.ToString(), (int)source);
+    }
+
+    private string GetTitle()
+    {
+        return this.GetTitle((ApiSource)state.VibrometerState.AS_Source);
+    }
+
+    private string GetTitle(ApiSource source)
+    {
+        switch (source)
+        {
+            case ApiSource.NoSource:
+                return "no data source selected";
+            case ApiSource.Raw:
+                return "Raw";
+            case ApiSource.Position:
+                return "Position";
+            case ApiSource.Filter:
+                return "Filter";
+            case ApiSource.FourierTransform:
+                return "Spectrum";
+            default:
+                throw new ArgumentException();
+        }
+    }
+
+    private void ToggleRun()
+    {
+        this.Run = !this.Run;
     }
 
     public void Dispose()
     {
-        state.PropertyChanged -= handler;
+        state.PropertyChanged -= this.Handler;
     }
 }

@@ -70,7 +70,7 @@ namespace Vibrometer.WebClient.Localization {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Fourier ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Spectrum ähnelt.
         /// </summary>
         public static string ApiSource_FourierTransform {
             get {

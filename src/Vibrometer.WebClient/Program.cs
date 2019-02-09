@@ -11,7 +11,7 @@ namespace Vibrometer.WebClient
                    .Build()
                    .Run();
 
-            JSRuntime.Current.InvokeAsync<bool>("OnLoaded");
+            JSRuntime.Current.InvokeAsync<object>("OnLoaded");
         }
 
         public static IWebAssemblyHostBuilder CreateHostBuilder(string[] args) =>

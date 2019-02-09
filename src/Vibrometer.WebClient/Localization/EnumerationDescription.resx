@@ -121,7 +121,7 @@
     <value>Filter</value>
   </data>
   <data name="ApiSource_FourierTransform" xml:space="preserve">
-    <value>Fourier</value>
+    <value>Spectrum</value>
   </data>
   <data name="ApiSource_NoSource" xml:space="preserve">
     <value>None</value>

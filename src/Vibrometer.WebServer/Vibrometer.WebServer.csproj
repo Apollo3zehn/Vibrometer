@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <!--<RuntimeIdentifier>ubuntu.16.04-arm</RuntimeIdentifier>-->
   </PropertyGroup>
 
   <ItemGroup>

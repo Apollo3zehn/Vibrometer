@@ -107,15 +107,14 @@ namespace Vibrometer.Testing
 
                 Console.WriteLine($"[F] - set log length");
                 Console.WriteLine($"[G] - set log throttle");
-                Console.WriteLine($"[H] - set address");
-                Console.WriteLine($"[I] - get read buffer");
+                Console.WriteLine($"[H] - get read buffer");
 
                 Console.WriteLine();
 
                 Program.WriteColored("RAM\n", ConsoleColor.Cyan);
-                Console.WriteLine($"[J] - get data ({Math.Min(Math.Pow(2, _api.RamWriter.LogLength), 1024)} values)");
-                Console.WriteLine($"[K] - get stream");
-                Console.WriteLine($"[L] - clear");
+                Console.WriteLine($"[I] - get data ({Math.Min(Math.Pow(2, _api.RamWriter.LogLength), 1024)} values)");
+                Console.WriteLine($"[J] - get stream");
+                Console.WriteLine($"[K] - clear");
 
                 var keyInfo = Console.ReadKey(true);
 
@@ -189,18 +188,15 @@ namespace Vibrometer.Testing
                         Program.RW_Set_LogThrottle();
                         break;
                     case ConsoleKey.H:
-                        Program.RW_Set_Address();
-                        break;
-                    case ConsoleKey.I:
                         Program.RW_Get_ReadBuffer();
                         break;
-                    case ConsoleKey.J:
+                    case ConsoleKey.I:
                         Program.RAM_Get_Data();
                         break;
-                    case ConsoleKey.K:
+                    case ConsoleKey.J:
                         Program.RAM_Get_Stream();
                         break;
-                    case ConsoleKey.L:
+                    case ConsoleKey.K:
                         _api.ClearRam();
                         break;
                     case ConsoleKey.Escape:
@@ -433,11 +429,6 @@ namespace Vibrometer.Testing
             Program.PrintDialogInteger(ApiParameter.RW_LogThrottle, ref value);
 
             _api.RamWriter.LogThrottle = value;
-        }
-
-        private static void RW_Set_Address()
-        {
-            _api.RamWriter.Address = SystemParameters.DATA_BASE;
         }
 
         private static void RW_Get_ReadBuffer()

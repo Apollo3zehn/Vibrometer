@@ -43,7 +43,7 @@ namespace Vibrometer.WebServer
                 switch (parameter)
                 {
                     case ApiParameter.AS_Source:
-                        _api.AxisSwitch.Source = (ApiSource)value;
+                        _api.SetStateSafe(() => _api.AxisSwitch.Source = (ApiSource)value);
                         break;
                     case ApiParameter.SG_PhaseSignal:
                         _api.SignalGenerator.PhaseSignal = value;
@@ -117,15 +117,6 @@ namespace Vibrometer.WebServer
             return Task.Run(() =>
             {
                 _api.SetState(vibrometerState);
-                this.OnVibrometerStateChanged();
-            });
-        }
-
-        public Task ActivateProfile(string profileName)
-        {
-            return Task.Run(() =>
-            {
-                _api.SetDefaults();
                 this.OnVibrometerStateChanged();
             });
         }

@@ -32,7 +32,10 @@ namespace Vibrometer.WebServer
 
         private void OnUpdateBufferContent(object sender, ElapsedEventArgs e)
         {
-            _hubContext.Clients.All.SendAsync("SendBufferContent", _api.GetBuffer());
+            if (_api.RamWriter.Enabled)
+            {
+                _hubContext.Clients.All.SendAsync("SendBufferContent", _api.GetBuffer());
+            }
         }
 
         #endregion
