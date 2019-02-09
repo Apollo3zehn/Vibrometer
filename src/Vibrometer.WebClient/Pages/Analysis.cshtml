@@ -57,7 +57,7 @@
                     case ApiSource.Filter:
 
                         var data1 = state.BufferContent.Select((value, i) => new { x = i + 1, y = value }).ToList();
-                        await JSRuntime.Current.InvokeAsync<bool>("window.Vibrometer.UpdateChart", "chart", data1);
+                        await JSRuntime.Current.InvokeAsync<bool>("Vibrometer.UpdateChart", "chart", data1);
                         break;
 
                     case ApiSource.FourierTransform:
@@ -68,7 +68,7 @@
                         var count = ampl.Count();
 
                         var data2 = ampl.Select((value, i) => new { x = state.Summary.FT_SamplingFrequency * i / count, y = value }).ToList();
-                        await JSRuntime.Current.InvokeAsync<bool>("window.Vibrometer.UpdateChart", "chart", data2);
+                        await JSRuntime.Current.InvokeAsync<bool>("Vibrometer.UpdateChart", "chart", data2);
 
                         break;
 
@@ -95,19 +95,19 @@
         switch ((ApiSource)state.VibrometerState.AS_Source)
         {
             case ApiSource.NoSource:
-                await JSRuntime.Current.InvokeAsync<bool>("window.Vibrometer.InitializeChart", "chart", "no data source selected", 1, Math.Pow(2, state.VibrometerState.RW_LogLength), "-", 0, 1, "-");
+                await JSRuntime.Current.InvokeAsync<bool>("Vibrometer.InitializeChart", "chart", "no data source selected", 1, Math.Pow(2, state.VibrometerState.RW_LogLength), "-", 0, 1, "-");
                 break;
             case ApiSource.Raw:
-                await JSRuntime.Current.InvokeAsync<bool>("window.Vibrometer.InitializeChart", "chart", "RAW data", 1, Math.Pow(2, state.VibrometerState.RW_LogLength), "time", -32768, 32768, "raw");
+                await JSRuntime.Current.InvokeAsync<bool>("Vibrometer.InitializeChart", "chart", "RAW data", 1, Math.Pow(2, state.VibrometerState.RW_LogLength), "time", -32768, 32768, "raw");
                 break;
             case ApiSource.Position:
-                await JSRuntime.Current.InvokeAsync<bool>("window.Vibrometer.InitializeChart", "chart", "Position data", 1, Math.Pow(2, state.VibrometerState.RW_LogLength), "time", -32768, 32768, "position");
+                await JSRuntime.Current.InvokeAsync<bool>("Vibrometer.InitializeChart", "chart", "Position data", 1, Math.Pow(2, state.VibrometerState.RW_LogLength), "time", -32768, 32768, "position");
                 break;
             case ApiSource.Filter:
-                await JSRuntime.Current.InvokeAsync<bool>("window.Vibrometer.InitializeChart", "chart", "Filter data", 1, Math.Pow(2, state.VibrometerState.RW_LogLength), "time", -32768, 32768, "filtered position");
+                await JSRuntime.Current.InvokeAsync<bool>("Vibrometer.InitializeChart", "chart", "Filter data", 1, Math.Pow(2, state.VibrometerState.RW_LogLength), "time", -32768, 32768, "filtered position");
                 break;
             case ApiSource.FourierTransform:
-                await JSRuntime.Current.InvokeAsync<bool>("window.Vibrometer.InitializeChart", "chart", "Spectrum", 0, state.Summary.FT_SamplingFrequency, "frequency in Hz", -32768, 32768, "amplitude");
+                await JSRuntime.Current.InvokeAsync<bool>("Vibrometer.InitializeChart", "chart", "Spectrum", 0, state.Summary.FT_SamplingFrequency, "frequency in Hz", -32768, 32768, "amplitude");
                 break;
             default:
                 break;

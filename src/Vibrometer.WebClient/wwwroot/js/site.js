@@ -1,4 +1,4 @@
-﻿window.Vibrometer = {
+window.Vibrometer = {
     InitializeChart: function (id, title, xmin, xmax, xlabel, ymin, ymax, ylabel)
     {
         context = document.getElementById(id);
@@ -71,5 +71,50 @@
         window.Vibrometer.Chart.update(0);
 
         return true;
+    },
+    ReadVibFile: function (fileInputId)
+    {
+        return new Promise((resolve, reject) =>
+        {
+            let fileInput = document.getElementById(fileInputId);
+            let fileReader = new FileReader();
+
+            fileReader.onerror = () =>
+            {
+                fileReader.abort();
+                reject(new DOMException("File could not be read."));
+            };
+
+            fileReader.onload = () =>
+            {
+                try
+                {
+                    resolve(JSON.parse(fileReader.result));
+                } catch (e)
+                {
+                    reject(new DOMException("Could not parse JSON data."));
+                }
+            };
+
+            fileReader.readAsText(fileInput.files[0]);
+        });
+    },
+    WriteVibFile: function (vibrometerState)
+    {
+        var json = JSON.stringify(vibrometerState, null, 2);
+
+        var blob = new Blob([json], {
+            type: "text/plain;charset=utf-8"
+        });
+
+        var url = URL.createObjectURL(blob);
+
+        var link = document.createElement('a');
+        link.download = "config.vib.json";
+        link.href = url;
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 };

@@ -112,6 +112,15 @@ namespace Vibrometer.WebServer
             });
         }
 
+        public Task ApplyConfiguration(VibrometerState vibrometerState)
+        {
+            return Task.Run(() =>
+            {
+                _api.SetState(vibrometerState);
+                this.OnVibrometerStateChanged();
+            });
+        }
+
         public Task ActivateProfile(string profileName)
         {
             return Task.Run(() =>

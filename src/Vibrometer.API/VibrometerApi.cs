@@ -199,11 +199,33 @@ namespace Vibrometer.BaseTypes.API
                 FT_LogCountAverages = (int)this.FourierTransform.LogCountAverages,
                 FT_LogThrottle = (int)this.FourierTransform.LogThrottle,
                 RW_Enabled = this.RamWriter.Enabled,
-                RW_RequestEnabled = this.RamWriter.RequestEnabled,
                 RW_LogLength = (int)this.RamWriter.LogLength,
-                RW_LogThrottle = (int)this.RamWriter.LogThrottle,
-                RW_ReadBuffer = (int)this.RamWriter.ReadBuffer
+                RW_LogThrottle = (int)this.RamWriter.LogThrottle
             };
+        }
+
+        public void SetState(VibrometerState vibrometerState)
+        {
+            this.RamWriter.Enabled = false;
+            this.FourierTransform.Enabled = false;
+
+            this.AxisSwitch.Source = (ApiSource)vibrometerState.AS_Source;
+            this.SignalGenerator.FmEnabled = vibrometerState.SG_FmEnabled;
+            this.SignalGenerator.PhaseSignal = (uint)vibrometerState.SG_PhaseSignal;
+            this.SignalGenerator.PhaseCarrier = (uint)vibrometerState.SG_PhaseCarrier;
+            this.DataAcquisition.SwitchEnabled = vibrometerState.DA_SwitchEnabled;
+            this.PositionTracker.LogScale = (uint)vibrometerState.PT_LogScale;
+            this.PositionTracker.LogCountExtremum = (uint)vibrometerState.PT_LogCountExtremum;
+            this.PositionTracker.ShiftExtremum = (uint)vibrometerState.PT_ShiftExtremum;
+            this.Filter.LogThrottle = (uint)vibrometerState.FI_LogThrottle;
+            this.FourierTransform.LogCountAverages = (uint)vibrometerState.FT_LogCountAverages;
+            this.FourierTransform.LogThrottle = (uint)vibrometerState.FT_LogThrottle;
+            this.RamWriter.LogLength = (uint)vibrometerState.RW_LogLength;
+            this.RamWriter.LogThrottle = (uint)vibrometerState.RW_LogThrottle;
+
+            this.RamWriter.RequestEnabled = false;
+            this.RamWriter.Enabled = vibrometerState.FT_Enabled;
+            this.FourierTransform.Enabled = vibrometerState.RW_Enabled;
         }
 
         #endregion

@@ -1,11 +1,11 @@
 ﻿@using Vibrometer.WebClient.Model
 @inject AppState state
 
-<div class="sidebar" data-color="rose" data-background-color="black" data-image="./img/sidebar-1.jpg">
+<div class="sidebar" data-color="azure" data-background-color="black" data-image="./img/sidebar-1.jpg">
 
     <div class="logo">
         <a class="simple-text logo-mini">
-            
+
         </a>
 
         <a class="simple-text logo-normal" href="/">
@@ -17,7 +17,7 @@
         <ul class="nav">
             @foreach (var pageDescription in state.PageDescriptionSet)
             {
-                <NavItem PageDescription="pageDescription"/>
+                <NavItem PageDescription="pageDescription" />
             }
         </ul>
     </div>
