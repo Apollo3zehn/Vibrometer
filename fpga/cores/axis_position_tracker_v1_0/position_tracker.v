@@ -10,10 +10,10 @@ module axis_position_tracker #
     input  wire                                 aclk,
     input  wire                                 aresetn,
     
-    // FC signals
-    input  wire [(S_AXIS_TDATA_WIDTH/2)-1:0]    FC_lower_threshold,
-    input  wire [(S_AXIS_TDATA_WIDTH/2)-1:0]    FC_upper_threshold,
-    input  wire [4:0]                           FC_log_scale,
+    // IP signals
+    input  wire [(S_AXIS_TDATA_WIDTH/2)-1:0]    lower_threshold,
+    input  wire [(S_AXIS_TDATA_WIDTH/2)-1:0]    upper_threshold,
+    input  wire [4:0]                           log_scale,
     
     // axis slave
     input  wire                                 S_AXIS_tvalid,
@@ -61,25 +61,25 @@ module axis_position_tracker #
         case(state)
         
             idle: begin
-                if ($signed(signal_a) < $signed(FC_lower_threshold))
-                    state_next  = low;
+                if ($signed(signal_a) < $signed(lower_threshold))
+                    state_next = low;
             end
                 
             low: begin
-                if ($signed(signal_a) > $signed(FC_upper_threshold))
-                    state_next  = high;
+                if ($signed(signal_a) > $signed(upper_threshold))
+                    state_next = high;
             end
             
             high: begin
-                if ($signed(signal_a) < $signed(FC_lower_threshold)) begin
-                    center = (($signed(FC_upper_threshold) + $signed(FC_lower_threshold)) >>> 1);
+                if ($signed(signal_a) < $signed(lower_threshold)) begin
+                    center = (($signed(upper_threshold) + $signed(lower_threshold)) >>> 1);
                 
                     if ($signed(signal_b) > $signed(center))
-                        position_next = $signed(position) + $signed((1 << FC_log_scale));
+                        position_next = $signed(position) + $signed((1 << log_scale));
                     else
-                        position_next = $signed(position) - $signed((1 << FC_log_scale));
+                        position_next = $signed(position) - $signed((1 << log_scale));
                         
-                    state_next  = low;             
+                    state_next = low;             
                 end
             end
             

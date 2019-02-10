@@ -8,7 +8,7 @@ module signal_switch #
     // system signals
     input  wire                             aclk,
     
-    // FC signals
+    // IP signals
     input  wire                             switch,
     input  wire [DATA_WIDTH-1:0]            a,
     input  wire [DATA_WIDTH-1:0]            b,

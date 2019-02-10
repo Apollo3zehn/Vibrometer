@@ -7,18 +7,18 @@ module axis_position_tracker_tb #
 
     reg                         aclk                = 0;
     reg                         aresetn             = 0;
-    reg [AXIS_TDATA_WIDTH-1:0]  FC_lower_treshold   = -10;
-    reg [AXIS_TDATA_WIDTH-1:0]  FC_upper_treshold   = 10;
+    reg [AXIS_TDATA_WIDTH-1:0]  lower_treshold      = -10;
+    reg [AXIS_TDATA_WIDTH-1:0]  upper_treshold      = 10;
     reg                         S_AXIS_tvalid       = 1;
     reg [AXIS_TDATA_WIDTH-1:0]  S_AXIS_tdata        = 0;
 
     integer i                                       = 0;
 
     axis_position_tracker DUT (
-        .SYS_aclk(SYS_aclk),
-        .SYS_aresetn(SYS_aresetn),
-        .FC_lower_treshold(FC_lower_treshold),
-        .FC_upper_treshold(FC_upper_treshold),
+        .aclk(aclk),
+        .aresetn(aresetn),
+        .lower_treshold(lower_treshold),
+        .upper_treshold(upper_treshold),
         .S_AXIS_tvalid(S_AXIS_tvalid),
         .S_AXIS_tdata(S_AXIS_tdata)
     );

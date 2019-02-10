@@ -9,11 +9,11 @@ module axis_extremum_finder #
     input  wire                             aclk,
     input  wire                             aresetn,
     
-    // EF signals
-    input  wire [4:0]                       EF_log_count,
-    input  wire [2:0]                       EF_shift,
-    output wire [AXIS_TDATA_WIDTH/2-1:0]    EF_lower_threshold,
-    output wire [AXIS_TDATA_WIDTH/2-1:0]    EF_upper_threshold,
+    // IP signals
+    input  wire [4:0]                       log_count,
+    input  wire [2:0]                       shift,
+    output wire [AXIS_TDATA_WIDTH/2-1:0]    lower_threshold,
+    output wire [AXIS_TDATA_WIDTH/2-1:0]    upper_threshold,
     
     // axis slave
     input  wire                             S_AXIS_tvalid,
@@ -40,12 +40,12 @@ module axis_extremum_finder #
     wire [31:0]                             max_count;
 
     assign S_AXIS_tready                    = 1'b1;
-    assign EF_lower_threshold               = min;
-    assign EF_upper_threshold               = max;
+    assign lower_threshold                  = min;
+    assign upper_threshold                  = max;
 
     assign signal_a                         = S_AXIS_tdata[AXIS_TDATA_WIDTH/2-1:0];
     assign signal_b                         = S_AXIS_tdata[AXIS_TDATA_WIDTH-1:AXIS_TDATA_WIDTH/2];
-    assign max_count                        = 1 << EF_log_count;
+    assign max_count                        = 1 << log_count;
 
     always @(posedge aclk) begin
         if (~aresetn) begin
@@ -91,8 +91,8 @@ module axis_extremum_finder #
                     
                 if (count >= max_count - 1) begin
                     tmp_center      = ($signed(tmp_max) + $signed(tmp_min)) >>> 1;
-                    min_next        = (($signed(tmp_min) - $signed(tmp_center)) >>> EF_shift) + $signed(tmp_center);
-                    max_next        = (($signed(tmp_max) - $signed(tmp_center)) >>> EF_shift) + $signed(tmp_center);
+                    min_next        = (($signed(tmp_min) - $signed(tmp_center)) >>> shift) + $signed(tmp_center);
+                    max_next        = (($signed(tmp_max) - $signed(tmp_center)) >>> shift) + $signed(tmp_center);
                     state_next      = idle;
                 end
                     

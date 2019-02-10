@@ -17,7 +17,8 @@ Position_Tracker    0x4122_0000
     [31:0]          threshold               RO     31_[max, min]_0
 
 Filter              0x4123_0000
-    [4:0]           log_throttle            RW
+    [0:0]           enable                  RW
+    [5:1]           log_throttle            RW
 
 Fourier_Transform   0x4124_0000
     [0:0]           enable                  RW      

@@ -13,8 +13,8 @@ module axis_complex_averager #
     input  wire                             aclk,
     input  wire                             aresetn,
 
-    // averager signals
-    input  wire [4:0]                       AV_log_count,
+    // IP signals
+    input  wire [4:0]                       log_count,
     
     // slave
     input  wire [AXIS_TDATA_WIDTH-1:0]      S_AXIS_tdata,
@@ -63,7 +63,7 @@ module axis_complex_averager #
     wire [31:0]                             max_count;
     wire                                    write_enable;
 
-    assign max_count                        = 1 << AV_log_count;
+    assign max_count                        = 1 << log_count;
     assign write_enable                     = M_AXIS_tready && S_AXIS_tvalid && aresetn;
 
     // split signals
@@ -77,7 +77,7 @@ module axis_complex_averager #
 
     // M_AXIS
     assign M_AXIS_tvalid                    = write_enable && state == first;
-    assign M_AXIS_tdata                     = {truncate($signed(b_imag) >>> AV_log_count), truncate($signed(b_real) >>> AV_log_count)};
+    assign M_AXIS_tdata                     = {truncate($signed(b_imag) >>> log_count), truncate($signed(b_real) >>> log_count)};
     assign M_AXIS_tlast                     = t_last;
 
     // BRAM port A (write)

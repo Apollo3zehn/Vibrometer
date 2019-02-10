@@ -10,6 +10,9 @@ module axis_differentiator #
     input  wire                             aclk,
     input  wire                             aresetn,
 
+    // IP signals
+    input  wire                             enable,
+
     // axis slave
     input  wire                             S_AXIS_tvalid,
     input  wire [AXIS_TDATA_WIDTH-1:0]      S_AXIS_tdata,
@@ -33,7 +36,7 @@ module axis_differentiator #
 
     assign sum1             = shift_register[4] - shift_register[0];
     assign sum2             = shift_register[1] - shift_register[3];    
-    assign M_AXIS_tdata     = result;
+    assign M_AXIS_tdata     = enable ? result : S_AXIS_tdata;
     assign M_AXIS_tvalid    = S_AXIS_tvalid;
 
     assign S_AXIS_tready    = 1'b1;

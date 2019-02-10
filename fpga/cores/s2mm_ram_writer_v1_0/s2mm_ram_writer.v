@@ -13,6 +13,7 @@ module s2mm_ram_writer #
     input  wire                         aclk,
     input  wire                         aresetn,
 
+    // IP signals
     input  wire [AXI_ADDR_WIDTH-1:0]    address,
     output wire                         reading,
     output wire                         writing,

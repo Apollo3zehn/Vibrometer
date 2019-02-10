@@ -11,7 +11,7 @@ module fm_manager #
     // system signals
     input  wire                                 aclk,
     
-    // FM signals
+    // IP signals
     input  wire                                 fm_enable,
     input  wire [CARRIER_PINC_WIDTH-1:0]        phase_carrier,
     

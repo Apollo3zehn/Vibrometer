@@ -9,7 +9,7 @@ module axis_throttler #
     input  wire                             aclk,
     input  wire                             aresetn,
     
-    // module signals
+    // IP signals
     input  wire [4:0]                       log_throttle,
     
     // axis master
