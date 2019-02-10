@@ -19,6 +19,18 @@ namespace Vibrometer.BaseTypes.API
 
         #endregion
 
+        public bool Enabled
+        {
+            get
+            {
+                return ApiHelper.GetValue(ApiParameter.FI_Enabled, _address) > 0;
+            }
+            set
+            {
+                ApiHelper.SetValue(ApiParameter.FI_Enabled, _address, value ? 1U : 0U);
+            }
+        }
+
         public uint LogThrottle
         {
             get

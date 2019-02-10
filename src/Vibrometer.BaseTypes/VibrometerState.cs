@@ -21,6 +21,8 @@ namespace Vibrometer.BaseTypes
         public int PT_LogCountExtremum { get; set; }
         [DataMember(Name = "pT_ShiftExtremum")]
         public int PT_ShiftExtremum { get; set; }
+        [DataMember(Name = "fI_Enabled")]
+        public bool FI_Enabled { get; set; }
         [DataMember(Name = "fI_LogThrottle")]
         public int FI_LogThrottle { get; set; }
         [DataMember(Name = "fT_Enabled")]

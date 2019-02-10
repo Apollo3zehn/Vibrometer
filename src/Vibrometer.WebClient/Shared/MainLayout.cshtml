@@ -1,5 +1,8 @@
-﻿@inherits BlazorLayoutComponent
+﻿@using Vibrometer.WebClient.Model
+
+@inherits BlazorLayoutComponent
 @inject SignalRService signalR
+@inject AppState state
 
 <div class="wrapper">
 
@@ -12,7 +15,17 @@
         <div class="content">
             <div class="content">
                 <div class="container-fluid">
-                    @Body
+                    @if (state.IsConnected)
+                    {
+                        @Body
+                    }
+                    else
+                    {
+                        <div class="alert alert-rose alert-with-icon" data-notify="container">
+                            <i class="material-icons" data-notify="icon">notifications</i>
+                            <span data-notify="message">Connection to server lost, tryring to reconnect ...</span>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
@@ -20,3 +33,18 @@
     </div>
 
 </div>
+
+@functions
+{
+    protected override void OnInit()
+    {
+        state.PropertyChanged += (sender, e) =>
+        {
+            if (e.PropertyName == nameof(state.IsConnected))
+            {
+                this.StateHasChanged();
+            }
+        };
+    }
+}
+

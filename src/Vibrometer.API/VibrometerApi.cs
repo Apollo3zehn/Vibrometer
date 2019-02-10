@@ -194,6 +194,7 @@ namespace Vibrometer.BaseTypes.API
                 PT_LogScale = unchecked((int)this.PositionTracker.LogScale),
                 PT_LogCountExtremum = unchecked((int)this.PositionTracker.LogCountExtremum),
                 PT_ShiftExtremum = unchecked((int)this.PositionTracker.ShiftExtremum),
+                FI_Enabled = this.Filter.Enabled,
                 FI_LogThrottle = unchecked((int)this.Filter.LogThrottle),
                 FT_Enabled = this.FourierTransform.Enabled,
                 FT_LogCountAverages = unchecked((int)this.FourierTransform.LogCountAverages),
@@ -217,6 +218,7 @@ namespace Vibrometer.BaseTypes.API
             this.PositionTracker.LogScale = unchecked((uint)vibrometerState.PT_LogScale);
             this.PositionTracker.LogCountExtremum = unchecked((uint)vibrometerState.PT_LogCountExtremum);
             this.PositionTracker.ShiftExtremum = unchecked((uint)vibrometerState.PT_ShiftExtremum);
+            this.Filter.Enabled = vibrometerState.FI_Enabled;
             this.Filter.LogThrottle = unchecked((uint)vibrometerState.FI_LogThrottle);
             this.FourierTransform.LogCountAverages = unchecked((uint)vibrometerState.FT_LogCountAverages);
             this.FourierTransform.LogThrottle = unchecked((uint)vibrometerState.FT_LogThrottle);
@@ -239,6 +241,7 @@ namespace Vibrometer.BaseTypes.API
             this.FourierTransform.Enabled = false;
             this.RamWriter.Enabled = false;
 
+            this.ClearRam();
             action?.Invoke();
 
             this.FourierTransform.Enabled = fourierTransform_enabled;

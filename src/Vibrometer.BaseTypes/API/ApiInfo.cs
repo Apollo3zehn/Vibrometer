@@ -84,15 +84,20 @@ namespace Vibrometer.BaseTypes.API
 
                 // Filter
                 new ApiRecord(
-                        ApiParameter.FI_LogThrottle, ApiGroup.Filter, 
+                        ApiParameter.FI_Enabled, ApiGroup.Filter, 
+                        "Enabled", "Enables or disable the filter module. A disabled module is a simple pass-through for the data stream with the throttle parameter still applying.",
+                        offset: 0x00, shift: 0, size: 1
+                ),
+                new ApiRecord(
+                        ApiParameter.FI_LogThrottle, ApiGroup.Filter,
                         "Log Throttle", "Sets the logarithmic data stream throttle for the filter.",
-                        offset: 0x00, shift: 0, size: 5
+                        offset: 0x00, shift: 1, size: 5
                 ),
 
                 // FourierTransform
                 new ApiRecord(
                         ApiParameter.FT_Enabled, ApiGroup.FourierTransform, 
-                        "Enabled", "Enables or disables the Fourier Transform.",
+                        "Enabled", "Enables or disables the Fourier Transform. Disabling the Fourier Transform stops the data transfer.",
                         offset: 0x00, shift: 0, size: 1
                 ),
                 new ApiRecord(
@@ -109,7 +114,7 @@ namespace Vibrometer.BaseTypes.API
                 // RAM Writer
                 new ApiRecord(
                         ApiParameter.RW_Enabled, ApiGroup.RamWriter, 
-                        "Enabled", "Enables or disables the RAM writer.",
+                        "Enabled", "Enables or disables the RAM writer. Disabling the RAM writer stops the data transfer.",
                         offset: 0x00, shift: 0, size: 1
                 ),
                 new ApiRecord(

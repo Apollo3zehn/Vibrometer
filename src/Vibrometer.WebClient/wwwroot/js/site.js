@@ -55,7 +55,11 @@ window.Vibrometer = {
                         ticks: {
                             autoSkip: true,
                             min: xmin,
-                            max: xmax
+                            max: xmax,
+                            callback: function (value, index, values)
+                            {
+                                return value.toFixed(2);
+                            }
                         }
                     }],
                     yAxes: [{
@@ -66,7 +70,6 @@ window.Vibrometer = {
                             labelString: ylabel
                         },
                         ticks: {
-                            beginAtZero: true,
                             min: ymin,
                             max: ymax
                         },
@@ -85,7 +88,7 @@ window.Vibrometer = {
             }
         };
 
-        if (window.Vibrometer.Chart)
+        if (window.Vibrometer.Chart && window.Vibrometer.Chart.canvas === context)
         {
             window.Vibrometer.Chart.options = config.options;
             window.Vibrometer.Chart.data = config.data;

@@ -8,6 +8,7 @@ namespace Vibrometer.WebClient.Model
         #region Field
 
         int[] _bufferContent;
+        bool _isConnected;
         VibrometerState _vibrometerState;
 
         #endregion
@@ -16,6 +17,7 @@ namespace Vibrometer.WebClient.Model
 
         public AppState()
         {
+            this.IsConnected = true;
             this.VibrometerState = new VibrometerState();
 
             this.PageDescriptionSet = new List<PageDescription>()
@@ -35,6 +37,12 @@ namespace Vibrometer.WebClient.Model
         {
             get { return _bufferContent; }
             set { base.SetProperty(ref _bufferContent, value); }
+        }
+
+        public bool IsConnected
+        {
+            get { return _isConnected; }
+            set { base.SetProperty(ref _isConnected, value); }
         }
 
         public VibrometerState VibrometerState

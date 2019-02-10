@@ -27,7 +27,7 @@ module fm_manager #
 );
     wire   [SIGNAL_PHASE_WIDTH-1:0]             tdata_unsigned;
 
-    assign tdata_unsigned                       = S_AXIS_tdata + (2 << (SIGNAL_PHASE_WIDTH - 1));
+    assign tdata_unsigned                       = S_AXIS_tdata + (1 << (SIGNAL_PHASE_WIDTH - 1));
     assign S_AXIS_tready                        = M_AXIS_tready;
     assign M_AXIS_tvalid                        = fm_enable ? S_AXIS_tvalid : 1'b1;
     assign M_AXIS_tdata                         = fm_enable ? tdata_unsigned : phase_carrier;

@@ -112,8 +112,13 @@
                                                         OnValueChanged="@OnValueChanged" />
 
                                     <!--Filter-->
+
+                                    <!--TODO: The purpose of this module is to apply a high pass filter to avoid variable overflow and ...-->
                                     <ApiRecordHeader DisplayName="Filter"
-                                                     Description="The purpose of this module is to apply a high pass filter to avoid variable overflow and it additionally consists of an differentiator that is required if signal B is not shifted by 90 deg." />
+                                                     Description="This module consists of an differentiator that is required if signal B is not shifted by 90 deg to determine the count direction." />
+                                    <ApiRecordComponentBool Record="ApiInfo.Instance[ApiParameter.FI_Enabled]"
+                                                            Value="@state.VibrometerState.FI_Enabled"
+                                                            OnValueChanged="@OnValueChangedBool" />
                                     <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.FI_LogThrottle]"
                                                         Value="@state.VibrometerState.FI_LogThrottle"
                                                         OnValueChanged="@OnValueChanged" />

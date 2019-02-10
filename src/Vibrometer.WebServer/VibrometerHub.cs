@@ -95,6 +95,9 @@ namespace Vibrometer.WebServer
                     case ApiParameter.DA_SwitchEnabled:
                         _api.DataAcquisition.SwitchEnabled = value;
                         break;
+                    case ApiParameter.FI_Enabled:
+                        _api.Filter.Enabled = value;
+                        break;
                     case ApiParameter.FT_Enabled:
                         _api.FourierTransform.Enabled = value;
                         break;

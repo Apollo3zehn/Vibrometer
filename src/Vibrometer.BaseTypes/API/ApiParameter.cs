@@ -12,6 +12,7 @@
         PT_LogCountExtremum,
         PT_ShiftExtremum,
         PT_Threshold,
+        FI_Enabled,
         FI_LogThrottle,
         FT_Enabled,
         FT_LogCountAverages,

@@ -87,27 +87,23 @@
                         break;
 
                     case ApiSource.Raw:
-                        data1 = state.BufferContent.Select((value, i) => new ChartPoint(i + 1, unchecked((short)(value & 0x0000FFFF)))).ToList();
-                        data2 = state.BufferContent.Select((value, i) => new ChartPoint(i + 1, unchecked((short)(value >> 16)))).ToList();
+                        data1 = state.BufferContent.Select((value, i) => new ChartPoint(i * state.Summary.Step, unchecked((short)(value & 0x0000FFFF)))).ToList();
+                        data2 = state.BufferContent.Select((value, i) => new ChartPoint(i * state.Summary.Step, unchecked((short)(value >> 16)))).ToList();
                         break;
 
                     case ApiSource.Position:
                     case ApiSource.Filter:
-                        data1 = state.BufferContent.Select((value, i) => new ChartPoint(i + 1, unchecked((short)(value & 0x0000FFFF)))).ToList();
+                        data1 = state.BufferContent.Select((value, i) => new ChartPoint(i * state.Summary.Step, unchecked((short)(value & 0x0000FFFF)))).ToList();
                         break;
 
                     case ApiSource.FourierTransform:
-
-                        Console.WriteLine("a: " + state.BufferContent[0]);
-                        Console.WriteLine("b: " + (state.BufferContent[0] & 0x0000FFFF));
-                        Console.WriteLine("c: " + unchecked((short)(state.BufferContent[0] >> 16)));
 
                         var real = state.BufferContent.Select(value => unchecked((short)(value & 0x0000FFFF))).ToArray();
                         var imag = state.BufferContent.Select(value => unchecked((short)(value >> 16))).ToArray();
                         var ampl = real.Zip(imag, (x, y) => Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2))).ToArray();
                         var count = ampl.Count();
 
-                        data1 = ampl.Select((value, i) => new ChartPoint(state.Summary.FT_SamplingFrequency * i / count, value)).ToList();
+                        data1 = ampl.Select((value, i) => new ChartPoint(i * state.Summary.Step, value)).ToList();
                         break;
 
                     default:
@@ -149,16 +145,16 @@
             case ApiSource.NoSource:
                 break;
             case ApiSource.Raw:
-                await JSRuntime.Current.InvokeAsync<object>("Vibrometer.InitializeChart", "chart", 1, Math.Pow(2, state.VibrometerState.RW_LogLength), "time", -Math.Pow(2, 14 - 1), Math.Pow(2, 14 - 1) - 1, "raw");
+                await JSRuntime.Current.InvokeAsync<object>("Vibrometer.InitializeChart", "chart", state.Summary.XMin, state.Summary.XMax, $"time in {state.Summary.Unit}", -Math.Pow(2, 14 - 1), Math.Pow(2, 14 - 1) - 1, "raw");
                 break;
             case ApiSource.Position:
-                await JSRuntime.Current.InvokeAsync<object>("Vibrometer.InitializeChart", "chart", 1, Math.Pow(2, state.VibrometerState.RW_LogLength), "time", -Math.Pow(2, 16 - 1), Math.Pow(2, 16 - 1) - 1, "position");
+                await JSRuntime.Current.InvokeAsync<object>("Vibrometer.InitializeChart", "chart", state.Summary.XMin, state.Summary.XMax, $"time in {state.Summary.Unit}", -Math.Pow(2, 16 - 1), Math.Pow(2, 16 - 1) - 1, "position");
                 break;
             case ApiSource.Filter:
-                await JSRuntime.Current.InvokeAsync<object>("Vibrometer.InitializeChart", "chart", 1, Math.Pow(2, state.VibrometerState.RW_LogLength), "time", -Math.Pow(2, 16 - 1), Math.Pow(2, 16 - 1) - 1, "filtered position");
+                await JSRuntime.Current.InvokeAsync<object>("Vibrometer.InitializeChart", "chart", state.Summary.XMin, state.Summary.XMax, $"time in {state.Summary.Unit}", -Math.Pow(2, 16 - 1), Math.Pow(2, 16 - 1) - 1, "filtered position");
                 break;
             case ApiSource.FourierTransform:
-                await JSRuntime.Current.InvokeAsync<object>("Vibrometer.InitializeChart", "chart", 0, state.Summary.FT_SamplingFrequency, "frequency in Hz", 0, Math.Pow(2, 16) - 1, "amplitude");
+                await JSRuntime.Current.InvokeAsync<object>("Vibrometer.InitializeChart", "chart", state.Summary.XMin, state.Summary.XMax, $"frequency in {state.Summary.Unit}", 0, Math.Pow(2, 16) - 1, "amplitude");
                 break;
             default:
                 throw new ArgumentException();

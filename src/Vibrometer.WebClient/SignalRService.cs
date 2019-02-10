@@ -18,13 +18,21 @@ namespace Vibrometer.WebClient
             {
                 return Task.Run(async () =>
                 {
-                    try
+                    state.IsConnected = false;
+
+                    while (true)
                     {
-                        await this.Connection.StartAsync();
-                    }
-                    catch
-                    {
-                        await Task.Delay(TimeSpan.FromSeconds(3));
+                        try
+                        {
+                            await this.Connection.StartAsync();
+                            state.IsConnected = true;
+
+                            break;
+                        }
+                        catch
+                        {
+                            await Task.Delay(TimeSpan.FromSeconds(3));
+                        }
                     }
                 });
             });
