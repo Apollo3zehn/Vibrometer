@@ -2,6 +2,7 @@ variable location [file dirname [file normalize [info script]]]
 
 set coreNameSet {
 	axis_complex_averager_v1_0
+	axis_counter_v1_0
 	axis_data_width_adapter_v1_0
 	axis_differentiator_v1_0
 	axis_extremum_finder_v1_0

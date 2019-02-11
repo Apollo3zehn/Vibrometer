@@ -39,7 +39,7 @@ module axis_differentiator #
     assign M_AXIS_tdata     = enable ? result : S_AXIS_tdata;
     assign M_AXIS_tvalid    = S_AXIS_tvalid;
 
-    assign S_AXIS_tready    = 1'b1;
+    assign S_AXIS_tready    = aresetn;
 
     for (i = 0; i < 5 ; i = i + 1) begin
         always @(posedge aclk) begin

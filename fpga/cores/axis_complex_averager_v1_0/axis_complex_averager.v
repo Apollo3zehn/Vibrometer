@@ -73,7 +73,7 @@ module axis_complex_averager #
     assign b_imag                           = bram_portb_rddata[BRAM_DATA_WIDTH-1:BRAM_DATA_WIDTH/2];
 
     // S_AXIS
-    assign S_AXIS_tready                    = M_AXIS_tready;
+    assign S_AXIS_tready                    = M_AXIS_tready && aresetn;
 
     // M_AXIS
     assign M_AXIS_tvalid                    = write_enable && state == first;

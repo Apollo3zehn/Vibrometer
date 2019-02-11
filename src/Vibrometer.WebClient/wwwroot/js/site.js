@@ -78,12 +78,6 @@ window.Vibrometer = {
                 },
                 title: {
                     display: false
-                },
-                tooltips: {
-                    enabled: false
-                },
-                hover: {
-                    mode: null
                 }
             }
         };

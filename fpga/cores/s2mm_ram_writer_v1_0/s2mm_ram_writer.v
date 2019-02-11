@@ -82,17 +82,17 @@ module s2mm_ram_writer #
     // DONE: The read operation is also synchronous, presenting the next data word at DO whenever the RDEN is active one setup time before the rising RDCLK edge.
     // DONE: RDEN must be held low during reset cycle
     // DONE: RDEN must be low for at least two RDCLK clock cycles after RST deasserted.
-    assign writing                      = wvalid        & M_AXI_wready  & aresetn & count_rst > 2;
+    assign writing                      = wvalid        && M_AXI_wready  && aresetn && count_rst > 2;
     // TODO: RST must be held high for at least five WRCLK clock cycles ...
     // DONE: ... and WREN must be low before RST becomes active high, and WREN remains low during this reset cycle.
     // DONE: The write operation is synchronous, writing the data word available at DI into the FIFO whenever WREN is active one setup time before the rising WRCLK edge.
     // DONE: WREN must be held low during reset cycle
     // DONE: WREN must be low for at least two WRCLK clock cycles after RST deasserted.
-    assign reading                      = S_AXIS_tvalid & S_AXIS_tready & aresetn & count_rst > 2;
+    assign reading                      = S_AXIS_tvalid && S_AXIS_tready && count_rst > 2; // aresetn is already included in S_AXIS_tready
 
     assign wlast                        = &count;
     assign tdata                        = {{(64 - AXIS_TDATA_WIDTH - AXI_ADDR_WIDTH){1'b0}}, S_AXIS_tdata, address};
-    assign S_AXIS_tready                = ~full;
+    assign S_AXIS_tready                = ~full && aresetn;
 
     assign M_AXI_awid                   = {(AXI_ID_WIDTH){1'b0}};                       // Write address ID
     assign M_AXI_awaddr                 = wdata[AXI_ADDR_WIDTH-1:0];                    // Write address

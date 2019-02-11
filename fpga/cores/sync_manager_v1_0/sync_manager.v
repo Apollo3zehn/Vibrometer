@@ -47,14 +47,15 @@ module sync_manager #
     reg  [MM_ADDR_WIDTH-1:0]                read_count,         read_count_next;
     reg  [MM_ADDR_WIDTH-1:0]                write_count,        write_count_next;
     reg                                     lock,               lock_next;
+    reg  [MM_ADDR_WIDTH-1:0]                write_factor,       write_factor_next;
     reg  [31:0]                             write_buffer_tmp,   write_buffer_tmp_next;
 
     wire [31:0]                             length;
     
     assign combination                      = state_read | state_ready | state_lock | state_write;
     assign length                           = 1 << log_length;
-    assign read_buffer                      = base_address + length * buffer_to_factor(state_read) * (DATA_WIDTH / 8);
-    assign write_buffer                     = write_buffer_tmp + length * buffer_to_factor(state_write) * (DATA_WIDTH / 8);
+    assign read_buffer                      = base_address + ((buffer_to_factor(state_read) * (DATA_WIDTH / 8)) << log_length);
+    assign write_buffer                     = write_buffer_tmp + ((write_factor * (DATA_WIDTH / 8)) << log_length);
 
     always @(posedge aclk) begin
         if (~aresetn) begin
@@ -65,6 +66,7 @@ module sync_manager #
             read_count          <= 0;
             write_count         <= 0;
             lock                <= 0;
+            write_factor        <= 0;
             write_buffer_tmp    <= 0;
         end else begin
             state_read          <= state_read_next;
@@ -74,6 +76,7 @@ module sync_manager #
             read_count          <= read_count_next;
             write_count         <= write_count_next;
             lock                <= lock_next;
+            write_factor        <= write_factor_next;
             write_buffer_tmp    <= write_buffer_tmp_next;
         end
     end
@@ -89,40 +92,42 @@ module sync_manager #
         
         // if s2mm read transfer was successful, increase read_count
         if (reading) begin
-            read_count_next     = read_count + 1;
-        end
 
-        // if read_count has reached the maximum, assign a new buffer
-        if (read_count_next >= length) begin
-            read_count_next     = 0;
+            // if read_count has reached the maximum, assign a new buffer
+            if (read_count + 1 >= length) begin
+                read_count_next     = 0;
 
-            if (combination[0] == 1'b0)
-                state_write_next = buffer_1;
-            else if (combination[1] == 1'b0)
-                state_write_next = buffer_2;
-            else if (combination[2] == 1'b0)
-                state_write_next = buffer_3;
-            else if (combination[3] == 1'b0)
-                state_write_next = buffer_4;
-            else begin
-                state_write_next = state_ready;
-                state_ready_next = state_read;
+                if (combination[0] == 1'b0)
+                    state_write_next = buffer_1;
+                else if (combination[1] == 1'b0)
+                    state_write_next = buffer_2;
+                else if (combination[2] == 1'b0)
+                    state_write_next = buffer_3;
+                else if (combination[3] == 1'b0)
+                    state_write_next = buffer_4;
+                else begin
+                    state_write_next = state_ready;
+                    state_ready_next = state_read;
+                end
+            end else begin
+                read_count_next = read_count + 1;
             end
         end
 
         // calculate part of the final write address
+        write_factor_next       = buffer_to_factor(state_write_next);
         write_buffer_tmp_next   = base_address + read_count_next * (DATA_WIDTH / 8);
 
         // if s2mm write transfer was successful, increase write_count
         if (writing) begin
-            write_count_next    = write_count + 1;
-        end
-
-        // if write_count has reached the maximum, assign new buffers
-        if (write_count >= length - 1) begin
-            write_count_next    = 0;
-            state_lock_next     = state_write;
-            state_ready_next    = state_lock;
+            // if write_count has reached the maximum, assign new buffers
+            if (write_count + 1 >= length) begin
+                write_count_next    = 0;
+                state_lock_next     = state_write;
+                state_ready_next    = state_lock;
+            end else begin
+                write_count_next    = write_count + 1;
+            end
         end
 
         // if read request

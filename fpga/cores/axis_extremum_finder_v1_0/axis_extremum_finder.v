@@ -39,7 +39,7 @@ module axis_extremum_finder #
     wire [AXIS_TDATA_WIDTH/2-1:0]           signal_b; 
     wire [31:0]                             max_count;
 
-    assign S_AXIS_tready                    = 1'b1;
+    assign S_AXIS_tready                    = aresetn;
     assign lower_threshold                  = min;
     assign upper_threshold                  = max;
 

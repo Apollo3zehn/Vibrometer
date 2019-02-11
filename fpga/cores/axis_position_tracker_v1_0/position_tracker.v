@@ -37,8 +37,8 @@ module axis_position_tracker #
     wire [S_AXIS_TDATA_WIDTH/2-1:0]             signal_a;
     wire [S_AXIS_TDATA_WIDTH/2-1:0]             signal_b;
  
-    assign S_AXIS_tready                        = 1'b1;
-    assign M_AXIS_tvalid                        = 1'b1;
+    assign S_AXIS_tready                        = aresetn;
+    assign M_AXIS_tvalid                        = aresetn;
     assign M_AXIS_tdata                         = position;
 
     assign signal_a                             = S_AXIS_tdata[(S_AXIS_TDATA_WIDTH/2)-1:0];
