@@ -25,6 +25,7 @@ module fm_manager #
     output wire                                 M_AXIS_tvalid,
     output wire [M_AXIS_TDATA_WIDTH-1:0]        M_AXIS_tdata
 );
+
     wire   [SIGNAL_PHASE_WIDTH-1:0]             tdata_unsigned;
 
     assign tdata_unsigned                       = S_AXIS_tdata + (1 << (SIGNAL_PHASE_WIDTH - 1));

@@ -24,11 +24,12 @@ module axis_throttler #
 );         
 
     reg         [31:0]                      count,              count_next;
+    reg                                     tready,             tready_next;
     reg                                     tvalid,             tvalid_next;
 
     wire        [31:0]                      max;
     
-    assign      S_AXIS_tready               = M_AXIS_tready;
+    assign      S_AXIS_tready               = tready;
     assign      M_AXIS_tvalid               = tvalid;
     assign      M_AXIS_tdata                = S_AXIS_tdata;
 
@@ -37,19 +38,23 @@ module axis_throttler #
     always @(posedge aclk) begin
         if (~aresetn) begin
             count           <= 0;
+            tready          <= 0;
             tvalid          <= 0;
         end else begin
             count           <= count_next;
+            tready          <= tready_next;
             tvalid          <= tvalid_next;
         end
     end
       
     always @* begin
         count_next          = count + 1;
+        tready_next         = 0;
         tvalid_next         = 0;
 
         if (count >= max - 1) begin
             count_next      = 0;
+            tready_next     = M_AXIS_tready;
             tvalid_next     = S_AXIS_tvalid;
         end   
     end
