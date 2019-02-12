@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Vibrometer.BaseTypes
+namespace Vibrometer.Infrastructure
 {
     [DataContract]
     public struct VibrometerState

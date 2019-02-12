@@ -2,8 +2,10 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using Vibrometer.Infrastructure;
+using Vibrometer.Infrastructure.API;
 
-namespace Vibrometer.BaseTypes.API
+namespace Vibrometer.API
 {
     public class VibrometerApi : IDisposable
     {
@@ -99,17 +101,26 @@ namespace Vibrometer.BaseTypes.API
         public int[] GetBuffer()
         {
             int length;
+            int address;
             int offset;
             int[] buffer;
             Random random;
 
             this.RamWriter.RequestEnabled = true;
 
-            offset = (int)(this.RamWriter.ReadBuffer - SystemParameters.DATA_BASE);
             length = (int)Math.Pow(2, this.RamWriter.LogLength);
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
+                address = (int)this.RamWriter.ReadBuffer;
+
+                if (address == 0)
+                {
+                    return new int[length];
+                }
+
+                offset = address - SystemParameters.DATA_BASE;
+
                 unsafe
                 {
                     buffer = new Span<int>(IntPtr.Add(_DATA, offset).ToPointer(), length).ToArray();
@@ -168,18 +179,35 @@ namespace Vibrometer.BaseTypes.API
             }
         }
 
-        public void LoadFpgaImage(string filePath)
+        public void LoadBitstream(string filePath)
         {
+            using (var sourceFileStream = File.Open(filePath, FileMode.Open, FileAccess.Read))
+            {
+                this.InternalLoadBitstream(sourceFileStream);
+            }
+        }
+
+        public void LoadBitstream(byte[] bitstream)
+        {
+            using (var sourceFileStream = new MemoryStream(bitstream))
+            {
+                this.InternalLoadBitstream(sourceFileStream);
+            }
+        }
+
+        private void InternalLoadBitstream(Stream sourceFileStream)
+        {
+            ApiProxy.IsEnabled = false;
+
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                using (var sourceFileStream = File.Open(filePath, FileMode.Open, FileAccess.Read))
+                using (var targetFileStream = File.Open("/dev/xdevcfg", FileMode.Open, FileAccess.Write))
                 {
-                    using (var targetFileStream = File.Open("/dev/xdevcfg", FileMode.Open, FileAccess.Write))
-                    {
-                        sourceFileStream.CopyTo(targetFileStream);
-                    }
+                    sourceFileStream.CopyTo(targetFileStream);
                 }
             }
+
+            ApiProxy.IsEnabled = true;
         }
 
         public VibrometerState GetState()
@@ -207,43 +235,38 @@ namespace Vibrometer.BaseTypes.API
 
         public void SetState(VibrometerState vibrometerState)
         {
-            this.FourierTransform.Enabled = false;
-            this.RamWriter.Enabled = false;
-
-            this.AxisSwitch.Source = (ApiSource)vibrometerState.AS_Source;
-            this.SignalGenerator.FmEnabled = vibrometerState.SG_FmEnabled;
-            this.SignalGenerator.PhaseSignal = unchecked((uint)vibrometerState.SG_PhaseSignal);
-            this.SignalGenerator.PhaseCarrier = unchecked((uint)vibrometerState.SG_PhaseCarrier);
-            this.DataAcquisition.SwitchEnabled = vibrometerState.DA_SwitchEnabled;
-            this.PositionTracker.LogScale = unchecked((uint)vibrometerState.PT_LogScale);
-            this.PositionTracker.LogCountExtremum = unchecked((uint)vibrometerState.PT_LogCountExtremum);
-            this.PositionTracker.ShiftExtremum = unchecked((uint)vibrometerState.PT_ShiftExtremum);
-            this.Filter.Enabled = vibrometerState.FI_Enabled;
-            this.Filter.LogThrottle = unchecked((uint)vibrometerState.FI_LogThrottle);
-            this.FourierTransform.LogCountAverages = unchecked((uint)vibrometerState.FT_LogCountAverages);
-            this.FourierTransform.LogThrottle = unchecked((uint)vibrometerState.FT_LogThrottle);
-            this.RamWriter.LogLength = unchecked((uint)vibrometerState.RW_LogLength);
-            this.RamWriter.LogThrottle = unchecked((uint)vibrometerState.RW_LogThrottle);
-
-            this.FourierTransform.Enabled = vibrometerState.RW_Enabled;
-            this.RamWriter.RequestEnabled = false;
-            this.RamWriter.Enabled = vibrometerState.FT_Enabled;
+            this.InternalSetStateSafe(vibrometerState.RW_Enabled, vibrometerState.FT_Enabled, () =>
+            {
+                this.AxisSwitch.Source = (ApiSource)vibrometerState.AS_Source;
+                this.SignalGenerator.FmEnabled = vibrometerState.SG_FmEnabled;
+                this.SignalGenerator.PhaseSignal = unchecked((uint)vibrometerState.SG_PhaseSignal);
+                this.SignalGenerator.PhaseCarrier = unchecked((uint)vibrometerState.SG_PhaseCarrier);
+                this.DataAcquisition.SwitchEnabled = vibrometerState.DA_SwitchEnabled;
+                this.PositionTracker.LogScale = unchecked((uint)vibrometerState.PT_LogScale);
+                this.PositionTracker.LogCountExtremum = unchecked((uint)vibrometerState.PT_LogCountExtremum);
+                this.PositionTracker.ShiftExtremum = unchecked((uint)vibrometerState.PT_ShiftExtremum);
+                this.Filter.Enabled = vibrometerState.FI_Enabled;
+                this.Filter.LogThrottle = unchecked((uint)vibrometerState.FI_LogThrottle);
+                this.FourierTransform.LogCountAverages = unchecked((uint)vibrometerState.FT_LogCountAverages);
+                this.FourierTransform.LogThrottle = unchecked((uint)vibrometerState.FT_LogThrottle);
+                this.RamWriter.LogLength = unchecked((uint)vibrometerState.RW_LogLength);
+                this.RamWriter.LogThrottle = unchecked((uint)vibrometerState.RW_LogThrottle);
+            });
         }
 
         public void SetStateSafe(Action action)
         {
-            bool fourierTransform_enabled;
-            bool ramWriter_enabled;
+            this.InternalSetStateSafe(this.RamWriter.Enabled, this.FourierTransform.Enabled, action);
+        }
 
-            fourierTransform_enabled = this.FourierTransform.Enabled;
-            ramWriter_enabled = this.RamWriter.Enabled;
-
+        private void InternalSetStateSafe(bool ramWriter_enabled, bool fourierTransform_enabled, Action action)
+        {
             this.FourierTransform.Enabled = false;
             this.RamWriter.Enabled = false;
 
-            this.ClearRam();
             action?.Invoke();
 
+            this.ClearRam();
             this.FourierTransform.Enabled = fourierTransform_enabled;
             this.RamWriter.RequestEnabled = false;
             this.RamWriter.Enabled = ramWriter_enabled;

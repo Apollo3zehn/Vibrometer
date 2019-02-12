@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Resources;
 
-namespace Vibrometer.BaseTypes
+namespace Vibrometer.Infrastructure
 {
     public static class Utilities
     {

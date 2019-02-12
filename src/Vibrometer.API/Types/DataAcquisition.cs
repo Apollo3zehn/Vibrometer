@@ -1,6 +1,7 @@
 ﻿using System;
+using Vibrometer.Infrastructure.API;
 
-namespace Vibrometer.BaseTypes.API
+namespace Vibrometer.API
 {
     public class DataAcquisition
     {
@@ -23,11 +24,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiParameter.DA_SwitchEnabled, _address) > 0;
+                return ApiProxy.GetValue(ApiParameter.DA_SwitchEnabled, _address) > 0;
             }
             set
             {
-                ApiHelper.SetValue(ApiParameter.DA_SwitchEnabled, _address, value ? 1U : 0U);
+                ApiProxy.SetValue(ApiParameter.DA_SwitchEnabled, _address, value ? 1U : 0U);
             }
         }
     }

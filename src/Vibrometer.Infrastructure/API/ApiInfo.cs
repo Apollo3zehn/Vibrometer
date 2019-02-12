@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace Vibrometer.BaseTypes.API
+namespace Vibrometer.Infrastructure.API
 {
     public class ApiInfo : ReadOnlyDictionary<ApiParameter, ApiRecord>
     {

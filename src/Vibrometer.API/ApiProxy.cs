@@ -1,27 +1,47 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using Vibrometer.Infrastructure;
+using Vibrometer.Infrastructure.API;
 
-namespace Vibrometer.BaseTypes.API
+namespace Vibrometer.API
 {
-    public static class ApiHelper
+    public static class ApiProxy
     {
+        #region Fields
+
         private static IntPtr fakeArray;
         private const int FAKE_BUFFER_SIZE = 100;
         private const int SWITCH_OFFSET = 80; // width = 64 byte => 64 / 4 => width = 12
 
-        static ApiHelper()
+        #endregion
+
+        #region Constructors
+
+        static ApiProxy()
         {
+            ApiProxy.IsEnabled = true;
+
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 // TODO: free array
-                fakeArray = Marshal.AllocHGlobal(ApiHelper.FAKE_BUFFER_SIZE * SystemParameters.BYTE_COUNT);
+                fakeArray = Marshal.AllocHGlobal(ApiProxy.FAKE_BUFFER_SIZE * SystemParameters.BYTE_COUNT);
 
                 unsafe
                 {
-                    new Span<uint>(fakeArray.ToPointer(), ApiHelper.FAKE_BUFFER_SIZE).Clear();
+                    new Span<uint>(fakeArray.ToPointer(), ApiProxy.FAKE_BUFFER_SIZE).Clear();
                 }
             }
         }
+
+        #endregion
+
+        #region Properties
+
+        public static bool IsEnabled { get; set; }
+
+        #endregion
+
+        #region Methods
 
         public static void SetValue(ApiParameter parameter, IntPtr address, uint value)
         {
@@ -29,9 +49,9 @@ namespace Vibrometer.BaseTypes.API
             IntPtr realAddress;
 
             record = ApiInfo.Instance[parameter];
-            realAddress = ApiHelper.GetAddress(record.Group, address);
+            realAddress = ApiProxy.GetAddress(record.Group, address);
 
-            ApiHelper.SetValueInternal(record, IntPtr.Add(realAddress, record.Offset), value);
+            ApiProxy.InternalSetValue(record, IntPtr.Add(realAddress, record.Offset), value);
         }
 
         public static uint GetValue(ApiParameter parameter, IntPtr address)
@@ -40,15 +60,20 @@ namespace Vibrometer.BaseTypes.API
             IntPtr realAddress;
 
             record = ApiInfo.Instance[parameter];
-            realAddress = ApiHelper.GetAddress(record.Group, address);
+            realAddress = ApiProxy.GetAddress(record.Group, address);
 
-            return ApiHelper.GetValueInternal(record.Shift, record.Size, IntPtr.Add(realAddress, record.Offset));
+            return ApiProxy.InternalGetValue(record.Shift, record.Size, IntPtr.Add(realAddress, record.Offset));
         }
 
-        private static void SetValueInternal(ApiRecord record, IntPtr address, uint value)
+        private static void InternalSetValue(ApiRecord record, IntPtr address, uint value)
         {
             uint storage;
             uint max;
+
+            if (!ApiProxy.IsEnabled)
+            {
+                return;
+            }
 
             max = (uint)(Math.Pow(2, record.Size) - 1);
 
@@ -57,7 +82,7 @@ namespace Vibrometer.BaseTypes.API
                 throw new ArgumentException(nameof(value));
             }
 
-            storage = ApiHelper.GetValueInternal(0, 32, address);
+            storage = ApiProxy.InternalGetValue(0, 32, address);
             storage &= ~(max << record.Shift);
             storage |= (value << record.Shift);
 
@@ -67,10 +92,15 @@ namespace Vibrometer.BaseTypes.API
             }
         }
 
-        private static uint GetValueInternal(int shift, int size, IntPtr address)
+        private static uint InternalGetValue(int shift, int size, IntPtr address)
         {
             uint value;
             uint max;
+
+            if (!ApiProxy.IsEnabled)
+            {
+                return 0;
+            }
 
             max = (uint)(Math.Pow(2, size) - 1);
 
@@ -92,7 +122,7 @@ namespace Vibrometer.BaseTypes.API
             {
                 if (group == ApiGroup.AxisSwitch)
                 {
-                    realAddress = IntPtr.Add(fakeArray, ApiHelper.SWITCH_OFFSET * SystemParameters.BYTE_COUNT);
+                    realAddress = IntPtr.Add(fakeArray, ApiProxy.SWITCH_OFFSET * SystemParameters.BYTE_COUNT);
                 }
                 else
                 {
@@ -102,5 +132,7 @@ namespace Vibrometer.BaseTypes.API
 
             return realAddress;
         }
+
+        #endregion
     }
 }

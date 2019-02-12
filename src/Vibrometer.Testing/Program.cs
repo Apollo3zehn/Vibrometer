@@ -2,8 +2,9 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Vibrometer.BaseTypes;
-using Vibrometer.BaseTypes.API;
+using Vibrometer.API;
+using Vibrometer.Infrastructure;
+using Vibrometer.Infrastructure.API;
 
 namespace Vibrometer.Testing
 {
@@ -20,7 +21,7 @@ namespace Vibrometer.Testing
             while (!exit)
             {
                 Console.Clear();
-                Console.WriteLine($"[Y] - load FPGA image");
+                Console.WriteLine($"[Y] - load Bitstream");
                 Console.WriteLine($"[Z] - set defaults");
 
                 Console.WriteLine();
@@ -121,7 +122,7 @@ namespace Vibrometer.Testing
                 switch(keyInfo.Key)
                 {
                     case ConsoleKey.Y:
-                        Program.LoadFPGAImage();
+                        Program.LoadBitstream();
                         break;
                     case ConsoleKey.Z:
                         _api.SetDefaults();
@@ -211,10 +212,10 @@ namespace Vibrometer.Testing
         }
 
         // helper
-        private static void LoadFPGAImage()
+        private static void LoadBitstream()
         {
             Console.Clear();
-            Console.WriteLine("Please enter the file path of the FPGA image:");
+            Console.WriteLine("Please enter the bitstream file path:");
             Console.WriteLine();
 
             var filePath = Console.ReadLine();
@@ -223,7 +224,7 @@ namespace Vibrometer.Testing
             {
                 if (File.Exists(filePath))
                 {
-                    _api.LoadFpgaImage(filePath);
+                    _api.LoadBitstream(filePath);
                     break;
                 }
             }

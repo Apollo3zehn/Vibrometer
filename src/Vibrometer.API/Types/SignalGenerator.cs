@@ -1,6 +1,7 @@
 ﻿using System;
+using Vibrometer.Infrastructure.API;
 
-namespace Vibrometer.BaseTypes.API
+namespace Vibrometer.API
 {
     public class SignalGenerator
     {
@@ -23,11 +24,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiParameter.SG_FmEnabled, _address) > 0;
+                return ApiProxy.GetValue(ApiParameter.SG_FmEnabled, _address) > 0;
             }
             set
             {
-                ApiHelper.SetValue(ApiParameter.SG_FmEnabled, _address, value ? 1U : 0U);
+                ApiProxy.SetValue(ApiParameter.SG_FmEnabled, _address, value ? 1U : 0U);
             }
         }
 
@@ -35,11 +36,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiParameter.SG_PhaseSignal, _address);
+                return ApiProxy.GetValue(ApiParameter.SG_PhaseSignal, _address);
             }
             set
             {
-                ApiHelper.SetValue(ApiParameter.SG_PhaseSignal, _address, value);
+                ApiProxy.SetValue(ApiParameter.SG_PhaseSignal, _address, value);
             }
         }
 
@@ -47,11 +48,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiParameter.SG_PhaseCarrier, _address);
+                return ApiProxy.GetValue(ApiParameter.SG_PhaseCarrier, _address);
             }
             set
             {
-                ApiHelper.SetValue(ApiParameter.SG_PhaseCarrier, _address, value);
+                ApiProxy.SetValue(ApiParameter.SG_PhaseCarrier, _address, value);
             }
         }
     }

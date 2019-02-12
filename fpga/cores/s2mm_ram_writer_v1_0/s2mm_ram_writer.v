@@ -165,8 +165,8 @@ module s2mm_ram_writer #
         if (count_rst <= 2)
             count_rst_next  = count_rst + 1;
 
-        // keep track of burst position
-        if (writing || ~aresetn) begin
+        // keep track of burst position and finish burst during reset
+        if (writing || (M_AXI_wready && ~aresetn)) begin
             count_next      = count + 1;
         end
 

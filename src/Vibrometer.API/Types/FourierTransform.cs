@@ -1,6 +1,7 @@
 ﻿using System;
+using Vibrometer.Infrastructure.API;
 
-namespace Vibrometer.BaseTypes.API
+namespace Vibrometer.API
 {
     public class FourierTransform
     {
@@ -23,11 +24,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiParameter.FT_Enabled, _address) > 0;
+                return ApiProxy.GetValue(ApiParameter.FT_Enabled, _address) > 0;
             }
             set
             {
-                ApiHelper.SetValue(ApiParameter.FT_Enabled, _address, value ? 1U : 0U);
+                ApiProxy.SetValue(ApiParameter.FT_Enabled, _address, value ? 1U : 0U);
             }
         }
 
@@ -35,11 +36,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiParameter.FT_LogCountAverages, _address);
+                return ApiProxy.GetValue(ApiParameter.FT_LogCountAverages, _address);
             }
             set
             {
-                ApiHelper.SetValue(ApiParameter.FT_LogCountAverages, _address, value);
+                ApiProxy.SetValue(ApiParameter.FT_LogCountAverages, _address, value);
             }
         }
 
@@ -47,11 +48,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiParameter.FT_LogThrottle, _address);
+                return ApiProxy.GetValue(ApiParameter.FT_LogThrottle, _address);
             }
             set
             {
-                ApiHelper.SetValue(ApiParameter.FT_LogThrottle, _address, value);
+                ApiProxy.SetValue(ApiParameter.FT_LogThrottle, _address, value);
             }
         }
     }

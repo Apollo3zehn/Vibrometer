@@ -1,6 +1,8 @@
 ﻿using System;
+using Vibrometer.Infrastructure;
+using Vibrometer.Infrastructure.API;
 
-namespace Vibrometer.BaseTypes.API
+namespace Vibrometer.API
 {
     public class RamWriter
     {
@@ -23,7 +25,7 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiParameter.RW_Enabled, _address) > 0;
+                return ApiProxy.GetValue(ApiParameter.RW_Enabled, _address) > 0;
             }
             set
             {
@@ -32,7 +34,7 @@ namespace Vibrometer.BaseTypes.API
                     this.Address = SystemParameters.DATA_BASE;
                 }
 
-                ApiHelper.SetValue(ApiParameter.RW_Enabled, _address, value ? 1U : 0U);
+                ApiProxy.SetValue(ApiParameter.RW_Enabled, _address, value ? 1U : 0U);
             }
         }
 
@@ -40,11 +42,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiParameter.RW_RequestEnabled, _address) > 0;
+                return ApiProxy.GetValue(ApiParameter.RW_RequestEnabled, _address) > 0;
             }
             set
             {
-                ApiHelper.SetValue(ApiParameter.RW_RequestEnabled, _address, value ? 1U : 0U);
+                ApiProxy.SetValue(ApiParameter.RW_RequestEnabled, _address, value ? 1U : 0U);
             }
         }
 
@@ -52,11 +54,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiParameter.RW_LogLength, _address);
+                return ApiProxy.GetValue(ApiParameter.RW_LogLength, _address);
             }
             set
             {
-                ApiHelper.SetValue(ApiParameter.RW_LogLength, _address, value);
+                ApiProxy.SetValue(ApiParameter.RW_LogLength, _address, value);
             }
         }
 
@@ -64,11 +66,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiParameter.RW_LogThrottle, _address);
+                return ApiProxy.GetValue(ApiParameter.RW_LogThrottle, _address);
             }
             set
             {
-                ApiHelper.SetValue(ApiParameter.RW_LogThrottle, _address, value);
+                ApiProxy.SetValue(ApiParameter.RW_LogThrottle, _address, value);
             }
         }
 
@@ -76,7 +78,7 @@ namespace Vibrometer.BaseTypes.API
         {
             set
             {
-                ApiHelper.SetValue(ApiParameter.RW_Address, _address, value);
+                ApiProxy.SetValue(ApiParameter.RW_Address, _address, value);
             }
         }
 
@@ -84,7 +86,7 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiParameter.RW_ReadBuffer, _address);
+                return ApiProxy.GetValue(ApiParameter.RW_ReadBuffer, _address);
             }
         }
     }

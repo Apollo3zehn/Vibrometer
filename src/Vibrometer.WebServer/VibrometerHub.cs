@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.SignalR;
+using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR;
-using Vibrometer.BaseTypes;
-using Vibrometer.BaseTypes.API;
+using Vibrometer.API;
+using Vibrometer.Infrastructure;
+using Vibrometer.Infrastructure.API;
 
 namespace Vibrometer.WebServer
 {
@@ -33,6 +34,19 @@ namespace Vibrometer.WebServer
             return Task.Run(() =>
             {
                 return _api.GetState();
+            });
+        }
+
+        public Task LoadBitstream(string bitstreamBase64)
+        {
+            return Task.Run(() =>
+            {
+                byte[] bitstream;
+
+                bitstream = Convert.FromBase64String(bitstreamBase64);
+
+                _api.LoadBitstream(bitstream);
+                this.OnVibrometerStateChanged();
             });
         }
 
@@ -70,7 +84,7 @@ namespace Vibrometer.WebServer
                         _api.FourierTransform.LogThrottle = value;
                         break;
                     case ApiParameter.RW_LogLength:
-                        _api.RamWriter.LogLength = value;
+                        _api.SetStateSafe(() => _api.RamWriter.LogLength = value);
                         break;
                     case ApiParameter.RW_LogThrottle:
                         _api.RamWriter.LogThrottle = value;

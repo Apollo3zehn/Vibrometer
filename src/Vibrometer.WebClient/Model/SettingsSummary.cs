@@ -1,6 +1,6 @@
 ﻿using System;
-using Vibrometer.BaseTypes;
-using Vibrometer.BaseTypes.API;
+using Vibrometer.Infrastructure;
+using Vibrometer.Infrastructure.API;
 
 namespace Vibrometer.WebClient.Model
 {

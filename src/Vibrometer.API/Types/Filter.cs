@@ -1,6 +1,7 @@
 ﻿using System;
+using Vibrometer.Infrastructure.API;
 
-namespace Vibrometer.BaseTypes.API
+namespace Vibrometer.API
 {
     public class Filter
     {
@@ -23,11 +24,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiParameter.FI_Enabled, _address) > 0;
+                return ApiProxy.GetValue(ApiParameter.FI_Enabled, _address) > 0;
             }
             set
             {
-                ApiHelper.SetValue(ApiParameter.FI_Enabled, _address, value ? 1U : 0U);
+                ApiProxy.SetValue(ApiParameter.FI_Enabled, _address, value ? 1U : 0U);
             }
         }
 
@@ -35,11 +36,11 @@ namespace Vibrometer.BaseTypes.API
         {
             get
             {
-                return ApiHelper.GetValue(ApiParameter.FI_LogThrottle, _address);
+                return ApiProxy.GetValue(ApiParameter.FI_LogThrottle, _address);
             }
             set
             {
-                ApiHelper.SetValue(ApiParameter.FI_LogThrottle, _address, value);
+                ApiProxy.SetValue(ApiParameter.FI_LogThrottle, _address, value);
             }
         }
     }

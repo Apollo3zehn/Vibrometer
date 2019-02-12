@@ -52,7 +52,7 @@ module Fourier_transform_tb #
 
         repeat (6) @(posedge aclk);
             // 10-6 log_throttle, 5-1 log_count_averages, 0 enable
-            GPIO            <= 32'b00000000_00000000_00000000_00000101;
+            GPIO            <= 32'b00000000_00000000_00000000_10000101;
     end
 
     always @(posedge aclk) begin

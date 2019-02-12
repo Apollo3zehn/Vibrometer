@@ -104,7 +104,7 @@ window.Vibrometer = {
             duration: 0
         });
     },
-    ReadVibFile: function (fileInputId)
+    ReadFile: function (fileInputId, readAsBinaryString)
     {
         return new Promise((resolve, reject) =>
         {
@@ -121,14 +121,28 @@ window.Vibrometer = {
             {
                 try
                 {
-                    resolve(JSON.parse(fileReader.result));
+                    if (readAsBinaryString === true)
+                    {
+                        resolve(fileReader.result.split("base64,")[1]);
+                    }
+                    else
+                    {
+                        resolve(JSON.parse(fileReader.result));
+                    }
                 } catch (e)
                 {
                     reject(new DOMException("Could not parse JSON data."));
                 }
             };
 
-            fileReader.readAsText(fileInput.files[0]);
+            if (readAsBinaryString === true)
+            {
+                fileReader.readAsDataURL(fileInput.files[0]);
+            }
+            else
+            {
+                fileReader.readAsText(fileInput.files[0]);
+            }
         });
     },
     WriteVibFile: function (vibrometerState)

@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module signal_switch_tb #
+module axis_data_switch_tb #
 (
      parameter integer      DATA_WIDTH  = 16
 );

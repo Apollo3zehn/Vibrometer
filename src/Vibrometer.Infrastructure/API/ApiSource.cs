@@ -1,4 +1,4 @@
-﻿namespace Vibrometer.BaseTypes.API
+﻿namespace Vibrometer.Infrastructure.API
 {
     public enum ApiSource : uint
     {

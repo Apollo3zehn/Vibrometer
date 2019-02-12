@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vibrometer.BaseTypes.API
+namespace Vibrometer.Infrastructure.API
 {
     public class ApiRecord
     {

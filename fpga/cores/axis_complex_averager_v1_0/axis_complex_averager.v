@@ -1,5 +1,3 @@
-// TODO: A master is not permitted to wait until TREADY is asserted before asserting TVALID
-
 `timescale 1ns / 1ps
 
 module axis_complex_averager #
@@ -73,10 +71,10 @@ module axis_complex_averager #
     assign b_imag                           = bram_portb_rddata[BRAM_DATA_WIDTH-1:BRAM_DATA_WIDTH/2];
 
     // S_AXIS
-    assign S_AXIS_tready                    = M_AXIS_tready && aresetn;
+    assign S_AXIS_tready                    = write_enable;
 
     // M_AXIS
-    assign M_AXIS_tvalid                    = write_enable && state == first;
+    assign M_AXIS_tvalid                    = S_AXIS_tvalid && (state == first) && aresetn;
     assign M_AXIS_tdata                     = {truncate($signed(b_imag) >>> log_count), truncate($signed(b_real) >>> log_count)};
     assign M_AXIS_tlast                     = t_last;
 

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Vibrometer.BaseTypes;
+using Vibrometer.Infrastructure;
 
 namespace Vibrometer.WebClient.Model
 {

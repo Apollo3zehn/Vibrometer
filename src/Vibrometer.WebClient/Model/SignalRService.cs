@@ -1,10 +1,9 @@
 ﻿using Blazor.Extensions;
 using System;
 using System.Threading.Tasks;
-using Vibrometer.BaseTypes;
-using Vibrometer.WebClient.Model;
+using Vibrometer.Infrastructure;
 
-namespace Vibrometer.WebClient
+namespace Vibrometer.WebClient.Model
 {
     public class SignalRService
     {

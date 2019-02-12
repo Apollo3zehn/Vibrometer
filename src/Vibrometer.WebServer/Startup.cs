@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Net.Mime;
-using Vibrometer.BaseTypes.API;
+using Vibrometer.API;
 
 namespace Vibrometer.WebServer
 {
@@ -43,7 +43,10 @@ namespace Vibrometer.WebServer
 
             app.UseSignalR(routes =>
             {
-                routes.MapHub<VibrometerHub>("/vibrometerhub");
+                routes.MapHub<VibrometerHub>("/vibrometerhub", options =>
+                {
+                    options.ApplicationMaxBufferSize = 3 * 1024 * 1024; // to send the bitstream (see this issue: https://github.com/aspnet/SignalR/issues/2266#issuecomment-389143453)
+                });
             });
 
             app.UseMvc(routes =>

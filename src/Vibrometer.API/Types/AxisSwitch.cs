@@ -1,6 +1,7 @@
 ﻿using System;
+using Vibrometer.Infrastructure.API;
 
-namespace Vibrometer.BaseTypes.API
+namespace Vibrometer.API
 {
     public class AxisSwitch
     {
@@ -25,7 +26,7 @@ namespace Vibrometer.BaseTypes.API
             {
                 uint value;
 
-                value = ApiHelper.GetValue(ApiParameter.AS_Source, _address);
+                value = ApiProxy.GetValue(ApiParameter.AS_Source, _address);
 
                 // return 0, if switch is disabled
                 if (value >= 0x80000000)
@@ -42,12 +43,12 @@ namespace Vibrometer.BaseTypes.API
                 if (value == 0)
                 {
                     // disable switch
-                    ApiHelper.SetValue(ApiParameter.AS_Source, _address, 0x8000_0000);
+                    ApiProxy.SetValue(ApiParameter.AS_Source, _address, 0x8000_0000);
                 }
                 else if (value <= ApiSource.FourierTransform)
                 {
                     // connect slave[value - 1] with master[0]
-                    ApiHelper.SetValue(ApiParameter.AS_Source, _address, (uint)value - 1);
+                    ApiProxy.SetValue(ApiParameter.AS_Source, _address, (uint)value - 1);
                 }
                 else
                 {
@@ -55,7 +56,7 @@ namespace Vibrometer.BaseTypes.API
                 }
 
                 // commit settings
-                ApiHelper.SetValue(ApiParameter.AS_Commit, _address, 0x0000_0002);
+                ApiProxy.SetValue(ApiParameter.AS_Commit, _address, 0x0000_0002);
             }
         }
     }

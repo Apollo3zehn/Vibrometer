@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Timers;
-using Vibrometer.BaseTypes.API;
+using Vibrometer.API;
 
 namespace Vibrometer.WebServer
 {

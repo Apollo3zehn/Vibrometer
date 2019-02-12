@@ -10,9 +10,6 @@ module axis_counter #
     input  wire                                 aclk,
     input  wire                                 aresetn,
 
-    // IP signals
-    output wire [COUNTER_WIDTH-1:0]             counter,
-
     // axis master
     input  wire                                 M_AXIS_tready,
     output wire                                 M_AXIS_tvalid,

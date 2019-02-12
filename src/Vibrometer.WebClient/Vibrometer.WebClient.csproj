@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Vibrometer.BaseTypes\Vibrometer.BaseTypes.csproj" />
+    <ProjectReference Include="..\Vibrometer.Infrastructure\Vibrometer.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

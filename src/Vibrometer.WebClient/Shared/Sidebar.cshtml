@@ -27,11 +27,11 @@
                 <span class="btn btn-raised btn-round btn-outline-info btn-file">
                     <i class="material-icons text_align-center visible-on-sidebar-regular">cloud_upload</i>
                     <span class="fileinput-new ml-1">Load</span>
-                    <input type="file" onchange="@UploadFile" id="fileUpload" accept=".vib.json" />
+                    <input type="file" onchange="@UploadVibFile" id="vibFileUpload" accept=".vib.json" />
                 </span>
             </div>
             <div class="fileinput text-center mx-1" data-provides="fileinput">
-                <span class="btn btn-raised btn-round btn-outline-info btn-file" onclick="@this.DownloadFile">
+                <span class="btn btn-raised btn-round btn-outline-info btn-file" onclick="@this.DownloadVibFile">
                     <i class="material-icons text_align-center visible-on-sidebar-regular">cloud_download</i>
                     <span class="fileinput-new ml-1">Save</span>
                 </span>
@@ -42,23 +42,23 @@
 
 @functions
 {
-private async void UploadFile(UIChangeEventArgs e)
-{
-    VibrometerState vibrometerState;
-
-    try
+    private async void UploadVibFile(UIChangeEventArgs e)
     {
-        vibrometerState = await JSRuntime.Current.InvokeAsync<VibrometerState>("Vibrometer.ReadVibFile", "fileUpload");
-        await signalR.Connection.InvokeAsync("ApplyConfiguration", vibrometerState);
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine(ex.Message);
-    }
-}
+        VibrometerState vibrometerState;
 
-private void DownloadFile()
-{
-    JSRuntime.Current.InvokeAsync<VibrometerState>("Vibrometer.WriteVibFile", state.VibrometerState);
-}
+        try
+        {
+            vibrometerState = await JSRuntime.Current.InvokeAsync<VibrometerState>("Vibrometer.ReadFile", "vibFileUpload", false);
+            await signalR.Connection.InvokeAsync("ApplyConfiguration", vibrometerState);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    private void DownloadVibFile()
+    {
+        JSRuntime.Current.InvokeAsync<VibrometerState>("Vibrometer.WriteVibFile", state.VibrometerState);
+    }
 }

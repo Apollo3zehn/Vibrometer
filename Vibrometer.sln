@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vibrometer.WebClient", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vibrometer.Testing", "src\Vibrometer.Testing\Vibrometer.Testing.csproj", "{FDA047F2-8820-4243-8823-3F42E7688C06}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vibrometer.BaseTypes", "src\Vibrometer.BaseTypes\Vibrometer.BaseTypes.csproj", "{E3B7C5E1-8224-4044-9D18-9D0F0E8F807A}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vibrometer.API", "src\Vibrometer.API\Vibrometer.API.csproj", "{062CB78E-57FA-4DFF-8AC3-1A91B2FD4EED}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vibrometer.Infrastructure", "src\Vibrometer.Infrastructure\Vibrometer.Infrastructure.csproj", "{577A97C5-420D-4B62-BBC5-CD4926B54C70}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,14 +31,14 @@ Global
 		{FDA047F2-8820-4243-8823-3F42E7688C06}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDA047F2-8820-4243-8823-3F42E7688C06}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDA047F2-8820-4243-8823-3F42E7688C06}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E3B7C5E1-8224-4044-9D18-9D0F0E8F807A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E3B7C5E1-8224-4044-9D18-9D0F0E8F807A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E3B7C5E1-8224-4044-9D18-9D0F0E8F807A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E3B7C5E1-8224-4044-9D18-9D0F0E8F807A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{062CB78E-57FA-4DFF-8AC3-1A91B2FD4EED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{062CB78E-57FA-4DFF-8AC3-1A91B2FD4EED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{062CB78E-57FA-4DFF-8AC3-1A91B2FD4EED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{062CB78E-57FA-4DFF-8AC3-1A91B2FD4EED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{577A97C5-420D-4B62-BBC5-CD4926B54C70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{577A97C5-420D-4B62-BBC5-CD4926B54C70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{577A97C5-420D-4B62-BBC5-CD4926B54C70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{577A97C5-420D-4B62-BBC5-CD4926B54C70}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
