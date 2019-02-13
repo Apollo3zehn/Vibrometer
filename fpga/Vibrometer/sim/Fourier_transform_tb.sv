@@ -5,6 +5,10 @@ module Fourier_transform_tb #
     parameter integer                   AXIS_TDATA_WIDTH_IN        = 16,
     parameter integer                   AXIS_TDATA_WIDTH_OUT       = 32
 );
+
+    string                              file_path_in;
+    string                              file_path_out;
+
     integer                             file_handle_in;
     integer                             file_handle_out;
     
@@ -34,8 +38,11 @@ module Fourier_transform_tb #
      
     initial begin
 
-        file_handle_in  = $fopen("C:/Users/wilvin/Desktop/Git/Vibrometer/fpga/Vibrometer/sim/Fourier_Transform_in.dat", "r");
-        file_handle_out = $fopen("C:/Users/wilvin/Desktop/Git/Vibrometer/fpga/Vibrometer/sim/Fourier_Transform_out.dat", "w");
+        $sformat(file_path_in, "%s/../Fourier_Transform_in.dat", `__FILE__);
+        $sformat(file_path_out, "%s/../Fourier_Transform_out.dat", `__FILE__);
+
+        file_handle_in  = $fopen(file_path_in, "r");
+        file_handle_out = $fopen(file_path_out, "w");
 
         if (file_handle_in == `NULL) begin
             $display("file handle is NULL");

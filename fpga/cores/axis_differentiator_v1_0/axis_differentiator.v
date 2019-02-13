@@ -3,7 +3,7 @@
 
 module axis_differentiator #
 (
-    parameter integer                       AXIS_TDATA_WIDTH    = 16
+    parameter integer                       AXIS_TDATA_WIDTH    = 32
 )
 (
     // system signals

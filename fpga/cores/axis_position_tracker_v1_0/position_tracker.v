@@ -3,7 +3,7 @@
 module axis_position_tracker #
 (
     parameter integer                           S_AXIS_TDATA_WIDTH  = 32,
-    parameter integer                           M_AXIS_TDATA_WIDTH  = 16
+    parameter integer                           M_AXIS_TDATA_WIDTH  = 32
 )
 (
     // system signals

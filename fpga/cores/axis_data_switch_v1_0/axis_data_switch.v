@@ -25,6 +25,6 @@ module axis_data_switch #
     assign M_AXIS_tvalid                    = S_AXIS_tvalid;
     assign S_AXIS_tready                    = M_AXIS_tready;
 
-    assign M_AXIS_tdata                     = switch ? S_AXIS_tdata : {S_AXIS_tdata[(AXIS_TDATA_WIDTH/2)-1:0], S_AXIS_tdata[AXIS_TDATA_WIDTH-1:AXIS_TDATA_WIDTH/2]};
+    assign M_AXIS_tdata                     = switch ? {S_AXIS_tdata[(AXIS_TDATA_WIDTH/2)-1:0], S_AXIS_tdata[AXIS_TDATA_WIDTH-1:AXIS_TDATA_WIDTH/2]} : S_AXIS_tdata;
 
 endmodule

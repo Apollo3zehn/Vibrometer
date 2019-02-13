@@ -12,12 +12,12 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="148400001fs"></ZoomEndTime>
+      <ZoomEndTime time="117400001fs"></ZoomEndTime>
       <Cursor1Time time="140000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="218"></NameColumnWidth>
-      <ValueColumnWidth column_width="174"></ValueColumnWidth>
+      <ValueColumnWidth column_width="170"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="8" />
    <wvobject fp_name="/axis_differentiator_tb/DUT/aclk" type="logic">
@@ -28,17 +28,17 @@
       <obj_property name="ElementShortName">S_AXIS_tvalid</obj_property>
       <obj_property name="ObjectShortName">S_AXIS_tvalid</obj_property>
    </wvobject>
-   <wvobject fp_name="/axis_differentiator_tb/DUT/sum1" type="logic">
-      <obj_property name="ElementShortName">sum1</obj_property>
-      <obj_property name="ObjectShortName">sum1</obj_property>
+   <wvobject fp_name="/axis_differentiator_tb/DUT/sum1" type="array">
+      <obj_property name="ElementShortName">sum1[32:0]</obj_property>
+      <obj_property name="ObjectShortName">sum1[32:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/axis_differentiator_tb/DUT/sum2" type="logic">
-      <obj_property name="ElementShortName">sum2</obj_property>
-      <obj_property name="ObjectShortName">sum2</obj_property>
+   <wvobject fp_name="/axis_differentiator_tb/DUT/sum2" type="array">
+      <obj_property name="ElementShortName">sum2[32:0]</obj_property>
+      <obj_property name="ObjectShortName">sum2[32:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/axis_differentiator_tb/DUT/shift_register" type="array">
-      <obj_property name="ElementShortName">shift_register[4:0][15:0]</obj_property>
-      <obj_property name="ObjectShortName">shift_register[4:0][15:0]</obj_property>
+      <obj_property name="ElementShortName">shift_register[4:0][31:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_register[4:0][31:0]</obj_property>
       <obj_property name="isExpanded"></obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
@@ -48,8 +48,8 @@
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/axis_differentiator_tb/DUT/S_AXIS_tdata" type="array">
-      <obj_property name="ElementShortName">S_AXIS_tdata[15:0]</obj_property>
-      <obj_property name="ObjectShortName">S_AXIS_tdata[15:0]</obj_property>
+      <obj_property name="ElementShortName">S_AXIS_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">S_AXIS_tdata[31:0]</obj_property>
       <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
       <obj_property name="CellHeight">100</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
@@ -61,16 +61,7 @@
       <obj_property name="AnalogHorizLine">0.000000</obj_property>
    </wvobject>
    <wvobject fp_name="/axis_differentiator_tb/DUT/M_AXIS_tdata" type="array">
-      <obj_property name="ElementShortName">M_AXIS_tdata[15:0]</obj_property>
-      <obj_property name="ObjectShortName">M_AXIS_tdata[15:0]</obj_property>
-      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
-      <obj_property name="CellHeight">100</obj_property>
-      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-      <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
-      <obj_property name="AnalogYRangeMin">0.000000</obj_property>
-      <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
-      <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
-      <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
-      <obj_property name="AnalogHorizLine">0.000000</obj_property>
+      <obj_property name="ElementShortName">M_AXIS_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">M_AXIS_tdata[31:0]</obj_property>
    </wvobject>
 </wave_config>
