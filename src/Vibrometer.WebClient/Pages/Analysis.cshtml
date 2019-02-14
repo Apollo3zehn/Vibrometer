@@ -140,6 +140,9 @@
                         break;
 
                     case ApiSource.Position:
+                        data1 = state.FpgaData.Buffer.Select((value, i) => new ChartPoint(i * state.Summary.Step, value)).ToList();
+                        break;
+
                     case ApiSource.Filter:
                         data1 = state.FpgaData.Buffer.Select((value, i) => new ChartPoint(i * state.Summary.Step, unchecked((short)(value & 0x0000FFFF)))).ToList();
                         break;
