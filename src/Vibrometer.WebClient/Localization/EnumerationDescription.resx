@@ -132,4 +132,16 @@
   <data name="ApiSource_Raw" xml:space="preserve">
     <value>Raw</value>
   </data>
+  <data name="ChartLimitMode_Auto" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="ChartLimitMode_Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="ChartLimitMode_MinToZero" xml:space="preserve">
+    <value>Negative</value>
+  </data>
+  <data name="ChartLimitMode_ZeroToMax" xml:space="preserve">
+    <value>Positive</value>
+  </data>
 </root>

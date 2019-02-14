@@ -1,5 +1,5 @@
 ﻿@page "/analysis"
-@inject AppState state
+@inject AppStateViewModel state
 @inject SignalRService signalR
 @implements IDisposable
 
@@ -17,8 +17,8 @@
                             @foreach (ApiSource source in Enum.GetValues(typeof(ApiSource)).Cast<ApiSource>().Skip(1))
                             {
                                 <li class="nav-item" onclick="@(() => this.SelectSource(source))">
-                                    <a class="nav-link @((ApiSource)state.VibrometerState.AS_Source == source ? "active" : "")" style="cursor:pointer">
-                                        <i class="material-icons">show_chart</i> @this.GetTitle(source)
+                                    <a class="nav-link @((ApiSource)state.FpgaSettings.AS_Source == source ? "active" : "")" style="cursor:pointer">
+                                        <i class="material-icons">show_chart</i> @state.ChartSettingsMap[source].Title
                                     </a>
                                 </li>
                             }
@@ -34,7 +34,7 @@
             <div class="card-body">
                 <div class="tab-content">
                     <div class="tab-pane active">
-                        @if ((ApiSource)state.VibrometerState.AS_Source == ApiSource.NoSource)
+                        @if ((ApiSource)state.FpgaSettings.AS_Source == ApiSource.NoSource)
                         {
                             <div class="alert alert-info mx-auto" style="max-width:400px;margin-top:170px;margin-bottom:170px;">
                                 <span>
@@ -42,14 +42,55 @@
                                 </span>
                             </div>
                         }
-                        <canvas height="130" id="chart" style="@((ApiSource)state.VibrometerState.AS_Source == ApiSource.NoSource ? "display : none" : string.Empty)"></canvas>
+                        <canvas height="130" id="chart" style="@((ApiSource)state.FpgaSettings.AS_Source == ApiSource.NoSource ? "display : none" : string.Empty)"></canvas>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-lg-4">
-
+        @if ((ApiSource)state.FpgaSettings.AS_Source > ApiSource.NoSource)
+        {
+            @*<div class="row mb-2">
+                <div class="col-md-10">
+                    <div class="form-group bmd-form-group">
+                        <label class="bmd-label-floating">Lower / Upper Threshold</label>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group bmd-form-group">
+                        <label class="bmd-label-floating">@state.FpgaData.LowerThreshold / @state.FpgaData.UpperThreshold</label>
+                    </div>
+                </div>
+            </div>*@
+            <div class="row mt-2">
+                <div class="col">
+                    <h5 style="margin-bottom:0px">Y-Limit Mode</h5>
+                </div>
+            </div>
+            <div class="btn-group w-100" role="group">
+                @foreach (ChartLimitMode limitMode in Enum.GetValues(typeof(ChartLimitMode)))
+                {
+                    <button type="button" class="btn @(this.ChartSettings.LimitMode == limitMode ? "btn-info" : "btn-default") @(limitMode == ChartLimitMode.Custom ? "w-100" : "")"
+                            onclick="@(() => this.ChartSettings.LimitMode = limitMode)">
+                        @Utilities.GetEnumLocalization((ChartLimitMode)limitMode, typeof(EnumerationDescription))
+                    </button>
+                }
+            </div>
+            @if (this.ChartSettings.LimitMode == ChartLimitMode.Custom)
+            {
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="">Min:</span>
+                    </div>
+                    <input type="text" class="form-control mr-2" placeholder="Lower limit ..." bind="@this.ChartSettings.YMin" />
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="">Max:</span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Upper limit ..." bind="@this.ChartSettings.YMax" />
+                </div>
+            }
+        }
     </div>
 </div>
 
@@ -58,18 +99,26 @@
     private bool _initialized;
 
     private bool Run { get; set; }
-    private PropertyChangedEventHandler Handler { get; set; }
+    private PropertyChangedEventHandler StateChangedHandler { get; set; }
+
+    private ChartSettingsViewModel ChartSettings
+    {
+        get
+        {
+            return state.ChartSettingsMap[(ApiSource)state.FpgaSettings.AS_Source];
+        }
+    }
 
     protected override void OnInit()
     {
         _initialized = false;
 
-        this.Handler = async (sender, e) =>
+        this.StateChangedHandler = async (sender, e) =>
         {
             List<ChartPoint> data1;
             List<ChartPoint> data2;
 
-            if (e.PropertyName == nameof(state.BufferContent))
+            if (e.PropertyName == nameof(state.FpgaData))
             {
                 if (!this.Run)
                 {
@@ -79,26 +128,26 @@
                 data1 = null;
                 data2 = null;
 
-                switch ((ApiSource)state.VibrometerState.AS_Source)
+                switch ((ApiSource)state.FpgaSettings.AS_Source)
                 {
                     case ApiSource.NoSource:
                         data1 = new List<ChartPoint>();
                         break;
 
                     case ApiSource.Raw:
-                        data1 = state.BufferContent.Select((value, i) => new ChartPoint(i * state.Summary.Step, unchecked((short)(value & 0x0000FFFF)))).ToList();
-                        data2 = state.BufferContent.Select((value, i) => new ChartPoint(i * state.Summary.Step, unchecked((short)(value >> 16)))).ToList();
+                        data1 = state.FpgaData.Buffer.Select((value, i) => new ChartPoint(i * state.Summary.Step, unchecked((short)(value & 0x0000FFFF)))).ToList();
+                        data2 = state.FpgaData.Buffer.Select((value, i) => new ChartPoint(i * state.Summary.Step, unchecked((short)(value >> 16)))).ToList();
                         break;
 
                     case ApiSource.Position:
                     case ApiSource.Filter:
-                        data1 = state.BufferContent.Select((value, i) => new ChartPoint(i * state.Summary.Step, unchecked((short)(value & 0x0000FFFF)))).ToList();
+                        data1 = state.FpgaData.Buffer.Select((value, i) => new ChartPoint(i * state.Summary.Step, unchecked((short)(value & 0x0000FFFF)))).ToList();
                         break;
 
                     case ApiSource.FourierTransform:
 
-                        var real = state.BufferContent.Select(value => unchecked((short)(value & 0x0000FFFF))).ToArray();
-                        var imag = state.BufferContent.Select(value => unchecked((short)(value >> 16))).ToArray();
+                        var real = state.FpgaData.Buffer.Select(value => unchecked((short)(value & 0x0000FFFF))).ToArray();
+                        var imag = state.FpgaData.Buffer.Select(value => unchecked((short)(value >> 16))).ToArray();
                         var ampl = real.Zip(imag, (x, y) => Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2))).ToArray();
                         var count = ampl.Count();
 
@@ -114,16 +163,20 @@
                     data2 = new List<ChartPoint>();
                 }
 
-                await JSRuntime.Current.InvokeAsync<object>("Vibrometer.UpdateChart", "chart", data1, data2);
+                await JSRuntime.Current.InvokeAsync<object>("Vibrometer.UpdateChartData", "chart", data1, data2);
             }
-            else if (e.PropertyName == nameof(state.VibrometerState))
+            else if (e.PropertyName == nameof(state.FpgaSettings))
             {
                 await this.InitializeChart();
                 base.StateHasChanged();
             }
+            else if (e.PropertyName == nameof(state.ChartSettingsMap))
+            {
+                await this.UpdateChartLimits();
+            }
         };
 
-        state.PropertyChanged += this.Handler;
+        state.PropertyChanged += this.StateChangedHandler;
 
         this.Run = true;
     }
@@ -139,54 +192,40 @@
 
     private async Task InitializeChart()
     {
-        switch ((ApiSource)state.VibrometerState.AS_Source)
+        string xLabel;
+
+        switch ((ApiSource)state.FpgaSettings.AS_Source)
         {
             case ApiSource.NoSource:
+                xLabel = string.Empty;
                 break;
             case ApiSource.Raw:
-                await JSRuntime.Current.InvokeAsync<object>("Vibrometer.InitializeChart", "chart", state.Summary.XMin, state.Summary.XMax, $"time in {state.Summary.Unit}", -Math.Pow(2, 14 - 1), Math.Pow(2, 14 - 1) - 1, "raw");
+                xLabel = $"time in {state.Summary.Unit}";
                 break;
             case ApiSource.Position:
-                await JSRuntime.Current.InvokeAsync<object>("Vibrometer.InitializeChart", "chart", state.Summary.XMin, state.Summary.XMax, $"time in {state.Summary.Unit}", -Math.Pow(2, 16 - 1), Math.Pow(2, 16 - 1) - 1, "position");
+                xLabel = $"time in {state.Summary.Unit}";
                 break;
             case ApiSource.Filter:
-                await JSRuntime.Current.InvokeAsync<object>("Vibrometer.InitializeChart", "chart", state.Summary.XMin, state.Summary.XMax, $"time in {state.Summary.Unit}", -Math.Pow(2, 16 - 1), Math.Pow(2, 16 - 1) - 1, "filtered position");
+                xLabel = $"time in {state.Summary.Unit}";
                 break;
             case ApiSource.FourierTransform:
-                await JSRuntime.Current.InvokeAsync<object>("Vibrometer.InitializeChart", "chart", state.Summary.XMin, state.Summary.XMax, $"frequency in {state.Summary.Unit}", 0, Math.Pow(2, 16) - 1, "amplitude");
+                xLabel = $"frequency in {state.Summary.Unit}";
                 break;
             default:
                 throw new ArgumentException();
         }
+
+        await JSRuntime.Current.InvokeAsync<object>("Vibrometer.InitializeChart", "chart", state.Summary.XMin, state.Summary.XMax, xLabel, this.ChartSettings);
+    }
+
+    private async Task UpdateChartLimits()
+    {
+        await JSRuntime.Current.InvokeAsync<object>("Vibrometer.UpdateChartLimits", "chart", this.ChartSettings);
     }
 
     private async void SelectSource(ApiSource source)
     {
         await signalR.Connection.InvokeAsync("UpdateSetting", ApiParameter.AS_Source.ToString(), (int)source);
-    }
-
-    private string GetTitle()
-    {
-        return this.GetTitle((ApiSource)state.VibrometerState.AS_Source);
-    }
-
-    private string GetTitle(ApiSource source)
-    {
-        switch (source)
-        {
-            case ApiSource.NoSource:
-                return "no data source selected";
-            case ApiSource.Raw:
-                return "Raw";
-            case ApiSource.Position:
-                return "Position";
-            case ApiSource.Filter:
-                return "Filter";
-            case ApiSource.FourierTransform:
-                return "Spectrum";
-            default:
-                throw new ArgumentException();
-        }
     }
 
     private void ToggleRun()
@@ -196,6 +235,6 @@
 
     public void Dispose()
     {
-        state.PropertyChanged -= this.Handler;
+        state.PropertyChanged -= this.StateChangedHandler;
     }
 }

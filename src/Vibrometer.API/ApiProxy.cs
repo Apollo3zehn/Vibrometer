@@ -11,7 +11,8 @@ namespace Vibrometer.API
 
         private static IntPtr fakeArray;
         private const int FAKE_BUFFER_SIZE = 100;
-        private const int SWITCH_OFFSET = 80; // width = 64 byte => 64 / 4 => width = 12
+        private const int SWITCH_OFFSET = 80; // width = 64 bytes => 64 / 4 => width = 12 * uint32
+        private const int GPIO_OFFSET = 8;
 
         #endregion
 
@@ -126,7 +127,12 @@ namespace Vibrometer.API
                 }
                 else
                 {
-                    realAddress = IntPtr.Add(fakeArray, (int)(group - 1) * SystemParameters.BYTE_COUNT * 2);
+                    // - # of ports     = 2
+                    // - AXI GPIO width = 4 bytes       (SystemParameters.BYTE_COUNT)
+                    // - GPIO offset    = 8 bytes       (ApiProxy.GPIO_OFFSET)
+                    // ==============================================================
+                    // total size per dual port GPIO = 4 * 2 + (8 - 4) = 8 + 4 = 12 bytes
+                    realAddress = IntPtr.Add(fakeArray, (int)(group - 1) * (ApiProxy.GPIO_OFFSET + SystemParameters.BYTE_COUNT));
                 }
             }
 

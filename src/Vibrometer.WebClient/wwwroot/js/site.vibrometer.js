@@ -1,5 +1,5 @@
 window.Vibrometer = {
-    InitializeChart: function (id, xmin, xmax, xlabel, ymin, ymax, ylabel)
+    InitializeChart: function (id, xMin, xMax, xLabel, settings)
     {
         let context = document.getElementById(id);
 
@@ -50,12 +50,12 @@ window.Vibrometer = {
                         display: true,
                         scaleLabel: {
                             display: true,
-                            labelString: xlabel
+                            labelString: xLabel
                         },
                         ticks: {
                             autoSkip: true,
-                            min: xmin,
-                            max: xmax,
+                            min: xMin,
+                            max: xMax,
                             callback: function (value, index, values)
                             {
                                 return value.toFixed(2);
@@ -67,20 +67,26 @@ window.Vibrometer = {
                         position: "left",
                         scaleLabel: {
                             display: true,
-                            labelString: ylabel
-                        },
-                        ticks: {
-                            min: ymin,
-                            max: ymax
+                            labelString: settings.yLabel
                         },
                         type: "linear"
                     }]
                 },
                 title: {
                     display: false
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function (tooltipItem, data)
+                        {
+                            return tooltipItem.xLabel.toFixed(2) + ", " + tooltipItem.yLabel.toFixed(2);
+                        }
+                    }
                 }
             }
         };
+
+        window.Vibrometer.UpdateChartLimits(id, settings, config.options);
 
         if (window.Vibrometer.Chart && window.Vibrometer.Chart.canvas === context)
         {
@@ -95,7 +101,51 @@ window.Vibrometer = {
             window.Vibrometer.Chart = new Chart(context, config);
         }
     },
-    UpdateChart: function (id, data1, data2)
+    UpdateChartLimits: function (id, settings, chartOptions)
+    {
+        let update = true;
+
+        if (chartOptions === undefined)
+        {
+            chartOptions = window.Vibrometer.Chart.options;
+            update = false;
+        }
+
+        switch (settings.limitMode)
+        {
+            case 1:
+                chartOptions.scales.yAxes[0].ticks = { };
+                break;
+            case 2:
+                chartOptions.scales.yAxes[0].ticks = {
+                    beginAtZero: true,
+                    min: settings.yMin
+                };
+                break;
+            case 3:
+                chartOptions.scales.yAxes[0].ticks = {
+                    beginAtZero: true,
+                    max: settings.yMax
+                };
+                break;
+            case 4:
+                chartOptions.scales.yAxes[0].ticks = {
+                    min: settings.yMin,
+                    max: settings.yMax
+                };
+                break;
+            default:
+                throw new Error();
+        }
+
+        if (update && window.Vibrometer.Chart)
+        {
+            window.Vibrometer.Chart.update({
+                duration: 0
+            });
+        }
+    },
+    UpdateChartData: function (id, data1, data2)
     {
         window.Vibrometer.Chart.config.data.datasets[0].data = data1;
         window.Vibrometer.Chart.config.data.datasets[1].data = data2;
@@ -145,9 +195,9 @@ window.Vibrometer = {
             }
         });
     },
-    WriteVibFile: function (vibrometerState)
+    WriteVibFile: function (fpgaSettings)
     {
-        var json = JSON.stringify(vibrometerState, null, 2);
+        var json = JSON.stringify(fpgaSettings, null, 2);
 
         var blob = new Blob([json], {
             type: "text/plain;charset=utf-8"

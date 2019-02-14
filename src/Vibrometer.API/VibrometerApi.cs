@@ -210,9 +210,9 @@ namespace Vibrometer.API
             ApiProxy.IsEnabled = true;
         }
 
-        public VibrometerState GetState()
+        public FpgaSettings GetState()
         {
-            return new VibrometerState()
+            return new FpgaSettings()
             {
                 AS_Source = unchecked((int)this.AxisSwitch.Source),
                 SG_FmEnabled = this.SignalGenerator.FmEnabled,
@@ -233,24 +233,24 @@ namespace Vibrometer.API
             };
         }
 
-        public void SetState(VibrometerState vibrometerState)
+        public void SetState(FpgaSettings fpgaSettings)
         {
-            this.InternalSetStateSafe(vibrometerState.RW_Enabled, vibrometerState.FT_Enabled, () =>
+            this.InternalSetStateSafe(fpgaSettings.RW_Enabled, fpgaSettings.FT_Enabled, () =>
             {
-                this.AxisSwitch.Source = (ApiSource)vibrometerState.AS_Source;
-                this.SignalGenerator.FmEnabled = vibrometerState.SG_FmEnabled;
-                this.SignalGenerator.PhaseSignal = unchecked((uint)vibrometerState.SG_PhaseSignal);
-                this.SignalGenerator.PhaseCarrier = unchecked((uint)vibrometerState.SG_PhaseCarrier);
-                this.DataAcquisition.SwitchEnabled = vibrometerState.DA_SwitchEnabled;
-                this.PositionTracker.LogScale = unchecked((uint)vibrometerState.PT_LogScale);
-                this.PositionTracker.LogCountExtremum = unchecked((uint)vibrometerState.PT_LogCountExtremum);
-                this.PositionTracker.ShiftExtremum = unchecked((uint)vibrometerState.PT_ShiftExtremum);
-                this.Filter.Enabled = vibrometerState.FI_Enabled;
-                this.Filter.LogThrottle = unchecked((uint)vibrometerState.FI_LogThrottle);
-                this.FourierTransform.LogCountAverages = unchecked((uint)vibrometerState.FT_LogCountAverages);
-                this.FourierTransform.LogThrottle = unchecked((uint)vibrometerState.FT_LogThrottle);
-                this.RamWriter.LogLength = unchecked((uint)vibrometerState.RW_LogLength);
-                this.RamWriter.LogThrottle = unchecked((uint)vibrometerState.RW_LogThrottle);
+                this.AxisSwitch.Source = (ApiSource)fpgaSettings.AS_Source;
+                this.SignalGenerator.FmEnabled = fpgaSettings.SG_FmEnabled;
+                this.SignalGenerator.PhaseSignal = unchecked((uint)fpgaSettings.SG_PhaseSignal);
+                this.SignalGenerator.PhaseCarrier = unchecked((uint)fpgaSettings.SG_PhaseCarrier);
+                this.DataAcquisition.SwitchEnabled = fpgaSettings.DA_SwitchEnabled;
+                this.PositionTracker.LogScale = unchecked((uint)fpgaSettings.PT_LogScale);
+                this.PositionTracker.LogCountExtremum = unchecked((uint)fpgaSettings.PT_LogCountExtremum);
+                this.PositionTracker.ShiftExtremum = unchecked((uint)fpgaSettings.PT_ShiftExtremum);
+                this.Filter.Enabled = fpgaSettings.FI_Enabled;
+                this.Filter.LogThrottle = unchecked((uint)fpgaSettings.FI_LogThrottle);
+                this.FourierTransform.LogCountAverages = unchecked((uint)fpgaSettings.FT_LogCountAverages);
+                this.FourierTransform.LogThrottle = unchecked((uint)fpgaSettings.FT_LogThrottle);
+                this.RamWriter.LogLength = unchecked((uint)fpgaSettings.RW_LogLength);
+                this.RamWriter.LogThrottle = unchecked((uint)fpgaSettings.RW_LogThrottle);
             });
         }
 

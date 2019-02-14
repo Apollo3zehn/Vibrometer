@@ -2,6 +2,7 @@
 using System;
 using System.Timers;
 using Vibrometer.API;
+using Vibrometer.Infrastructure;
 
 namespace Vibrometer.WebServer
 {
@@ -9,8 +10,8 @@ namespace Vibrometer.WebServer
     {
         #region "Fields"
 
-        private Timer _updateBufferContentTimer;
         private VibrometerApi _api;
+        private Timer _updateBufferContentTimer;
         private IHubContext<VibrometerHub> _hubContext;
 
         #endregion
@@ -32,9 +33,14 @@ namespace Vibrometer.WebServer
 
         private void OnUpdateBufferContent(object sender, ElapsedEventArgs e)
         {
+            int lowerTreshold;
+            int upperThreshold;
+
+            (lowerTreshold, upperThreshold) = _api.PositionTracker.Threshold;
+
             if (_api.RamWriter.Enabled)
             {
-                _hubContext.Clients.All.SendAsync("SendBufferContent", _api.GetBuffer());
+                _hubContext.Clients.All.SendAsync("SendFpgaData", new FpgaData(lowerTreshold, upperThreshold, _api.GetBuffer()));
             }
         }
 

@@ -1,4 +1,4 @@
-﻿@inject AppState state
+﻿@inject AppStateViewModel state
 @inject SignalRService signalR
 
 @using Vibrometer.WebClient.Model
@@ -44,12 +44,10 @@
 {
     private async void UploadVibFile(UIChangeEventArgs e)
     {
-        VibrometerState vibrometerState;
-
         try
         {
-            vibrometerState = await JSRuntime.Current.InvokeAsync<VibrometerState>("Vibrometer.ReadFile", "vibFileUpload", false);
-            await signalR.Connection.InvokeAsync("ApplyConfiguration", vibrometerState);
+            state.Model = await JSRuntime.Current.InvokeAsync<AppState>("Vibrometer.ReadFile", "vibFileUpload", false);
+            await signalR.Connection.InvokeAsync("ApplyConfiguration", state.FpgaSettings);
         }
         catch (Exception ex)
         {
@@ -59,6 +57,6 @@
 
     private void DownloadVibFile()
     {
-        JSRuntime.Current.InvokeAsync<VibrometerState>("Vibrometer.WriteVibFile", state.VibrometerState);
+        JSRuntime.Current.InvokeAsync<AppState>("Vibrometer.WriteVibFile", state.Model);
     }
 }

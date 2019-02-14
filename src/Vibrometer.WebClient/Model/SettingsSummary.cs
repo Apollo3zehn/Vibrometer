@@ -8,19 +8,19 @@ namespace Vibrometer.WebClient.Model
     {
         #region Constructors
 
-        public SettingsSummary(VibrometerState vibrometerState)
+        public SettingsSummary(FpgaSettings fpgaSettings)
         {
             double referenceFrequency;
 
             this.BaseSamplingFrequency = 125000000;
-            this.SG_CarrierFrequency = vibrometerState.SG_PhaseCarrier / Math.Pow(2, 27) * SystemParameters.CLOCK_RATE;
-            this.SG_SignalFrequency = vibrometerState.SG_PhaseSignal / Math.Pow(2, 27) * SystemParameters.CLOCK_RATE;
-            this.PT_ExtremumFrequency = this.BaseSamplingFrequency / Math.Pow(2, vibrometerState.PT_LogCountExtremum);
-            this.FI_SamplingFrequency = this.BaseSamplingFrequency / Math.Pow(2, vibrometerState.FI_LogThrottle);
-            this.FT_SamplingFrequency = this.FI_SamplingFrequency / Math.Pow(2, vibrometerState.FT_LogThrottle);
+            this.SG_CarrierFrequency = fpgaSettings.SG_PhaseCarrier / Math.Pow(2, 27) * SystemParameters.CLOCK_RATE;
+            this.SG_SignalFrequency = fpgaSettings.SG_PhaseSignal / Math.Pow(2, 27) * SystemParameters.CLOCK_RATE;
+            this.PT_ExtremumFrequency = this.BaseSamplingFrequency / Math.Pow(2, fpgaSettings.PT_LogCountExtremum);
+            this.FI_SamplingFrequency = this.BaseSamplingFrequency / Math.Pow(2, fpgaSettings.FI_LogThrottle);
+            this.FT_SamplingFrequency = this.FI_SamplingFrequency / Math.Pow(2, fpgaSettings.FT_LogThrottle);
             this.FT_FrequencyResolution = this.FT_SamplingFrequency / SystemParameters.FFT_LENGTH;
 
-            switch ((ApiSource)vibrometerState.AS_Source)
+            switch ((ApiSource)fpgaSettings.AS_Source)
             {
                 case ApiSource.NoSource:
                     referenceFrequency = 0;
@@ -42,33 +42,33 @@ namespace Vibrometer.WebClient.Model
                     throw new ArgumentException();
             }
 
-            this.RW_SamplingFrequency = referenceFrequency / Math.Pow(2, vibrometerState.RW_LogThrottle);
-            this.RW_BufferFrequency = this.RW_SamplingFrequency / (SystemParameters.FFT_LENGTH * Math.Pow(2, vibrometerState.FT_LogCountAverages));
+            this.RW_SamplingFrequency = referenceFrequency / Math.Pow(2, fpgaSettings.RW_LogThrottle);
+            this.RW_BufferFrequency = this.RW_SamplingFrequency / (SystemParameters.FFT_LENGTH * Math.Pow(2, fpgaSettings.FT_LogCountAverages));
 
             //
             this.XMin = 0;
             this.XMax = 0;
             this.Unit = string.Empty;
 
-            switch ((ApiSource)vibrometerState.AS_Source)
+            switch ((ApiSource)fpgaSettings.AS_Source)
             {
                 case ApiSource.NoSource:
                     break;
                 case ApiSource.Raw:
                 case ApiSource.Position:
                 case ApiSource.Filter:
-                    this.XMax = (Math.Pow(2, vibrometerState.RW_LogLength) - 1) / this.RW_SamplingFrequency;
-                    (this.XMax, this.Unit) = this.ConvertUnit(this.XMax, (ApiSource)vibrometerState.AS_Source);
+                    this.XMax = (Math.Pow(2, fpgaSettings.RW_LogLength) - 1) / this.RW_SamplingFrequency;
+                    (this.XMax, this.Unit) = this.ConvertUnit(this.XMax, (ApiSource)fpgaSettings.AS_Source);
                     break;
                 case ApiSource.FourierTransform:
                     this.XMax = this.RW_SamplingFrequency;
-                    (this.XMax, this.Unit) = this.ConvertUnit(this.XMax, (ApiSource)vibrometerState.AS_Source);
+                    (this.XMax, this.Unit) = this.ConvertUnit(this.XMax, (ApiSource)fpgaSettings.AS_Source);
                     break;
                 default:
                     throw new ArgumentException();
             }
 
-            this.Step = this.XMax / (Math.Pow(2, vibrometerState.RW_LogLength) - 1);
+            this.Step = this.XMax / (Math.Pow(2, fpgaSettings.RW_LogLength) - 1);
         }
 
         private (double, string) ConvertUnit(double value, ApiSource source)

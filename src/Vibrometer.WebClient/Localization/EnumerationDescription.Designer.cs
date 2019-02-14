@@ -104,5 +104,41 @@ namespace Vibrometer.WebClient.Localization {
                 return ResourceManager.GetString("ApiSource_Raw", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Auto ähnelt.
+        /// </summary>
+        public static string ChartLimitMode_Auto {
+            get {
+                return ResourceManager.GetString("ChartLimitMode_Auto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Custom ähnelt.
+        /// </summary>
+        public static string ChartLimitMode_Custom {
+            get {
+                return ResourceManager.GetString("ChartLimitMode_Custom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Negative ähnelt.
+        /// </summary>
+        public static string ChartLimitMode_MinToZero {
+            get {
+                return ResourceManager.GetString("ChartLimitMode_MinToZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Positive ähnelt.
+        /// </summary>
+        public static string ChartLimitMode_ZeroToMax {
+            get {
+                return ResourceManager.GetString("ChartLimitMode_ZeroToMax", resourceCulture);
+            }
+        }
     }
 }

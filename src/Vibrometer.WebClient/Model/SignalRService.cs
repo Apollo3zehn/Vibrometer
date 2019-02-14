@@ -9,7 +9,7 @@ namespace Vibrometer.WebClient.Model
     {
         #region Constructors
 
-        public SignalRService(AppState state)
+        public SignalRService(AppStateViewModel state)
         {
             this.Connection = this.BuildHubConnection();
 
@@ -36,23 +36,23 @@ namespace Vibrometer.WebClient.Model
                 });
             });
 
-            this.Connection.On<int[]>("SendBufferContent", bufferContent =>
+            this.Connection.On<FpgaData>("SendFpgaData", fpgaData =>
             {
-                state.BufferContent = bufferContent;
+                state.FpgaData = fpgaData;
 
                 return Task.CompletedTask;
             });
 
-            this.Connection.On<VibrometerState>("SendVibrometerState", vibrometerState =>
+            this.Connection.On<FpgaSettings>("SendFpgaSettings", fpgaSettings =>
             {
-                state.VibrometerState = vibrometerState;
+                state.FpgaSettings = fpgaSettings;
 
                 return Task.CompletedTask;
             });
 
             Task.Run(async () =>
             {
-                state.VibrometerState = await this.Connection.InvokeAsync<VibrometerState>("GetVibrometerState");
+                state.FpgaSettings = await this.Connection.InvokeAsync<FpgaSettings>("GetFpgaSettings");
             });
 
             this.Connection.StartAsync();

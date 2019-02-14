@@ -8,7 +8,7 @@ namespace Vibrometer.WebClient
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<AppState>();
+            services.AddSingleton<AppStateViewModel>();
             services.AddSingleton<SignalRService>();
         }
 

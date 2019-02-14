@@ -19,7 +19,7 @@ namespace Vibrometer.WebServer
 
         public override Task OnConnectedAsync()
         {
-            this.Clients.Client(this.Context.ConnectionId).SendAsync("SendVibrometerState", _api.GetState());
+            this.Clients.Client(this.Context.ConnectionId).SendAsync("SendFpgaSettings", _api.GetState());
 
             return base.OnConnectedAsync();
         }
@@ -29,7 +29,7 @@ namespace Vibrometer.WebServer
             return base.OnDisconnectedAsync(exception);
         }
 
-        public Task<VibrometerState> GetVibrometerState()
+        public Task<FpgaSettings> GetFpgaSettings()
         {
             return Task.Run(() =>
             {
@@ -46,7 +46,7 @@ namespace Vibrometer.WebServer
                 bitstream = Convert.FromBase64String(bitstreamBase64);
 
                 _api.LoadBitstream(bitstream);
-                this.OnVibrometerStateChanged();
+                this.OnFpgaSettingsChanged();
             });
         }
 
@@ -93,7 +93,7 @@ namespace Vibrometer.WebServer
                         throw new ArgumentException();
                 }
 
-                this.OnVibrometerStateChanged();
+                this.OnFpgaSettingsChanged();
             });
         }
 
@@ -125,22 +125,22 @@ namespace Vibrometer.WebServer
                         throw new ArgumentException();
                 }
 
-                this.OnVibrometerStateChanged();
+                this.OnFpgaSettingsChanged();
             });
         }
 
-        public Task ApplyConfiguration(VibrometerState vibrometerState)
+        public Task ApplyConfiguration(FpgaSettings fpgaSettings)
         {
             return Task.Run(() =>
             {
-                _api.SetState(vibrometerState);
-                this.OnVibrometerStateChanged();
+                _api.SetState(fpgaSettings);
+                this.OnFpgaSettingsChanged();
             });
         }
 
-        private void OnVibrometerStateChanged()
+        private void OnFpgaSettingsChanged()
         {
-            this.Clients.All.SendAsync("SendVibrometerState", _api.GetState());
+            this.Clients.All.SendAsync("SendFpgaSettings", _api.GetState());
         }
     }
 }
