@@ -473,7 +473,7 @@ namespace Vibrometer.Testing
 
             for (int i = 0; i < Math.Min(buffer.Length, 256); i++)
             {
-                a = unchecked((short)(buffer[i] & ~0xFFFF0000));
+                a = unchecked((short)(buffer[i] & 0x0000FFFF));
                 b = unchecked((short)(buffer[i] >> 16));
 
                 switch (source)
@@ -482,7 +482,7 @@ namespace Vibrometer.Testing
                         Console.WriteLine($"Buffer: {bufferAddress,8:X} | Raw data: {b,10} (b), {a,10} (a)");
                         break;
                     case ApiSource.Position:
-                        Console.WriteLine($"Buffer: {bufferAddress,8:X} | Position: {a,10}");
+                        Console.WriteLine($"Buffer: {bufferAddress,8:X} | Position: {buffer[i],10}");
                         break;
                     case ApiSource.Filter:
                         Console.WriteLine($"Buffer: {bufferAddress,8:X} | Filter: {a,10}");
@@ -520,7 +520,7 @@ namespace Vibrometer.Testing
                     buffer = _api.GetBuffer();
                     _api.RamWriter.RequestEnabled = false;
 
-                    a = unchecked((short)(buffer[0] & ~0xFFFF0000));
+                    a = unchecked((short)(buffer[0] & 0x0000FFFF));
                     b = unchecked((short)(buffer[0] >> 16));
 
                     switch (_api.AxisSwitch.Source)
@@ -529,7 +529,7 @@ namespace Vibrometer.Testing
                             Console.WriteLine($"Buffer: {_api.RamWriter.ReadBuffer,8:X} | Raw data: {b,10} (b), {a,10} (a)");
                             break;
                         case ApiSource.Position:
-                            Console.WriteLine($"Buffer: {_api.RamWriter.ReadBuffer,8:X} | Position: {a,10}");
+                            Console.WriteLine($"Buffer: {_api.RamWriter.ReadBuffer,8:X} | Position: {buffer[0],10}");
                             break;
                         case ApiSource.Filter:
                             Console.WriteLine($"Buffer: {_api.RamWriter.ReadBuffer,8:X} | Filter: {a,10}");

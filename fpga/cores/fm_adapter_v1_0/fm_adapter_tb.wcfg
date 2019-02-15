@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="fm_adapter_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="fm_adapter_tb" />
+            <top_module name="glbl" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="61700001fs"></ZoomEndTime>
+      <Cursor1Time time="108000000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="208"></NameColumnWidth>
+      <ValueColumnWidth column_width="150"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="19" />
+   <wvobject fp_name="/fm_adapter_tb/DUT/aclk" type="logic">
+      <obj_property name="ElementShortName">aclk</obj_property>
+      <obj_property name="ObjectShortName">aclk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fm_adapter_tb/DUT/aresetn" type="logic">
+      <obj_property name="ElementShortName">aresetn</obj_property>
+      <obj_property name="ObjectShortName">aresetn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fm_adapter_tb/DUT/fm_enable" type="logic">
+      <obj_property name="ElementShortName">fm_enable</obj_property>
+      <obj_property name="ObjectShortName">fm_enable</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fm_adapter_tb/DUT/shift_carrier" type="array">
+      <obj_property name="ElementShortName">shift_carrier[4:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_carrier[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fm_adapter_tb/DUT/phase_carrier" type="array">
+      <obj_property name="ElementShortName">phase_carrier[31:0]</obj_property>
+      <obj_property name="ObjectShortName">phase_carrier[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fm_adapter_tb/DUT/switch_enable" type="logic">
+      <obj_property name="ElementShortName">switch_enable</obj_property>
+      <obj_property name="ObjectShortName">switch_enable</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fm_adapter_tb/DUT/S_AXIS_tvalid" type="logic">
+      <obj_property name="ElementShortName">S_AXIS_tvalid</obj_property>
+      <obj_property name="ObjectShortName">S_AXIS_tvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fm_adapter_tb/DUT/S_AXIS_tdata" type="array">
+      <obj_property name="ElementShortName">S_AXIS_tdata[15:0]</obj_property>
+      <obj_property name="ObjectShortName">S_AXIS_tdata[15:0]</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fm_adapter_tb/DUT/S_AXIS_tready" type="logic">
+      <obj_property name="ElementShortName">S_AXIS_tready</obj_property>
+      <obj_property name="ObjectShortName">S_AXIS_tready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fm_adapter_tb/DUT/M_AXIS_tready" type="logic">
+      <obj_property name="ElementShortName">M_AXIS_tready</obj_property>
+      <obj_property name="ObjectShortName">M_AXIS_tready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fm_adapter_tb/DUT/M_AXIS_tvalid" type="logic">
+      <obj_property name="ElementShortName">M_AXIS_tvalid</obj_property>
+      <obj_property name="ObjectShortName">M_AXIS_tvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fm_adapter_tb/DUT/M_AXIS_tdata" type="array">
+      <obj_property name="ElementShortName">M_AXIS_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">M_AXIS_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fm_adapter_tb/DUT/tdata_unsigned" type="array">
+      <obj_property name="ElementShortName">tdata_unsigned[15:0]</obj_property>
+      <obj_property name="ObjectShortName">tdata_unsigned[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fm_adapter_tb/DUT/switch" type="logic">
+      <obj_property name="ElementShortName">switch</obj_property>
+      <obj_property name="ObjectShortName">switch</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fm_adapter_tb/DUT/switch_next" type="logic">
+      <obj_property name="ElementShortName">switch_next</obj_property>
+      <obj_property name="ObjectShortName">switch_next</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fm_adapter_tb/DUT/phase" type="array">
+      <obj_property name="ElementShortName">phase[15:0]</obj_property>
+      <obj_property name="ObjectShortName">phase[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fm_adapter_tb/DUT/phase_next" type="array">
+      <obj_property name="ElementShortName">phase_next[15:0]</obj_property>
+      <obj_property name="ObjectShortName">phase_next[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fm_adapter_tb/DUT/slope" type="logic">
+      <obj_property name="ElementShortName">slope</obj_property>
+      <obj_property name="ObjectShortName">slope</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fm_adapter_tb/DUT/slope_next" type="logic">
+      <obj_property name="ElementShortName">slope_next</obj_property>
+      <obj_property name="ObjectShortName">slope_next</obj_property>
+   </wvobject>
+</wave_config>
