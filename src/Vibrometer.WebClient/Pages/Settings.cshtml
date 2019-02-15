@@ -51,14 +51,19 @@
                                     <ApiRecordComponentBool Record="ApiInfo.Instance[ApiParameter.SG_FmEnabled]"
                                                             Value="@state.FpgaSettings.SG_FmEnabled"
                                                             OnValueChanged="@OnValueChangedBool" />
-                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.SG_PhaseCarrier]"
-                                                        Value="@state.FpgaSettings.SG_PhaseCarrier"
-                                                        OnValueChanged="@OnValueChanged" />
-
                                     @if (state.FpgaSettings.SG_FmEnabled)
                                     {
+                                        <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.SG_ShiftCarrier]"
+                                                            Value="@state.FpgaSettings.SG_ShiftCarrier"
+                                                            OnValueChanged="@OnValueChanged" />
                                         <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.SG_PhaseSignal]"
                                                             Value="@state.FpgaSettings.SG_PhaseSignal"
+                                                            OnValueChanged="@OnValueChanged" />
+                                    }
+                                    else
+                                    {
+                                        <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.SG_PhaseCarrier]"
+                                                            Value="@state.FpgaSettings.SG_PhaseCarrier"
                                                             OnValueChanged="@OnValueChanged" />
                                     }
 

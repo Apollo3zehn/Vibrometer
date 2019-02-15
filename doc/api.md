@@ -2,7 +2,8 @@
 
 Signal_Generator    0x4120_0000
     [0:0]           fm_enable               RW
-    [27:1]          phase_signal            RW
+    [5:1]           shift_carrier           RW
+    [31:6]          phase_signal            RW
     + 0x0008
     [26:0]          phase_carrier           RW
 

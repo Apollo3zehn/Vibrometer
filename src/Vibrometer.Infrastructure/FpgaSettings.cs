@@ -9,6 +9,8 @@ namespace Vibrometer.Infrastructure
         public int AS_Source { get; set; }
         [DataMember(Name = "sG_FmEnabled")]
         public bool SG_FmEnabled { get; set; }
+        [DataMember(Name = "sG_ShiftCarrier")]
+        public int SG_ShiftCarrier { get; set; }
         [DataMember(Name = "sG_PhaseSignal")]
         public int SG_PhaseSignal { get; set; }
         [DataMember(Name = "sG_PhaseCarrier")]

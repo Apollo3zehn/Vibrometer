@@ -43,14 +43,19 @@ namespace Vibrometer.Infrastructure.API
                         offset: 0x00, shift: 0, size: 1
                     ),
                 new ApiRecord(
+                        ApiParameter.SG_ShiftCarrier, ApiGroup.SignalGenerator,
+                        "Shift Carrier", "Sets number of right shifts to reduce the carrier frequency.",
+                        offset: 0x00, shift: 1, size: 5
+                    ),
+                new ApiRecord(
                         ApiParameter.SG_PhaseSignal, ApiGroup.SignalGenerator,
                         "Phase Signal", "Sets the phase incrementation value of the frequency modulated signal.",
-                        offset: 0x00, shift: 1, size: 27
+                        offset: 0x00, shift: 6, size: 26
                     ),
                 new ApiRecord(
                         ApiParameter.SG_PhaseCarrier, ApiGroup.SignalGenerator,
                         "Phase Carrier", "Sets the phase incrementation value of the carrier signals.",
-                        offset: 0x08, shift: 0, size: 27
+                        offset: 0x08, shift: 0, size: 26
                     ),
 
                 // Data Acquisition

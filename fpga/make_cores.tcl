@@ -10,7 +10,7 @@ set coreNameSet {
 	axis_position_tracker_v1_0
 	axis_sniffer_v1_0
 	axis_throttler_v1_0
-	fm_manager_v1_0
+	fm_adapter_v1_0
 	s2mm_ram_writer_v1_0
 	sync_manager_v1_0
 	axis_constant_v1_0

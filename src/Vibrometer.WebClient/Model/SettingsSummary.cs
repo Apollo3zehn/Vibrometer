@@ -11,10 +11,22 @@ namespace Vibrometer.WebClient.Model
         public SettingsSummary(FpgaSettings fpgaSettings)
         {
             double referenceFrequency;
+            int phaseCarrierWidth;
 
-            this.BaseSamplingFrequency = 125000000;
-            this.SG_CarrierFrequency = fpgaSettings.SG_PhaseCarrier / Math.Pow(2, 27) * SystemParameters.CLOCK_RATE;
-            this.SG_SignalFrequency = fpgaSettings.SG_PhaseSignal / Math.Pow(2, 27) * SystemParameters.CLOCK_RATE;
+            this.BaseSamplingFrequency = SystemParameters.CLOCK_RATE;
+
+            if (fpgaSettings.SG_FmEnabled)
+            {
+                phaseCarrierWidth = ApiInfo.Instance[ApiParameter.SG_PhaseCarrier].Size;
+                // Phase width of the signal's DDS compiler is 16.
+                this.SG_CarrierFrequency = SystemParameters.CLOCK_RATE / Math.Pow(2, phaseCarrierWidth - 16) / Math.Pow(2, fpgaSettings.SG_ShiftCarrier);
+            }
+            else
+            {
+                this.SG_CarrierFrequency = fpgaSettings.SG_PhaseCarrier / Math.Pow(2, ApiInfo.Instance[ApiParameter.SG_PhaseCarrier].Size) * SystemParameters.CLOCK_RATE;
+            }
+
+            this.SG_SignalFrequency = fpgaSettings.SG_PhaseSignal / Math.Pow(2, ApiInfo.Instance[ApiParameter.SG_PhaseSignal].Size) * SystemParameters.CLOCK_RATE;
             this.PT_ExtremumFrequency = this.BaseSamplingFrequency / Math.Pow(2, fpgaSettings.PT_LogCountExtremum);
             this.FI_SamplingFrequency = this.BaseSamplingFrequency / Math.Pow(2, fpgaSettings.FI_LogThrottle);
             this.FT_SamplingFrequency = this.FI_SamplingFrequency / Math.Pow(2, fpgaSettings.FT_LogThrottle);

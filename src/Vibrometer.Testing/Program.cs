@@ -56,66 +56,67 @@ namespace Vibrometer.Testing
                 else
                     Console.Write($"[1] - enable frequency modulation\n");
 
-                Console.WriteLine($"[2] - set phase signal");
-                Console.WriteLine($"[3] - set phase carrier");
+                Console.WriteLine($"[2] - set shift carrier");
+                Console.WriteLine($"[3] - set phase signal");
+                Console.WriteLine($"[4] - set phase carrier");
 
                 Console.WriteLine();
 
                 Program.WriteColored("Data Acquisition\n", ConsoleColor.Cyan);
 
                 if (_api.DataAcquisition.SwitchEnabled)
-                    Program.WriteColored($"[4] - disable switch\n");
+                    Program.WriteColored($"[5] - disable switch\n");
                 else
-                    Console.Write($"[4] - enable switch\n");
+                    Console.Write($"[5] - enable switch\n");
 
                 Console.WriteLine();
 
                 Program.WriteColored("Position Tracker\n", ConsoleColor.Cyan);
-                Console.WriteLine($"[5] - set log scale");
-                Console.WriteLine($"[6] - set log count extremum");
-                Console.WriteLine($"[7] - set shift extremum");
-                Console.WriteLine($"[8] - get threshold");
+                Console.WriteLine($"[6] - set log scale");
+                Console.WriteLine($"[7] - set log count extremum");
+                Console.WriteLine($"[8] - set shift extremum");
+                Console.WriteLine($"[9] - get threshold");
 
                 Console.WriteLine();
 
                 Program.WriteColored("Filter\n", ConsoleColor.Cyan);
-                Console.WriteLine($"[9] - set log throttle");
+                Console.WriteLine($"[A] - set log throttle");
 
                 Console.WriteLine();
 
                 Program.WriteColored("Fourier Transform\n", ConsoleColor.Cyan);
                 if (_api.FourierTransform.Enabled)
-                    Program.WriteColored($"[A] - disable Fourier transform\n");
+                    Program.WriteColored($"[B] - disable Fourier transform\n");
                 else
-                    Console.Write($"[A] - enable Fourier Transform\n");
+                    Console.Write($"[B] - enable Fourier Transform\n");
 
-                Console.WriteLine($"[B] - set log count averages");
-                Console.WriteLine($"[C] - set log throttle");
+                Console.WriteLine($"[C] - set log count averages");
+                Console.WriteLine($"[D] - set log throttle");
 
                 Console.WriteLine();
 
                 Program.WriteColored("RAM Writer\n", ConsoleColor.Cyan);
 
                 if (_api.RamWriter.Enabled)
-                    Program.WriteColored($"[D] - disable RAM writer\n");
+                    Program.WriteColored($"[E] - disable RAM writer\n");
                 else
-                    Console.Write($"[D] - enable RAM writer\n");
+                    Console.Write($"[E] - enable RAM writer\n");
 
                 if (_api.RamWriter.RequestEnabled)
-                    Program.WriteColored($"[E] - disable buffer request\n");
+                    Program.WriteColored($"[F] - disable buffer request\n");
                 else
-                    Console.Write($"[E] - enable buffer request\n");
+                    Console.Write($"[F] - enable buffer request\n");
 
-                Console.WriteLine($"[F] - set log length");
-                Console.WriteLine($"[G] - set log throttle");
-                Console.WriteLine($"[H] - get read buffer");
+                Console.WriteLine($"[G] - set log length");
+                Console.WriteLine($"[H] - set log throttle");
+                Console.WriteLine($"[I] - get read buffer");
 
                 Console.WriteLine();
 
                 Program.WriteColored("RAM\n", ConsoleColor.Cyan);
-                Console.WriteLine($"[I] - get data ({Math.Min(Math.Pow(2, _api.RamWriter.LogLength), 1024)} values)");
-                Console.WriteLine($"[J] - get stream");
-                Console.WriteLine($"[K] - clear");
+                Console.WriteLine($"[J] - get data ({Math.Min(Math.Pow(2, _api.RamWriter.LogLength), 1024)} values)");
+                Console.WriteLine($"[K] - get stream");
+                Console.WriteLine($"[L] - clear");
 
                 var keyInfo = Console.ReadKey(true);
 
@@ -137,67 +138,70 @@ namespace Vibrometer.Testing
                         break;
                     case ConsoleKey.NumPad2:
                     case ConsoleKey.D2:
-                        Program.SG_Set_Phase_Signal();
+                        Program.SG_Set_Shift_Carrier();
                         break;
                     case ConsoleKey.NumPad3:
                     case ConsoleKey.D3:
-                        Program.SG_Set_Phase_Carrier();
+                        Program.SG_Set_Phase_Signal();
                         break;
                     case ConsoleKey.NumPad4:
                     case ConsoleKey.D4:
-                        Program.DA_Toggle_Switch();
+                        Program.SG_Set_Phase_Carrier();
                         break;
                     case ConsoleKey.NumPad5:
                     case ConsoleKey.D5:
-                        Program.PT_Set_LogScale();
+                        Program.DA_Toggle_Switch();
                         break;
                     case ConsoleKey.NumPad6:
                     case ConsoleKey.D6:
-                        Program.PT_Set_LogCountExtremum();
+                        Program.PT_Set_LogScale();
                         break;
                     case ConsoleKey.NumPad7:
                     case ConsoleKey.D7:
-                        Program.PT_Set_ShiftExtremum();
+                        Program.PT_Set_LogCountExtremum();
                         break;
                     case ConsoleKey.NumPad8:
                     case ConsoleKey.D8:
-                        Program.PT_Get_Threshold();
+                        Program.PT_Set_ShiftExtremum();
                         break;
                     case ConsoleKey.NumPad9:
                     case ConsoleKey.D9:
-                        Program.FI_Set_LogThrottle();
+                        Program.PT_Get_Threshold();
                         break;
                     case ConsoleKey.A:
-                        Program.FT_Toggle_Enable();
+                        Program.FI_Set_LogThrottle();
                         break;
                     case ConsoleKey.B:
-                        Program.FT_Set_LogCountAverages();
+                        Program.FT_Toggle_Enable();
                         break;
                     case ConsoleKey.C:
-                        Program.FT_Set_LogThrottle();
+                        Program.FT_Set_LogCountAverages();
                         break;
                     case ConsoleKey.D:
-                        Program.RW_Toggle_Enable();
+                        Program.FT_Set_LogThrottle();
                         break;
                     case ConsoleKey.E:
-                        Program.RW_Toggle_RequestEnable();
+                        Program.RW_Toggle_Enable();
                         break;
                     case ConsoleKey.F:
-                        Program.RW_Set_LogLength();
+                        Program.RW_Toggle_RequestEnable();
                         break;
                     case ConsoleKey.G:
-                        Program.RW_Set_LogThrottle();
+                        Program.RW_Set_LogLength();
                         break;
                     case ConsoleKey.H:
-                        Program.RW_Get_ReadBuffer();
+                        Program.RW_Set_LogThrottle();
                         break;
                     case ConsoleKey.I:
-                        Program.RAM_Get_Data();
+                        Program.RW_Get_ReadBuffer();
                         break;
                     case ConsoleKey.J:
-                        Program.RAM_Get_Stream();
+                        Program.RAM_Get_Data();
                         break;
                     case ConsoleKey.K:
+                        Program.RAM_Get_Stream();
+                        break;
+                    case ConsoleKey.L:
                         _api.ClearRam();
                         break;
                     case ConsoleKey.Escape:
@@ -291,26 +295,35 @@ namespace Vibrometer.Testing
             _api.SignalGenerator.FmEnabled = !_api.SignalGenerator.FmEnabled;
         }
 
+        private static void SG_Set_Shift_Carrier()
+        {
+            uint value = _api.SignalGenerator.ShiftCarrier;
+
+            Program.PrintDialogInteger(ApiParameter.SG_ShiftCarrier, ref value);
+
+            _api.SignalGenerator.ShiftCarrier = value;
+        }
+
         private static void SG_Set_Phase_Signal()
         {
             double min = 0;
             double max = SystemParameters.CLOCK_RATE;
-            double value = _api.SignalGenerator.PhaseSignal / Math.Pow(2, 27) * SystemParameters.CLOCK_RATE;
+            double value = _api.SignalGenerator.PhaseSignal / ApiInfo.Instance[ApiParameter.SG_PhaseSignal].Size * SystemParameters.CLOCK_RATE;
 
             Program.PrintDialogFloat(ApiParameter.SG_PhaseSignal, ref value, min, max, "Hz");
 
-            _api.SignalGenerator.PhaseSignal = (uint)(value * Math.Pow(2, 27) / SystemParameters.CLOCK_RATE);
+            _api.SignalGenerator.PhaseSignal = (uint)(value * ApiInfo.Instance[ApiParameter.SG_PhaseSignal].Size / SystemParameters.CLOCK_RATE);
         }
 
         private static void SG_Set_Phase_Carrier()
         {
             double min = 0;
             double max = SystemParameters.CLOCK_RATE;
-            double value = _api.SignalGenerator.PhaseCarrier / Math.Pow(2, 27) * SystemParameters.CLOCK_RATE;
+            double value = _api.SignalGenerator.PhaseCarrier / ApiInfo.Instance[ApiParameter.SG_PhaseCarrier].Size * SystemParameters.CLOCK_RATE;
 
             Program.PrintDialogFloat(ApiParameter.SG_PhaseCarrier, ref value, min, max, "Hz");
 
-            _api.SignalGenerator.PhaseCarrier = (uint)(value * Math.Pow(2, 27) / SystemParameters.CLOCK_RATE);
+            _api.SignalGenerator.PhaseCarrier = (uint)(value * ApiInfo.Instance[ApiParameter.SG_PhaseCarrier].Size / SystemParameters.CLOCK_RATE);
         }
 
         private static void DA_Toggle_Switch()

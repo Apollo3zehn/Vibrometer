@@ -77,6 +77,7 @@ module axis_differentiator #
         shift1_next                 = shift1;
         shift2_next                 = shift2;
         shift3_next                 = shift3;
+        result_next                 = result;
         shift_register_next[0]      = shift_register[0];
 
         if (S_AXIS_tvalid) begin

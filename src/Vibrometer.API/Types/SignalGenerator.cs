@@ -31,6 +31,18 @@ namespace Vibrometer.API
                 ApiProxy.SetValue(ApiParameter.SG_FmEnabled, _address, value ? 1U : 0U);
             }
         }
+        
+        public uint ShiftCarrier
+        {
+            get
+            {
+                return ApiProxy.GetValue(ApiParameter.SG_ShiftCarrier, _address);
+            }
+            set
+            {
+                ApiProxy.SetValue(ApiParameter.SG_ShiftCarrier, _address, value);
+            }
+        }
 
         public uint PhaseSignal
         {

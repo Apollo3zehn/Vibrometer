@@ -65,7 +65,7 @@ namespace Vibrometer.API
             this.AxisSwitch.Source = ApiSource.FourierTransform;
 
             // 1000 Hz
-            this.SignalGenerator.PhaseCarrier = (uint)(1000 * Math.Pow(2, 27) / SystemParameters.CLOCK_RATE);
+            this.SignalGenerator.PhaseCarrier = (uint)(1000 * ApiInfo.Instance[ApiParameter.SG_PhaseCarrier].Size / SystemParameters.CLOCK_RATE);
 
             // approx. 1s
             this.PositionTracker.LogCountExtremum = 27;
@@ -79,7 +79,7 @@ namespace Vibrometer.API
             // calculate the average of 2^2 = 4 FFTs
             this.FourierTransform.LogCountAverages = 2;
             
-            // TBD
+            // TODO: TBD
             this.FourierTransform.LogThrottle = 14;
 
             // physical RAM address
@@ -216,6 +216,7 @@ namespace Vibrometer.API
             {
                 AS_Source = unchecked((int)this.AxisSwitch.Source),
                 SG_FmEnabled = this.SignalGenerator.FmEnabled,
+                SG_ShiftCarrier = unchecked((int)this.SignalGenerator.ShiftCarrier),
                 SG_PhaseSignal = unchecked((int)this.SignalGenerator.PhaseSignal),
                 SG_PhaseCarrier = unchecked((int)this.SignalGenerator.PhaseCarrier),
                 DA_SwitchEnabled = this.DataAcquisition.SwitchEnabled,
@@ -239,6 +240,7 @@ namespace Vibrometer.API
             {
                 this.AxisSwitch.Source = (ApiSource)fpgaSettings.AS_Source;
                 this.SignalGenerator.FmEnabled = fpgaSettings.SG_FmEnabled;
+                this.SignalGenerator.ShiftCarrier = unchecked((uint)fpgaSettings.SG_ShiftCarrier);
                 this.SignalGenerator.PhaseSignal = unchecked((uint)fpgaSettings.SG_PhaseSignal);
                 this.SignalGenerator.PhaseCarrier = unchecked((uint)fpgaSettings.SG_PhaseCarrier);
                 this.DataAcquisition.SwitchEnabled = fpgaSettings.DA_SwitchEnabled;

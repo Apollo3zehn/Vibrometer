@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module fm_manager #
+module fm_adapter #
 (
     parameter integer                           CARRIER_PINC_WIDTH  = 32,
     parameter integer                           SIGNAL_PHASE_WIDTH  = 16,
@@ -13,6 +13,7 @@ module fm_manager #
     
     // IP signals
     input  wire                                 fm_enable,
+    input  wire [4:0]                           shift_carrier,
     input  wire [CARRIER_PINC_WIDTH-1:0]        phase_carrier,
     
     // axis slave
@@ -31,6 +32,6 @@ module fm_manager #
     assign tdata_unsigned                       = S_AXIS_tdata + (1 << (SIGNAL_PHASE_WIDTH - 1));
     assign S_AXIS_tready                        = M_AXIS_tready;
     assign M_AXIS_tvalid                        = fm_enable ? S_AXIS_tvalid : 1'b1;
-    assign M_AXIS_tdata                         = fm_enable ? tdata_unsigned : phase_carrier;
+    assign M_AXIS_tdata                         = fm_enable ? (tdata_unsigned >> shift_carrier) : phase_carrier;
 
 endmodule

@@ -59,6 +59,9 @@ namespace Vibrometer.WebServer
                     case ApiParameter.AS_Source:
                         _api.SetStateSafe(() => _api.AxisSwitch.Source = (ApiSource)value);
                         break;
+                    case ApiParameter.SG_ShiftCarrier:
+                        _api.SignalGenerator.ShiftCarrier = value;
+                        break;
                     case ApiParameter.SG_PhaseSignal:
                         _api.SignalGenerator.PhaseSignal = value;
                         break;

@@ -5,6 +5,7 @@
         AS_Commit,
         AS_Source,
         SG_FmEnabled,
+        SG_ShiftCarrier,
         SG_PhaseSignal,
         SG_PhaseCarrier,
         DA_SwitchEnabled,
