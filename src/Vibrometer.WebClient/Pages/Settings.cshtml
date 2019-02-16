@@ -112,9 +112,13 @@
                                     <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.FT_LogCountAverages]"
                                                         Value="@state.FpgaSettings.FT_LogCountAverages"
                                                         OnValueChanged="@OnValueChanged" />
-                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.FT_LogThrottle]"
-                                                        Value="@state.FpgaSettings.FT_LogThrottle"
-                                                        OnValueChanged="@OnValueChanged" />
+
+                                    @if ((ApiSource)state.FpgaSettings.AS_Source != ApiSource.FourierTransform)
+                                    {
+                                        <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.FT_LogThrottle]"
+                                                            Value="@state.FpgaSettings.FT_LogThrottle"
+                                                            OnValueChanged="@OnValueChanged" />
+                                    }
 
                                     break;
 

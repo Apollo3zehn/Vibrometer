@@ -49,7 +49,7 @@ namespace Vibrometer.Infrastructure.API
                     ),
                 new ApiRecord(
                         ApiParameter.SG_PhaseSignal, ApiGroup.SignalGenerator,
-                        "Phase Signal", "Sets the phase incrementation value of the frequency modulated signal.",
+                        "Phase Signal", "Sets the phase incrementation value of the frequency modulating signal. In terms of the vibrometer, a single cycle is equal to an half object oscillation, i.e. the frequency peak is found at f = phase_signal / 2.",
                         offset: 0x00, shift: 6, size: 26
                     ),
                 new ApiRecord(
@@ -78,7 +78,7 @@ namespace Vibrometer.Infrastructure.API
                 ),
                 new ApiRecord(
                         ApiParameter.PT_ShiftExtremum, ApiGroup.PositionTracker, 
-                        "Shift Extremum", "Sets number of right shifts to reduce the upper and lower signal limits for the position tracker.",
+                        "Shift Extremum", "Sets number of right shifts to reduce the upper and lower signal limits of the position tracker.",
                         offset: 0x00, shift: 0, size: 3
                 ),
                 new ApiRecord(
@@ -95,7 +95,7 @@ namespace Vibrometer.Infrastructure.API
                 ),
                 new ApiRecord(
                         ApiParameter.FI_LogThrottle, ApiGroup.Filter,
-                        "Log Throttle", "Sets the logarithmic data stream throttle for the filter.",
+                        "Log Throttle", "Sets the logarithmic data stream throttle of the filter.",
                         offset: 0x00, shift: 1, size: 5
                 ),
 
@@ -112,7 +112,7 @@ namespace Vibrometer.Infrastructure.API
                 ),
                 new ApiRecord(
                         ApiParameter.FT_LogThrottle, ApiGroup.FourierTransform,
-                        "Log Throttle", "Sets the logarithmic data stream throttle for the Fourier Transform.",
+                        "Log Throttle", "Sets the logarithmic data stream throttle of the Fourier Transform.",
                         offset: 0x00, shift: 6, size: 5
                 ),
 
@@ -134,7 +134,7 @@ namespace Vibrometer.Infrastructure.API
                 ),
                 new ApiRecord(
                         ApiParameter.RW_LogThrottle, ApiGroup.RamWriter,
-                        "Log Throttle", "Sets the logarithmic data stream throttle for the RAM writer.",
+                        "Log Throttle", "Sets the logarithmic data stream throttle of the RAM writer.",
                         offset: 0x00, shift: 7, size: 5
                 ),
                 new ApiRecord(

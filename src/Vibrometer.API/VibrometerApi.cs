@@ -269,6 +269,12 @@ namespace Vibrometer.API
             action?.Invoke();
 
             this.ClearRam();
+
+            if (this.AxisSwitch.Source == ApiSource.FourierTransform)
+            {
+                this.RamWriter.LogThrottle = 0;
+            }
+            
             this.FourierTransform.Enabled = fourierTransform_enabled;
             this.RamWriter.RequestEnabled = false;
             this.RamWriter.Enabled = ramWriter_enabled;

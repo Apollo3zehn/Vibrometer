@@ -74,7 +74,7 @@ module axis_complex_averager #
     assign S_AXIS_tready                    = write_enable;
 
     // M_AXIS
-    assign M_AXIS_tvalid                    = S_AXIS_tvalid && (state == first) && aresetn;
+    assign M_AXIS_tvalid                    = S_AXIS_tvalid && state == first && aresetn;
     assign M_AXIS_tdata                     = {truncate($signed(b_imag) >>> log_count), truncate($signed(b_real) >>> log_count)};
     assign M_AXIS_tlast                     = t_last;
 

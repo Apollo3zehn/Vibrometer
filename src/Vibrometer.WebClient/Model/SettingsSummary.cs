@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Vibrometer.Infrastructure;
 using Vibrometer.Infrastructure.API;
 
@@ -73,7 +73,7 @@ namespace Vibrometer.WebClient.Model
                     (this.XMax, this.Unit) = this.ConvertUnit(this.XMax, (ApiSource)fpgaSettings.AS_Source);
                     break;
                 case ApiSource.FourierTransform:
-                    this.XMax = this.RW_SamplingFrequency;
+                    this.XMax = this.FT_SamplingFrequency;
                     (this.XMax, this.Unit) = this.ConvertUnit(this.XMax, (ApiSource)fpgaSettings.AS_Source);
                     break;
                 default:
