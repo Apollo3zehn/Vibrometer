@@ -113,12 +113,9 @@
                                                         Value="@state.FpgaSettings.FT_LogCountAverages"
                                                         OnValueChanged="@OnValueChanged" />
 
-                                    @if ((ApiSource)state.FpgaSettings.AS_Source != ApiSource.FourierTransform)
-                                    {
-                                        <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.FT_LogThrottle]"
-                                                            Value="@state.FpgaSettings.FT_LogThrottle"
-                                                            OnValueChanged="@OnValueChanged" />
-                                    }
+                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.FT_LogThrottle]"
+                                                        Value="@state.FpgaSettings.FT_LogThrottle"
+                                                        OnValueChanged="@OnValueChanged" />
 
                                     break;
 
@@ -149,16 +146,20 @@
 
                                     <!--RAM Writer-->
                                     <ApiRecordHeader DisplayName="RAM Writer"
-                                                     Description="The RAM writer consists of an sync manager module and the RAM writer itself. The sync manager handles the buffer management to ensure there is always a buffer for reading and for writing available." />
+                                                     Description="The RAM writer consists of a sync manager module and the RAM writer itself. The sync manager handles the buffer management to ensure there is always a buffer for reading and for writing available." />
                                     <ApiRecordComponentBool Record="ApiInfo.Instance[ApiParameter.RW_Enabled]"
                                                             Value="@state.FpgaSettings.RW_Enabled"
                                                             OnValueChanged="@OnValueChangedBool" />
                                     <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.RW_LogLength]"
                                                         Value="@state.FpgaSettings.RW_LogLength"
                                                         OnValueChanged="@OnValueChanged" />
-                                    <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.RW_LogThrottle]"
-                                                        Value="@state.FpgaSettings.RW_LogThrottle"
-                                                        OnValueChanged="@OnValueChanged" />
+
+                                    @if ((ApiSource)state.FpgaSettings.AS_Source != ApiSource.FourierTransform)
+                                    {
+                                        <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.RW_LogThrottle]"
+                                                            Value="@state.FpgaSettings.RW_LogThrottle"
+                                                            OnValueChanged="@OnValueChanged" />
+                                    }
 
                                     break;
 

@@ -8,23 +8,26 @@ namespace Vibrometer.WebClient.Model
 
         public double YMin;
         public double YMax;
-        public ChartLimitMode LimitMode;
+        public int Source;
+        public int LimitMode;
 
         #endregion
 
         #region Constructors
 
-        public ChartSettings(ApiSource source, ChartLimitMode limitMode)
+        public ChartSettings()
         {
-            this.Source = source;
-            this.LimitMode = limitMode;
+            //
         }
 
-        #endregion
+        public ChartSettings(ApiSource source, ChartLimitMode limitMode)
+        {
+            this.YMin = 0;
+            this.YMax = 0;
 
-        #region Properties
-
-        public ApiSource Source { get; }
+            this.Source = (int)source;
+            this.LimitMode = (int)limitMode;
+        }
 
         #endregion
     }

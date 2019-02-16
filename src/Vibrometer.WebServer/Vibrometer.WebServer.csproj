@@ -2,8 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <!-- <RuntimeIdentifiers>win7-x64;ubuntu.16.04-arm</RuntimeIdentifiers> -->
-    <RuntimeIdentifier>ubuntu.16.04-arm</RuntimeIdentifier>
+    <RuntimeIdentifiers>ubuntu.16.04-arm;win7-x64</RuntimeIdentifiers> 
   </PropertyGroup>
 
   <ItemGroup>

@@ -3,8 +3,13 @@
 namespace Vibrometer.Infrastructure
 {
     [DataContract]
-    public struct FpgaSettings
+    public class FpgaSettings
     {
+        public FpgaSettings()
+        {
+            //
+        }
+
         [DataMember(Name = "aS_Source")]
         public int AS_Source { get; set; }
         [DataMember(Name = "sG_FmEnabled")]

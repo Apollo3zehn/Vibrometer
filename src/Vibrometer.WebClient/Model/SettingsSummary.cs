@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Vibrometer.Infrastructure;
 using Vibrometer.Infrastructure.API;
 
@@ -12,6 +13,7 @@ namespace Vibrometer.WebClient.Model
         {
             double referenceFrequency;
             int phaseCarrierWidth;
+            int factor;
 
             this.BaseSamplingFrequency = SystemParameters.CLOCK_RATE;
 
@@ -58,6 +60,7 @@ namespace Vibrometer.WebClient.Model
             this.RW_BufferFrequency = this.RW_SamplingFrequency / (SystemParameters.FFT_LENGTH * Math.Pow(2, fpgaSettings.FT_LogCountAverages));
 
             //
+            this.Step = 0;
             this.XMin = 0;
             this.XMax = 0;
             this.Unit = string.Empty;
@@ -69,34 +72,41 @@ namespace Vibrometer.WebClient.Model
                 case ApiSource.Raw:
                 case ApiSource.Position:
                 case ApiSource.Filter:
-                    this.XMax = (Math.Pow(2, fpgaSettings.RW_LogLength) - 1) / this.RW_SamplingFrequency;
-                    (this.XMax, this.Unit) = this.ConvertUnit(this.XMax, (ApiSource)fpgaSettings.AS_Source);
+                    this.Step = 1 / this.RW_SamplingFrequency;
+                    this.XMin = 0 * this.Step;
+                    this.XMax = (Math.Pow(2, fpgaSettings.RW_LogLength) - 1) * this.Step;
                     break;
                 case ApiSource.FourierTransform:
-                    this.XMax = this.FT_SamplingFrequency;
-                    (this.XMax, this.Unit) = this.ConvertUnit(this.XMax, (ApiSource)fpgaSettings.AS_Source);
+                    // df = N / f
+                    this.Step = this.FT_SamplingFrequency / SystemParameters.FFT_LENGTH;
+                    // XMin = -N/2 * df
+                    this.XMin = -SystemParameters.FFT_LENGTH / 2 * this.Step;
+                    // XMax = +(N/2 - 1) * df
+                    this.XMax = (SystemParameters.FFT_LENGTH / 2 - 1) * this.Step;
                     break;
                 default:
                     throw new ArgumentException();
             }
 
-            this.Step = this.XMax / (Math.Pow(2, fpgaSettings.RW_LogLength) - 1);
+            (factor, this.Unit) = this.ConvertUnit(Math.Max(Math.Abs(this.XMin), Math.Abs(this.XMax)), (ApiSource)fpgaSettings.AS_Source);
+            this.Step *= Math.Pow(1000, factor);
+            this.XMin *= Math.Pow(1000, factor);
+            this.XMax *= Math.Pow(1000, factor);
         }
 
-        private (double, string) ConvertUnit(double value, ApiSource source)
+        private (int, string) ConvertUnit(double value, ApiSource source)
         {
             int factor;
 
             string unit;
-            string prefix_1;
-            string prefix_2;
+            string prefix;
             
             factor = 0;
-            prefix_1 = string.Empty;
-            prefix_2 = string.Empty;
+            prefix = string.Empty;
 
             switch (source)
             {
+                case ApiSource.NoSource:
                 case ApiSource.Raw:
                 case ApiSource.Position:
                 case ApiSource.Filter:
@@ -119,7 +129,7 @@ namespace Vibrometer.WebClient.Model
                         if (value > 1000 && value != 0)
                         {
                             value /= 1000;
-                            factor += 1;
+                            factor -= 1;
                         }
                         else
                         {
@@ -127,20 +137,23 @@ namespace Vibrometer.WebClient.Model
                         }
                     }
                     break;
-                case ApiSource.NoSource:
                 default:
                     throw new ArgumentException();
             }
 
             switch (factor)
             {
-                case 1: // millisecond, kilohertz
-                    prefix_1 = "m";
-                    prefix_2 = "k";
+                case -2: // megahertz
+                    prefix = "M";
                     break;
-                case 2: // microsecond, megahertz
-                    prefix_1 = "µ";
-                    prefix_2 = "M";
+                case -1: // kilohertz
+                    prefix = "k";
+                    break;
+                case 1: // millisecond
+                    prefix = "m";
+                    break;
+                case 2: // microsecond
+                    prefix = "µ";
                     break;
                 case 0: // second, hertz
                 default:
@@ -149,20 +162,22 @@ namespace Vibrometer.WebClient.Model
 
             switch (source)
             {
+                case ApiSource.NoSource:
+                    unit = string.Empty;
+                    break;
                 case ApiSource.Raw:
                 case ApiSource.Position:
                 case ApiSource.Filter:
-                    unit = prefix_1 + "s";
+                    unit = prefix + "s";
                     break;
                 case ApiSource.FourierTransform:
-                    unit = prefix_2 + "Hz";
+                    unit = prefix + "Hz";
                     break;
-                case ApiSource.NoSource:
                 default:
                     throw new ArgumentException();
             }
 
-            return (value, unit);
+            return (factor, unit);
         }
 
         #endregion

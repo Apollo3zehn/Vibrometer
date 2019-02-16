@@ -9,11 +9,11 @@ window.Vibrometer = {
                 datasets: [
                     {
                         data: [],
-                        backgroundColor: "rgba(233, 30, 99, 0.2)",
-                        borderColor: "rgba(233, 30, 99)",
-                        lineTension: 0,
-                        pointRadius: 1,
+                        backgroundColor: "rgba(234, 44, 109, 0.2)",
+                        borderColor: "rgba(234, 44, 109)",
                         borderWidth: 1,
+                        lineTension: 0,
+                        pointRadius: 2,
                         showLine: true,
                         fill: false
                     },
@@ -23,7 +23,7 @@ window.Vibrometer = {
                         borderColor: "rgba(0, 188, 212)",
                         borderWidth: 1,
                         lineTension: 0,
-                        pointRadius: 1,
+                        pointRadius: 2,
                         showLine: true,
                         fill: false
                     }
@@ -56,6 +56,7 @@ window.Vibrometer = {
                             autoSkip: true,
                             min: xMin,
                             max: xMax,
+                            maxRotation: 0,
                             callback: function (value, index, values)
                             {
                                 return value.toFixed(2);

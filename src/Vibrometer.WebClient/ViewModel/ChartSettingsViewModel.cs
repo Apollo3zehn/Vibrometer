@@ -72,17 +72,11 @@ namespace Vibrometer.WebClient.ViewModel
         {
             get
             {
-                return _model.LimitMode;
+                return (ChartLimitMode)_model.LimitMode;
             }
             set
             {
-                if (value != this.LimitMode)
-                {
-                    this.YMin = _defaultYMin;
-                    this.YMax = _defaultYMax;
-                }
-
-                base.SetProperty(ref _model.LimitMode, value);
+                base.SetProperty(ref _model.LimitMode, (int)value);
             }
         }
 
@@ -100,9 +94,15 @@ namespace Vibrometer.WebClient.ViewModel
 
         #region Methods
 
+        public void Reset()
+        {
+            this.YMin = _defaultYMin;
+            this.YMax = _defaultYMax;
+        }
+
         private string GetTitle()
         {
-            switch (_model.Source)
+            switch ((ApiSource)_model.Source)
             {
                 case ApiSource.NoSource:
                     return string.Empty;
@@ -121,7 +121,7 @@ namespace Vibrometer.WebClient.ViewModel
 
         private string GetYLabel()
         {
-            switch (_model.Source)
+            switch ((ApiSource)_model.Source)
             {
                 case ApiSource.NoSource:
                     return string.Empty;
@@ -140,7 +140,7 @@ namespace Vibrometer.WebClient.ViewModel
 
         private double GetYMin()
         {
-            switch (_model.Source)
+            switch ((ApiSource)_model.Source)
             {
                 case ApiSource.NoSource:
                     return 0;
@@ -159,7 +159,7 @@ namespace Vibrometer.WebClient.ViewModel
 
         private double GetYMax()
         {
-            switch (_model.Source)
+            switch ((ApiSource)_model.Source)
             {
                 case ApiSource.NoSource:
                     return 0;

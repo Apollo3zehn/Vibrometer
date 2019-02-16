@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Vibrometer.Infrastructure;
 using Vibrometer.Infrastructure.API;
 using Vibrometer.WebClient.ViewModel;
@@ -22,19 +23,11 @@ namespace Vibrometer.WebClient.Model
             _model = new AppState();
 
             this.IsConnected = true;
-            this.ChartSettingsMap = new Dictionary<ApiSource, ChartSettingsViewModel>();
             this.Summary = new SettingsSummary(this.FpgaSettings);
+            this.ChartSettingsMap = new Dictionary<ApiSource, ChartSettingsViewModel>();
             this.FpgaData = new FpgaData();
 
-            foreach (ChartSettings settings in _model.ChartSettingsSet)
-            {
-                ChartSettingsViewModel chartSettings;
-
-                chartSettings = new ChartSettingsViewModel(settings);
-                chartSettings.PropertyChanged += (sender, e) => base.RaisePropertyChanged(nameof(this.ChartSettingsMap));
-
-                this.ChartSettingsMap.Add(settings.Source, chartSettings);
-            }
+            this.InitializeChartSettingsMap();
 
             this.PageDescriptionSet = new List<PageDescription>()
             {
@@ -88,9 +81,35 @@ namespace Vibrometer.WebClient.Model
             {
                 _model = value;
 
+                this.InitializeChartSettingsMap();
                 this.Summary = new SettingsSummary(this.FpgaSettings);
+
                 base.RaisePropertyChanged(nameof(this.ChartSettingsMap));
                 base.RaisePropertyChanged(nameof(this.FpgaSettings));
+            }
+        }
+
+        #endregion
+
+        #region "Methods"
+
+        private void InitializeChartSettingsMap()
+        {
+            this.ChartSettingsMap.ToList().ForEach(value =>
+            {
+                value.Value.PropertyChanged -= (sender, e) => base.RaisePropertyChanged(nameof(this.ChartSettingsMap));
+            });
+
+            this.ChartSettingsMap.Clear();
+
+            foreach (ChartSettings settings in this.Model.ChartSettingsSet)
+            {
+                ChartSettingsViewModel chartSettings;
+
+                chartSettings = new ChartSettingsViewModel(settings);
+                chartSettings.PropertyChanged += (sender, e) => base.RaisePropertyChanged(nameof(this.ChartSettingsMap));
+
+                this.ChartSettingsMap.Add((ApiSource)settings.Source, chartSettings);
             }
         }
 

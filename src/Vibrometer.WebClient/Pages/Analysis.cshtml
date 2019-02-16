@@ -8,7 +8,7 @@
 <h1 class="display-4">Analysis</h1>
 
 <div class="row">
-    <div class="col-lg-8">
+    <div class="col-lg-7">
         <div class="card">
             <div class="card-header card-header-tabs card-header-info">
                 <div class="nav-tabs-navigation">
@@ -48,48 +48,107 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-5">
         @if ((ApiSource)state.FpgaSettings.AS_Source > ApiSource.NoSource)
         {
-            @*<div class="row mb-2">
-                <div class="col-md-10">
-                    <div class="form-group bmd-form-group">
-                        <label class="bmd-label-floating">Lower / Upper Threshold</label>
+            <div class="card">
+                <div class="card-header card-header-tabs card-header-info">
+                    <div class="nav-tabs-navigation">
+                        <div class="nav-tabs-wrapper">
+                            <ul class="nav nav-tabs" data-tabs="tabs">
+                                <li class="nav-item">
+                                    <a class="nav-link active" style="cursor:pointer">
+                                        <i class="material-icons">settings</i> Toolbox
+                                        <div class="ripple-container"></div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-2">
-                    <div class="form-group bmd-form-group">
-                        <label class="bmd-label-floating">@state.FpgaData.LowerThreshold / @state.FpgaData.UpperThreshold</label>
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane active">
+                            <div class="row mt-2">
+                                <div class="col">
+                                    <h5 style="margin-bottom:0px">Y-Axes Limits</h5>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col">
+                                    <div class="form-group bmd-form-group mt-3">
+                                        <label>Select of the following options to fit your needs.</label>
+                                        <div class="d-flex justify-content-between mt-2">
+                                            @foreach (ChartLimitMode limitMode in Enum.GetValues(typeof(ChartLimitMode)))
+                                            {
+                                                <label class="form-check-label">
+                                                    <input type="radio"
+                                                           checked="@(this.ChartSettings.LimitMode == limitMode)"
+                                                           onclick="@(() => this.ChartSettings.LimitMode = limitMode)" />
+                                                    @Utilities.GetEnumLocalization((ChartLimitMode)limitMode, typeof(EnumerationDescription))
+                                                </label>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @if (this.ChartSettings.LimitMode == ChartLimitMode.Custom)
+                            {
+                                <hr />
+                                <div class="input-group mt-2">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Min:</span>
+                                    </div>
+                                    <input type="text" class="form-control mr-2" placeholder="Lower limit ..." bind="@this.ChartSettings.YMin" />
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Max:</span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="Upper limit ..." bind="@this.ChartSettings.YMax" />
+                                    <button type="button" class="btn btn-outline-secondary btn-sm ml-4"
+                                            onclick="@this.ChartSettings.Reset">
+                                        Reset
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*<div class="card">
+                <div class="card-header card-header-tabs card-header-info">
+                    <div class="nav-tabs-navigation">
+                        <div class="nav-tabs-wrapper">
+                            <ul class="nav nav-tabs" data-tabs="tabs">
+                                <li class="nav-item">
+                                    <a class="nav-link active" style="cursor:pointer">
+                                        <i class="material-icons">settings</i> Threshold Data
+                                        <div class="ripple-container"></div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane active">
+                            <div class="row mb-2">
+                                <div class="col">
+                                    <div class="form-group bmd-form-group">
+                                        <label class="bmd-label-floating">Lower / Upper Threshold</label>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group bmd-form-group">
+                                        <label class="bmd-label-floating">@state.FpgaData.LowerThreshold / @state.FpgaData.UpperThreshold</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>*@
-            <div class="row mt-2">
-                <div class="col">
-                    <h5 style="margin-bottom:0px">Y-Limit Mode</h5>
-                </div>
-            </div>
-            <div class="btn-group w-100" role="group">
-                @foreach (ChartLimitMode limitMode in Enum.GetValues(typeof(ChartLimitMode)))
-                {
-                    <button type="button" class="btn @(this.ChartSettings.LimitMode == limitMode ? "btn-info" : "btn-default") @(limitMode == ChartLimitMode.Custom ? "w-100" : "")"
-                            onclick="@(() => this.ChartSettings.LimitMode = limitMode)">
-                        @Utilities.GetEnumLocalization((ChartLimitMode)limitMode, typeof(EnumerationDescription))
-                    </button>
-                }
-            </div>
-            @if (this.ChartSettings.LimitMode == ChartLimitMode.Custom)
-            {
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="">Min:</span>
-                    </div>
-                    <input type="text" class="form-control mr-2" placeholder="Lower limit ..." bind="@this.ChartSettings.YMin" />
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="">Max:</span>
-                    </div>
-                    <input type="text" class="form-control" placeholder="Upper limit ..." bind="@this.ChartSettings.YMax" />
-                </div>
-            }
+            
         }
     </div>
 </div>
@@ -149,12 +208,13 @@
 
                     case ApiSource.FourierTransform:
 
-                        var real = state.FpgaData.Buffer.Select(value => unchecked((short)(value & 0x0000FFFF))).ToArray();
-                        var imag = state.FpgaData.Buffer.Select(value => unchecked((short)(value >> 16))).ToArray();
-                        var ampl = real.Zip(imag, (x, y) => Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2))).ToArray();
-                        var count = ampl.Count();
+                        var real = state.FpgaData.Buffer.Select(value => unchecked((short)(value & 0x0000FFFF)));
+                        var imag = state.FpgaData.Buffer.Select(value => unchecked((short)(value >> 16)));
+                        var ampl = real.Zip(imag, (x, y) => Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2)));
+                        var ampl_fft_shift = ampl.Skip(SystemParameters.FFT_LENGTH / 2).Concat(ampl.Take(SystemParameters.FFT_LENGTH / 2));
+                        var count = ampl_fft_shift.Count();
 
-                        data1 = ampl.Select((value, i) => new ChartPoint(i * state.Summary.Step, value)).ToList();
+                        data1 = ampl_fft_shift.Select((value, i) => new ChartPoint(i * state.Summary.Step + state.Summary.XMin, value)).ToList();
                         break;
 
                     default:
@@ -176,6 +236,7 @@
             else if (e.PropertyName == nameof(state.ChartSettingsMap))
             {
                 await this.UpdateChartLimits();
+                base.StateHasChanged();
             }
         };
 

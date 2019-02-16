@@ -9,6 +9,7 @@ namespace Vibrometer.WebClient.Model
         #region Field
 
         public FpgaSettings FpgaSettings;
+        public List<ChartSettings> ChartSettingsSet;
 
         #endregion
 
@@ -23,16 +24,10 @@ namespace Vibrometer.WebClient.Model
                 new ChartSettings(ApiSource.NoSource, ChartLimitMode.Auto),
                 new ChartSettings(ApiSource.Raw, ChartLimitMode.Custom),
                 new ChartSettings(ApiSource.Position, ChartLimitMode.Auto),
-                new ChartSettings(ApiSource.Filter, ChartLimitMode.Custom),
+                new ChartSettings(ApiSource.Filter, ChartLimitMode.Auto),
                 new ChartSettings(ApiSource.FourierTransform, ChartLimitMode.ZeroToMax)
             };
         }
-
-        #endregion
-
-        #region Properties
-
-        public List<ChartSettings> ChartSettingsSet { get; }
 
         #endregion
     }
