@@ -1,6 +1,6 @@
 ﻿@page "/"
 
-<h1 class="display-4">Welcome</h1>
+<h1 class="display-4">Home</h1>
 
 <div class="row">
     <div class="col">
@@ -14,9 +14,9 @@
             <div class="card-body">
                 <div class="tab-content">
                     <div class="tab-pane active">
-                        <div class="row mt-2">
+                        <div class="row mb-2">
                             <div class="col">
-                                <h3>Overview</h3>
+                                <label class="bmd-label-floating">The vibrometer is made of three parts: the fiber interferometer, the FPGA based data processing unit and the user interface. The fiber interferometer is required to make use of the underlying physical principles, i.e interference and the Doppler effect. The FPGA part performs the computationally intensive post processing and the user interface visualizes the measurement data and allows to control the vibrometer, i.e. loading the FPGA bitstream and tune different parameters that affect the processing.</label>
                             </div>
                         </div>
                     </div>
@@ -37,14 +37,9 @@
             <div class="card-body">
                 <div class="tab-content">
                     <div class="tab-pane active">
-                        <div class="row mt-2">
-                            <div class="col">
-                                <h3>Interferometer</h3>
-                            </div>
-                        </div>
                         <div class="row mb-2">
                             <div class="col">
-                                <label class="bmd-label-floating">interferometer ...</label>
+                                <label class="bmd-label-floating">GRAFIK FEHLERHAFT. The interferometer is the heart of the vibrometer. The laser is protected from reflected light by an isolator and connected to the first beam splitter where the object and low power reference beams are created. The object beam continues to the circulator where it enters at port 1 and exists at port 2. This beam is intended for the measurement on the vibrating object. When the beam is reflected by a moving object, its frequency is shifted due to the Doppler effect. The reflected light enters the circulator again at port 2 and leaves it at port 3. The reflected object beam and the reference beam are recombined using another splitter where the actual interference occurs. On the other end of the splitter, two Avalanche photodiodes (APD) measure the resulting beams intensity. The second APD is required to determine the direction of movement.</label>
                                 <img src="./img/flow_diagram_interferometer.png" class="img-fluid">
                             </div>
                         </div>
@@ -64,14 +59,9 @@
             <div class="card-body">
                 <div class="tab-content">
                     <div class="tab-pane active">
-                        <div class="row mt-2">
-                            <div class="col">
-                                <h3>FPGA</h3>
-                            </div>
-                        </div>
                         <div class="row mb-2">
                             <div class="col">
-                                <label class="bmd-label-floating">FPGA ...</label>
+                                <label class="bmd-label-floating">The FPGA board is located directly behind the two Avalanche Photodiodes (APD) of the interferometer. It's first task is the analog / digital conversion (ADC) of both diodes. These raw signals are streamed to the position tracking module where the number of oscillations is counted (the count direction directly depends on the direction of the object's movement). If only one APD is connected, there is only one count direction whichs introduces harmonic frequencies. To reduce the effect, the signal is filtered by a differentiator. The final step is the calculation of the signals Fourier transform. The resulting data stream is pushed into a defined RAM region via the RAM writer module using direct memory access. When the data are written, the operating system can access the data for further processing. The FPGA bitstreams additionally allows different data streams to be written into the RAM with the help of the AXI-4 stream switch. For testing, there is also a signal generation module (not shown in the figure) utilizing the digital-analog converters (DAC) of the FPGA board.</label>
                                 <img src="./img/flow_diagram_FPGA.png" class="img-fluid">
                             </div>
                         </div>
