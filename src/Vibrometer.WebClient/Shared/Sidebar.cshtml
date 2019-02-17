@@ -23,28 +23,41 @@
             }
         </ul>
         <div class="d-flex justify-content-between" style="position:absolute;bottom:0px">
-            <div class="fileinput text-center mx-1" data-provides="fileinput">
-                <span class="btn btn-raised btn-round btn-outline-info btn-file">
+            <div class="fileinput text-center mx-1">
+                <span class="btn btn-raised btn-round btn-outline-info btn-file @((!state.IsConnected || !state.IsBitstreamLoaded) ? "disabled" : "")">
                     <i class="material-icons text_align-center visible-on-sidebar-regular">cloud_upload</i>
                     <span class="fileinput-new ml-1">Load</span>
                     <input type="file" onchange="@UploadVibFile" id="vibFileUpload" accept=".vib.json" />
                 </span>
             </div>
-            <div class="fileinput text-center mx-1" data-provides="fileinput">
+            <div class="text-center mx-1">
                 <span class="btn btn-raised btn-round btn-outline-info btn-file" onclick="@this.DownloadVibFile">
                     <i class="material-icons text_align-center visible-on-sidebar-regular">cloud_download</i>
                     <span class="fileinput-new ml-1">Save</span>
                 </span>
             </div>
         </div>
-        <div class="d-flex w-100" style="position:absolute;bottom:50%">
-            <h6 style="transform:rotate(-90deg);transform-origin: left top 0;"><small>© ESO/Y. Beletsky</small></h6>
+        <div class="d-flex" style="white-space: nowrap;position:absolute;bottom:30%">
+            <h6 style="transform:rotate(-90deg);transform-origin: left top 0;"><small>© www.creative-tim.com / © ESO/Y. Beletsky</small></h6>
         </div>
     </div>
 </div>
 
 @functions
-{
+{      
+    protected override void OnInit()
+    {
+        state.PropertyChanged += (sender, e) =>
+        {
+            if (e.PropertyName == nameof(state.IsConnected) || e.PropertyName == nameof(state.IsBitstreamLoaded))
+            {
+                this.StateHasChanged();
+            }
+        };
+
+        base.OnInit();
+    }
+
     private async void UploadVibFile(UIChangeEventArgs e)
     {
         try

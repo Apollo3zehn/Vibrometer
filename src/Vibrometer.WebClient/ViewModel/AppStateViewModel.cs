@@ -10,9 +10,11 @@ namespace Vibrometer.WebClient.Model
     {
         #region Field
 
+        bool _isBitstreamLoaded;
+        bool _isConnected;
+
         AppState _model;
         FpgaData _fpgaData;
-        bool _isConnected;
 
         #endregion
 
@@ -41,6 +43,12 @@ namespace Vibrometer.WebClient.Model
         #endregion
 
         #region Properties
+
+        public bool IsBitstreamLoaded
+        {
+            get { return _isBitstreamLoaded; }
+            set { base.SetProperty(ref _isBitstreamLoaded, value); }
+        }
 
         public bool IsConnected
         {

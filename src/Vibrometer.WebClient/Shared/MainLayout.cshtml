@@ -13,20 +13,39 @@
         <Navbar />
 
         <div class="content">
-            <div class="content">
-                <div class="container-fluid">
-                    @if (state.IsConnected)
-                    {
-                        @Body
-                    }
-                    else
-                    {
-                        <div class="alert alert-rose alert-with-icon" data-notify="container">
-                            <i class="material-icons" data-notify="icon">notifications</i>
-                            <span data-notify="message">Connection to server lost, trying to reconnect ...</span>
+            <div class="container-fluid">
+                @if (!state.IsConnected)
+                {
+                    <div class="row align-items-center" style="height:70vh">
+                        <div class="col mx-auto">
+                            <div class="alert alert-info alert-with-icon" data-notify="container">
+                                <i class="material-icons" data-notify="icon">notifications</i>
+                                <span data-notify="message">Connection to server lost, trying to reconnect ...</span>
+                            </div>
                         </div>
-                    }
-                </div>
+                    </div>
+                }
+                else if (!state.IsBitstreamLoaded)
+                {
+                    <div class="row align-items-center" style="height:70vh">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h5 class="card-text">Please confirm that the vibrometer's bitstream is already loaded to avoid any deadlocks.</h5>
+                                <button class="btn btn-rose" onclick="@this.ConfirmBitstreamIsLoaded">Yes, continue!</button>
+                                <div class="fileinput text-center mx-1">
+                                    <span class="btn btn-outline-secondary btn-file">
+                                        <span class="fileinput-new">No, upload now!</span>
+                                        <input type="file" onchange="@UploadBitstream" id="bitstreamUpload2" accept=".bit" />
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    @Body
+                }
             </div>
         </div>
 
@@ -40,11 +59,31 @@
     {
         state.PropertyChanged += (sender, e) =>
         {
-            if (e.PropertyName == nameof(state.IsConnected))
+            if (e.PropertyName == nameof(state.IsConnected) || e.PropertyName == nameof(state.IsBitstreamLoaded))
             {
                 this.StateHasChanged();
             }
         };
+    }
+
+    private async void UploadBitstream()
+    {
+        string bitstreamBase64;
+
+        try
+        {
+            bitstreamBase64 = await JSRuntime.Current.InvokeAsync<string>("Vibrometer.ReadFile", "bitstreamUpload2", true);
+            await signalR.Connection.InvokeAsync("LoadBitstream", bitstreamBase64);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    private async void ConfirmBitstreamIsLoaded()
+    {
+        await signalR.Connection.InvokeAsync("UpdateBitstreamState", true);
     }
 }
 

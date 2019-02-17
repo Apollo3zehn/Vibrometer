@@ -9,17 +9,20 @@ namespace Vibrometer.WebServer
 {
     public class VibrometerHub : Hub
     {
+        private AppState _state;
         private VibrometerApi _api;
 
-        // clientPushService is only requested to create an instance
-        public VibrometerHub(VibrometerApi api, ClientPushService clientPushService)
+        // clientPushService is only requested to create a singleton instance
+        public VibrometerHub(AppState state, VibrometerApi api, ClientPushService clientPushService)
         {
+            _state = state;
             _api = api;
         }
 
         public override Task OnConnectedAsync()
         {
             this.Clients.Client(this.Context.ConnectionId).SendAsync("SendFpgaSettings", _api.GetState());
+            this.Clients.Client(this.Context.ConnectionId).SendAsync("SendBitstreamState", _state.IsBitstreamLoaded);
 
             return base.OnConnectedAsync();
         }
@@ -47,6 +50,15 @@ namespace Vibrometer.WebServer
 
                 _api.LoadBitstream(bitstream);
                 this.OnFpgaSettingsChanged();
+            });
+        }
+
+        public Task UpdateBitstreamState(bool state)
+        {
+            return Task.Run(() =>
+            {
+                _state.IsBitstreamLoaded = state;
+                this.Clients.All.SendAsync("SendBitstreamState", _state.IsBitstreamLoaded);
             });
         }
 

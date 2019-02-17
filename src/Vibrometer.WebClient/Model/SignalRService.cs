@@ -50,6 +50,13 @@ namespace Vibrometer.WebClient.Model
                 return Task.CompletedTask;
             });
 
+            this.Connection.On<bool>("SendBitstreamState", bitstreamState =>
+            {
+                state.IsBitstreamLoaded = bitstreamState;
+
+                return Task.CompletedTask;
+            });
+
             Task.Run(async () =>
             {
                 state.FpgaSettings = await this.Connection.InvokeAsync<FpgaSettings>("GetFpgaSettings");

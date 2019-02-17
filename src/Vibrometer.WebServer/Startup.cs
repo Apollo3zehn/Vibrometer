@@ -28,8 +28,9 @@ namespace Vibrometer.WebServer
                 });
             });
 
-            services.AddSingleton<ClientPushService>();
+            services.AddSingleton<AppState>();
             services.AddSingleton<VibrometerApi>();
+            services.AddSingleton<ClientPushService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
