@@ -16,13 +16,13 @@ The FPGA board is located directly behind the two Avalanche Photodiodes (APD) of
 
 ## User interface
 
-The user interface is based on ASP.NET Core (web server) and https://blazor.net/ (web client), which in combination allow full-stack web-development with C#. The real-time communication is accomplished with [SignalR](https://dotnet.microsoft.com/apps/aspnet/real-time), a websockets based API to allow remote-procedure calls for duplex communcation.
+The user interface is based on ASP.NET Core (web server) and [Blazor](https://blazor.net/) (web client), which in combination allow full-stack web-development with C#. The real-time communication is accomplished with [SignalR](https://dotnet.microsoft.com/apps/aspnet/real-time), a websockets based API to allow remote-procedure calls for duplex communcation.
 
-The figure below shows the analysis page of the web client. The [sample](sample/sample.vib.json) configuration file has been loaded to confgure the FPGA. In this sample, the signal generating feature has been activated to create two phase-shifted, frequency modulated signals. The two RF outputs of the FPGA board ([STEMlab 125-14](https://www.redpitaya.com/f130/STEMlab-board) are directly connected to the two RF inputs via two SMA cables. The signals are configured with a frequency of 400 Hz as a real object oscillation consists of two sinusoidal movements (back and forth), the frequency is halved to 200 Hz, which can be found in the spectrum.
+The figure below shows the analysis page of the web client. The [sample](sample/sample.vib.json) configuration file has been loaded to confgure the FPGA. In this sample, the signal generating feature is activated to create two phase-shifted, frequency modulated signals. The two RF outputs of the FPGA board ([STEMlab 125-14](https://www.redpitaya.com/f130/STEMlab-board)) are directly connected to the two RF inputs via two SMA cables to measure the generated signals. The output signals are configured with a frequency of 400 Hz. But a real object oscillation consists of two sinusoidal movements (back and forth), and therefore the frequency is halved to 200 Hz, which can be found as a peak in the spectrum below.
 
 ![User interface (analysis)](doc/UI_analysis.png)
 
-The next figure shows the configuration page where all FPGA parameters can be modified. A summary of the low-level FPGA settings is shown on the right to get a quick overview of the internal frequencies. The settings page also allows the upload of a bitstream file which will directly be written to the FPGA.
+The next figure shows the configuration page where all FPGA parameters can be modified. A summary of the low-level FPGA settings is shown on the right to get a quick overview of the internal frequencies. The settings page also allows the upload of a bitstream file which will be written directly to the FPGA.
 
 ![User interface (settings)](doc/UI_settings.png)
 
