@@ -16,4 +16,6 @@ The FPGA board is located directly behind the two Avalanche Photodiodes (APD) of
 
 ## User interface
 
-coming soon
+![User Interface](doc/UI_analysis.png)
+
+![User Interface](doc/UI_settings.png)
