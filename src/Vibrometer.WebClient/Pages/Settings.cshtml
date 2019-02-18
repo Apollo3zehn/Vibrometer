@@ -90,12 +90,11 @@
                                     <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.PT_ShiftExtremum]"
                                                         Value="@state.FpgaSettings.PT_ShiftExtremum"
                                                         OnValueChanged="@OnValueChanged" />
+                                    <ExtremumFinderComponent />
 
                                     <!--Filter-->
-
-                                    <!--TODO: The purpose of this module is to apply a high pass filter to avoid variable overflow and ...-->
                                     <ApiRecordHeader DisplayName="Filter"
-                                                     Description="This module consists of an differentiator that is required if signal B is not shifted by 90 deg to determine the count direction." />
+                                                     Description="This module consists of an differentiator that is required if the 90° shifted signal (signal B) is not available to determine the count direction." />
                                     <ApiRecordComponentBool Record="ApiInfo.Instance[ApiParameter.FI_Enabled]"
                                                             Value="@state.FpgaSettings.FI_Enabled"
                                                             OnValueChanged="@OnValueChangedBool" />

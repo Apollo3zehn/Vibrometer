@@ -1,0 +1,52 @@
+﻿@inject AppStateViewModel state
+@implements IDisposable
+
+@using System.ComponentModel
+
+<div class="row mb-2">
+    <div class="col-10">
+        <div class="form-group bmd-form-group">
+            <label class="bmd-label-floating">Current lower threshold: </label>
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="form-group bmd-form-group">
+            <label class="bmd-label-floating">@state.FpgaData.LowerThreshold</label>
+        </div>
+    </div>
+</div>
+<div class="row mb-2">
+    <div class="col-10">
+        <div class="form-group bmd-form-group">
+            <label class="bmd-label-floating">Current upper threshold: </label>
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="form-group bmd-form-group">
+            <label class="bmd-label-floating">@state.FpgaData.UpperThreshold</label>
+        </div>
+    </div>
+</div>
+
+@functions
+{
+    private PropertyChangedEventHandler StateChangedHandler;
+
+    protected override void OnInit()
+    {
+        this.StateChangedHandler = (sender, e) =>
+        {
+            if (e.PropertyName == nameof(state.FpgaData))
+            {
+                base.StateHasChanged();
+            }
+        };
+
+        state.PropertyChanged += this.StateChangedHandler;
+    }
+
+    public void Dispose()
+    {
+        state.PropertyChanged -= this.StateChangedHandler;
+    }
+}
