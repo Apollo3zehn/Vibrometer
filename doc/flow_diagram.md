@@ -43,7 +43,7 @@ graph LR
     object --> circulator
 
     circulator --> splitterY1
-    splitterY --> splitterY1
+    splitterY --> |reference beam| splitterY1
     splitterY1 --> APD1
 
     circulator --> splitterY2
