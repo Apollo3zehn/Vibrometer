@@ -3,6 +3,11 @@ window.Vibrometer = {
     {
         let context = document.getElementById(id);
 
+        //Chart.defaults.global.elements.point.radius = 0;
+        Chart.defaults.global.elements.line.borderWidth = 1;
+        Chart.defaults.global.elements.line.fill = false;
+        Chart.defaults.global.elements.line.lineTension = 0;
+
         let config = {
             type: "scatter",
             data: {
@@ -11,21 +16,13 @@ window.Vibrometer = {
                         data: [],
                         backgroundColor: "rgba(234, 44, 109, 0.2)",
                         borderColor: "rgba(234, 44, 109)",
-                        borderWidth: 1,
-                        lineTension: 0,
-                        pointRadius: 2,
-                        showLine: true,
-                        fill: false
+                        showLine: true
                     },
                     {
                         data: [],
                         backgroundColor: "rgba(0, 188, 212, 0.2)",
                         borderColor: "rgba(0, 188, 212)",
-                        borderWidth: 1,
-                        lineTension: 0,
-                        pointRadius: 2,
-                        showLine: true,
-                        fill: false
+                        showLine: true
                     }
                 ]
             },
