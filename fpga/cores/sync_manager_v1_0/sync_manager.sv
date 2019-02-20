@@ -39,25 +39,25 @@ module sync_manager #
                                             buffer_3            = 4'b0100,
                                             buffer_4            = 4'b1000;
 
-    reg  [3:0]                              state_read,         state_read_next;
-    reg  [3:0]                              state_ready,        state_ready_next;
-    reg  [3:0]                              state_lock,         state_lock_next;
-    reg  [3:0]                              state_write,        state_write_next;
+    logic  [3:0]                            state_read,         state_read_next;
+    logic  [3:0]                            state_ready,        state_ready_next;
+    logic  [3:0]                            state_lock,         state_lock_next;
+    logic  [3:0]                            state_write,        state_write_next;
 
-    reg  [MM_ADDR_WIDTH-1:0]                read_count,         read_count_next;
-    reg  [MM_ADDR_WIDTH-1:0]                write_count,        write_count_next;
-    reg                                     lock,               lock_next;
-    reg  [MM_ADDR_WIDTH-1:0]                write_factor,       write_factor_next;
-    reg  [31:0]                             write_buffer_tmp,   write_buffer_tmp_next;
+    logic  [MM_ADDR_WIDTH-1:0]              read_count,         read_count_next;
+    logic  [MM_ADDR_WIDTH-1:0]              write_count,        write_count_next;
+    logic                                   lock,               lock_next;
+    logic  [MM_ADDR_WIDTH-1:0]              write_factor,       write_factor_next;
+    logic  [31:0]                           write_buffer_tmp,   write_buffer_tmp_next;
 
-    wire [31:0]                             length;
+    wire   [31:0]                           length;
     
     assign combination                      = state_read | state_ready | state_lock | state_write;
     assign length                           = 1 << log_length;
     assign read_buffer                      = base_address + ((buffer_to_factor(state_read) * (DATA_WIDTH / 8)) << log_length);
     assign write_buffer                     = write_buffer_tmp + ((write_factor * (DATA_WIDTH / 8)) << log_length);
 
-    always @(posedge aclk) begin
+    always_ff @(posedge aclk) begin
         if (~aresetn) begin
             state_read          <= buffer_1;
             state_ready         <= buffer_2;
@@ -81,7 +81,7 @@ module sync_manager #
         end
     end
 
-    always @* begin
+    always_comb begin 
         lock_next               = request;
         read_count_next         = read_count;
         write_count_next        = write_count;

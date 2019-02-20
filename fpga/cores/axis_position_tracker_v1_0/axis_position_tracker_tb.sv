@@ -2,15 +2,15 @@
 
 module axis_position_tracker_tb #
 (
-    parameter integer           AXIS_TDATA_WIDTH    = 32
+    parameter integer             AXIS_TDATA_WIDTH    = 32
 );
 
-    reg                         aclk                = 0;
-    reg                         aresetn             = 0;
-    reg [AXIS_TDATA_WIDTH-1:0]  lower_treshold      = -10;
-    reg [AXIS_TDATA_WIDTH-1:0]  upper_treshold      = 10;
-    reg                         S_AXIS_tvalid       = 1;
-    reg [AXIS_TDATA_WIDTH-1:0]  S_AXIS_tdata        = 0;
+    logic                         aclk                = 0;
+    logic                         aresetn             = 0;
+    logic [AXIS_TDATA_WIDTH-1:0]  lower_treshold      = -10;
+    logic [AXIS_TDATA_WIDTH-1:0]  upper_treshold      = 10;
+    logic                         S_AXIS_tvalid       = 1;
+    logic [AXIS_TDATA_WIDTH-1:0]  S_AXIS_tdata        = 0;
 
     integer i                                       = 0;
 

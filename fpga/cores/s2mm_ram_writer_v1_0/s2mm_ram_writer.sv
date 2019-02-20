@@ -53,19 +53,19 @@ module s2mm_ram_writer #
     localparam  [7:0]                   burst_length            = 16;
     localparam integer                  ADDR_SIZE               = clogb2((AXI_DATA_WIDTH/8)-1);
 
-    reg  [3:0]                          count,                  count_next;
-    reg  [2:0]                          count_rst,              count_rst_next;
-    reg                                 awvalid,                awvalid_next;
-    reg                                 wvalid,                 wvalid_next;
-    reg  [1:0]                          state,                  state_next;
+    logic  [3:0]                        count,                  count_next;
+    logic  [2:0]                        count_rst,              count_rst_next;
+    logic                               awvalid,                awvalid_next;
+    logic                               wvalid,                 wvalid_next;
+    logic  [1:0]                        state,                  state_next;
 
     wire                                full;              
     wire                                empty;
     wire                                wlast;
-    wire [63:0]                         wdata;
-    wire [63:0]                         tdata;
-    wire [12:0]                         rdcount;
-    wire [12:0]                         wrcount;
+    wire   [63:0]                       wdata;
+    wire   [63:0]                       tdata;
+    wire   [12:0]                       rdcount;
+    wire   [12:0]                       wrcount;
 
     function integer clogb2 (input integer value);
         for(clogb2 = 0; value > 0; clogb2 = clogb2 + 1) begin
@@ -130,7 +130,7 @@ module s2mm_ram_writer #
         .ALMOSTEMPTY(empty)
     );
 
-    always @(posedge aclk) begin
+    always_ff @(posedge aclk) begin
         if(~aresetn) begin
             count_rst       <= 0;
             awvalid         <= 0;
@@ -154,7 +154,7 @@ module s2mm_ram_writer #
         end
     end
 
-    always @* begin
+    always_comb begin 
         count_next          = count;
         count_rst_next      = count_rst;
         awvalid_next        = awvalid;

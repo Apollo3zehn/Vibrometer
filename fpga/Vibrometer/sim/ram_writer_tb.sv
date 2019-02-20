@@ -2,13 +2,13 @@
 
 module ram_writer_tb();
 
-    reg         aclk                    = 0;
-    reg         aresetn                 = 0;
-    reg [31:0]  GPIO                    = 0;
-    reg         S_AXIS_tvalid           = 1;
-    reg [31:0]  S_AXIS_tdata            = 0;
-    reg         M_AXI_awready           = 1;
-    reg         M_AXI_wready            = 1;
+    logic         aclk                    = 0;
+    logic         aresetn                 = 0;
+    logic [31:0]  GPIO                    = 0;
+    logic         S_AXIS_tvalid           = 1;
+    logic [31:0]  S_AXIS_tdata            = 0;
+    logic         M_AXI_awready           = 1;
+    logic         M_AXI_wready            = 1;
  
     RAM_Writer_imp_DKQNRD DUT (
         .aclk(aclk),

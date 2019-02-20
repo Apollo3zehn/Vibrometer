@@ -24,20 +24,20 @@ module axis_extremum_finder #
     localparam                              idle            = 1'b0, 
                                             measure         = 1'b1;
 
-    reg  [AXIS_TDATA_WIDTH/2-1:0]           min,            min_next;
-    reg  [AXIS_TDATA_WIDTH/2-1:0]           max,            max_next;
-    reg  [AXIS_TDATA_WIDTH/2-1:0]           tmp_min,        tmp_min_next;
-    reg  [AXIS_TDATA_WIDTH/2-1:0]           tmp_max,        tmp_max_next;
-    reg  [31:0]                             count,          count_next;
-    reg                                     state,          state_next;
+    logic  [AXIS_TDATA_WIDTH/2-1:0]         min,            min_next;
+    logic  [AXIS_TDATA_WIDTH/2-1:0]         max,            max_next;
+    logic  [AXIS_TDATA_WIDTH/2-1:0]         tmp_min,        tmp_min_next;
+    logic  [AXIS_TDATA_WIDTH/2-1:0]         tmp_max,        tmp_max_next;
+    logic  [31:0]                           count,          count_next;
+    logic                                   state,          state_next;
     
-    reg  [AXIS_TDATA_WIDTH/2-1:0]           tmp_center;
+    logic  [AXIS_TDATA_WIDTH/2-1:0]         tmp_center;
     
-    reg  [AXIS_TDATA_WIDTH/2-1:0]           testreg;
+    logic  [AXIS_TDATA_WIDTH/2-1:0]         testreg;
     
-    wire [AXIS_TDATA_WIDTH/2-1:0]           signal_a;
-    wire [AXIS_TDATA_WIDTH/2-1:0]           signal_b; 
-    wire [31:0]                             max_count;
+    wire   [AXIS_TDATA_WIDTH/2-1:0]         signal_a;
+    wire   [AXIS_TDATA_WIDTH/2-1:0]         signal_b; 
+    wire   [31:0]                           max_count;
 
     assign S_AXIS_tready                    = aresetn;
     assign lower_threshold                  = min;
@@ -47,7 +47,7 @@ module axis_extremum_finder #
     assign signal_b                         = S_AXIS_tdata[AXIS_TDATA_WIDTH-1:AXIS_TDATA_WIDTH/2];
     assign max_count                        = 1 << log_count;
 
-    always @(posedge aclk) begin
+    always_ff @(posedge aclk) begin
         if (~aresetn) begin
             min             <= {1'b0, {(AXIS_TDATA_WIDTH/2-1){1'b1}}}; // max. positve number
             max             <= {1'b1, {(AXIS_TDATA_WIDTH/2-1){1'b0}}}; // max. negative number
@@ -65,7 +65,7 @@ module axis_extremum_finder #
         end
     end
   
-    always @* begin
+    always_comb begin 
         min_next            = min;
         max_next            = max;
         tmp_min_next        = tmp_min;

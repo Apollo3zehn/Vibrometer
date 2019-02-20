@@ -48,17 +48,17 @@ module axis_complex_averager #
     localparam                              first               = 1'b0, 
                                             measure             = 1'b1;
 
-    reg  [7:0]                              avg_count,          avg_count_next;
-    reg                                     state,              state_next;
-    reg  [BRAM_ADDR_WIDTH-1:0]              a_addr,             a_addr_next;
-    reg  [BRAM_ADDR_WIDTH-1:0]              b_addr,             b_addr_next;
-    reg                                     t_last,             t_last_next;
+    logic  [7:0]                            avg_count,          avg_count_next;
+    logic                                   state,              state_next;
+    logic  [BRAM_ADDR_WIDTH-1:0]            a_addr,             a_addr_next;
+    logic  [BRAM_ADDR_WIDTH-1:0]            b_addr,             b_addr_next;
+    logic                                   t_last,             t_last_next;
 
-    wire [(BRAM_DATA_WIDTH/2)-1:0]          s_real;
-    wire [(BRAM_DATA_WIDTH/2)-1:0]          s_imag;
-    wire [(BRAM_DATA_WIDTH/2)-1:0]          b_real;
-    wire [(BRAM_DATA_WIDTH/2)-1:0]          b_imag;
-    wire [31:0]                             max_count;
+    wire   [(BRAM_DATA_WIDTH/2)-1:0]        s_real;
+    wire   [(BRAM_DATA_WIDTH/2)-1:0]        s_imag;
+    wire   [(BRAM_DATA_WIDTH/2)-1:0]        b_real;
+    wire   [(BRAM_DATA_WIDTH/2)-1:0]        b_imag;
+    wire   [31:0]                           max_count;
     wire                                    write_enable;
 
     assign max_count                        = 1 << log_count;
@@ -89,7 +89,7 @@ module axis_complex_averager #
     assign bram_portb_clk                   = aclk;
     assign bram_portb_en                    = write_enable;
 
-    always @(posedge aclk) begin
+    always_ff @(posedge aclk) begin
         if (~aresetn) begin
             avg_count           <= 0;
             state               <= first;
@@ -105,7 +105,7 @@ module axis_complex_averager #
         end
     end
 
-    always @* begin
+    always_comb begin 
         avg_count_next          = avg_count;
         state_next              = state;
         a_addr_next             = a_addr;

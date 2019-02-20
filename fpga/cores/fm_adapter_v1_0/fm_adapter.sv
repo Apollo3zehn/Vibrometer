@@ -31,9 +31,9 @@ module fm_adapter #
 
     wire   [SIGNAL_PHASE_WIDTH-1:0]             tdata_unsigned;
 
-    reg                                         switch, switch_next;
-    reg    [SIGNAL_PHASE_WIDTH-1:0]             phase, phase_next;
-    reg                                         slope, slope_next;
+    logic                                       switch, switch_next;
+    logic    [SIGNAL_PHASE_WIDTH-1:0]           phase, phase_next;
+    logic                                       slope, slope_next;
 
     assign tdata_unsigned                       = S_AXIS_tdata + (1 << (SIGNAL_PHASE_WIDTH - 1));
     assign S_AXIS_tready                        = M_AXIS_tready;
@@ -41,7 +41,7 @@ module fm_adapter #
     assign M_AXIS_tdata                         = fm_enable ? (tdata_unsigned >> shift_carrier) : phase_carrier;
     assign switch_enable                        = switch;
 
-    always @(posedge aclk) begin
+    always_ff @(posedge aclk) begin
         if (~aresetn) begin
             switch          <= 1'b0;
             phase           <= 0;
@@ -53,7 +53,7 @@ module fm_adapter #
         end 
     end
       
-    always @* begin
+    always_comb begin 
         switch_next          = switch;
         phase_next           = tdata_unsigned;
         slope_next           = slope;

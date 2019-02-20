@@ -23,10 +23,10 @@ module axis_throttler #
     input  wire [AXIS_TDATA_WIDTH-1:0]      S_AXIS_tdata
 );     
 
-    reg         [31:0]                      count,              count_next;
-    reg                                     deny,               deny_next;
+    logic [31:0]                            count,          count_next;
+    logic                                   deny,           deny_next;
 
-    wire        [31:0]                      max;
+    wire  [31:0]                            max;
     
     assign      S_AXIS_tready               = M_AXIS_tready && ~deny;
     assign      M_AXIS_tvalid               = S_AXIS_tvalid && ~deny;
@@ -34,7 +34,7 @@ module axis_throttler #
 
     assign      max                         = 1 << log_throttle;
 
-    always @(posedge aclk) begin
+    always_ff @(posedge aclk) begin
         if (~aresetn) begin
             count           <= 0;
             deny            <= 1'b0;
@@ -44,7 +44,7 @@ module axis_throttler #
         end
     end
       
-    always @* begin
+    always_comb begin 
         deny_next           = deny;
         count_next          = count;
 

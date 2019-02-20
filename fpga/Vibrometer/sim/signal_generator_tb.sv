@@ -2,8 +2,8 @@
 
 module signal_generator_tb();
 
-    reg         aclk    = 0;
-    reg [31:0]  GPIO_sg = 3000000;
+    logic         aclk    = 0;
+    logic [31:0]  GPIO_sg = 3000000;
  
     Signal_Generator_imp_H83IIY DUT (
         .GPIO_sg(GPIO_sg),

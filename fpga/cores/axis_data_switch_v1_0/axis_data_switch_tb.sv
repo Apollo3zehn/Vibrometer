@@ -2,13 +2,13 @@
 
 module axis_data_switch_tb #
 (
-     parameter integer      DATA_WIDTH  = 16
+     parameter integer        DATA_WIDTH  = 16
 );
 
-    reg                     aclk        = 0;
-    reg                     switch      = 0;
-    reg  [DATA_WIDTH-1:0]   a           = 14;
-    reg  [DATA_WIDTH-1:0]   b           = -29;
+    logic                     aclk        = 0;
+    logic                     switch      = 0;
+    logic  [DATA_WIDTH-1:0]   a           = 14;
+    logic  [DATA_WIDTH-1:0]   b           = -29;
     
     signal_switch DUT (
         .aclk(aclk),

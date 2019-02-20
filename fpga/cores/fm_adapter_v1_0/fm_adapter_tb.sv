@@ -2,18 +2,18 @@
 
 module fm_adapter_tb #
 (
-     parameter integer              CARRIER_PINC_WIDTH  = 32,
-     parameter integer              AXIS_TDATA_WIDTH    = 32
+     parameter integer                CARRIER_PINC_WIDTH  = 32,
+     parameter integer                AXIS_TDATA_WIDTH    = 32
 );
 
-    reg                             aclk                = 0;
-    reg                             aresetn             = 0;
+    logic                             aclk                = 0;
+    logic                             aresetn             = 0;
 
-    reg                             fm_enable           = 1;
-    reg [4:0]                       shift_carrier       = 0;
-    reg [CARRIER_PINC_WIDTH-1:0]    phase_carrier       = 0;
+    logic                             fm_enable           = 1;
+    logic [4:0]                       shift_carrier       = 0;
+    logic [CARRIER_PINC_WIDTH-1:0]    phase_carrier       = 0;
     
-    reg signed [AXIS_TDATA_WIDTH-1:0] S_AXIS_tdata      = 0;
+    logic signed [AXIS_TDATA_WIDTH-1:0] S_AXIS_tdata      = 0;
 
     fm_adapter DUT (
         .aclk(aclk),

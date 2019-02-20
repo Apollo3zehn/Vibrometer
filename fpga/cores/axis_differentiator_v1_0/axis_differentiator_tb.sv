@@ -9,14 +9,14 @@ module axis_differentiator_tb #
     integer                             data_handle; 
     `define NULL                        0    
 
-    reg                                 aclk                = 0;
-    reg                                 aresetn             = 1'b0;
-    reg                                 enable              = 1'b1;
-    reg                                 M_AXIS_tready       = 1'b1;
-    reg                                 S_AXIS_tvalid       = 1'b1;
-    reg  [AXIS_TDATA_WIDTH-1:0]         value               = 0;
+    logic                               aclk                = 0;
+    logic                               aresetn             = 1'b0;
+    logic                               enable              = 1'b1;
+    logic                               M_AXIS_tready       = 1'b1;
+    logic                               S_AXIS_tvalid       = 1'b1;
+    logic  [AXIS_TDATA_WIDTH-1:0]       value               = 0;
  
-    wire [AXIS_TDATA_WIDTH-1:0]         S_AXIS_tdata;
+    wire   [AXIS_TDATA_WIDTH-1:0]       S_AXIS_tdata;
 
     axis_differentiator DUT (
         .aclk(aclk),
@@ -43,7 +43,7 @@ module axis_differentiator_tb #
             aresetn         = 1'b1;
     end
 
-    always @(posedge aclk) begin
+    always_ff @(posedge aclk) begin
         $fscanf(data_handle, "%d\n", value);
 
         if ($feof(data_handle)) begin

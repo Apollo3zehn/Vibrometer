@@ -14,13 +14,13 @@ module Fourier_transform_tb #
     
     `define NULL                        0    
 
-    reg                                 aclk                    = 0;
-    reg                                 aresetn                 = 0;
-    reg  [31:0]                         GPIO                    = 0;
-    reg  [AXIS_TDATA_WIDTH_IN-1:0]      value                   = 0;
-    reg                                 S_AXIS_filter_tvalid    = 1;
-    reg                                 M_AXIS_fft_tready       = 1;
-    reg  [(AXIS_TDATA_WIDTH_OUT)-1:0]   M_AXIS_fft_tdata        = 0;
+    logic                                 aclk                    = 0;
+    logic                                 aresetn                 = 0;
+    logic  [31:0]                         GPIO                    = 0;
+    logic  [AXIS_TDATA_WIDTH_IN-1:0]      value                   = 0;
+    logic                                 S_AXIS_filter_tvalid    = 1;
+    logic                                 M_AXIS_fft_tready       = 1;
+    logic  [(AXIS_TDATA_WIDTH_OUT)-1:0]   M_AXIS_fft_tdata        = 0;
  
     wire [AXIS_TDATA_WIDTH_IN-1:0]      S_AXIS_filter_tdata;
  
@@ -62,7 +62,7 @@ module Fourier_transform_tb #
             GPIO            <= 32'b00000000_00000000_00000000_10000101;
     end
 
-    always @(posedge aclk) begin
+    always_ff @(posedge aclk) begin
         $fscanf(file_handle_in, "%d\n", value);
         $fwrite(
             file_handle_out, 

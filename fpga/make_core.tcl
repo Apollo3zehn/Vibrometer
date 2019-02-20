@@ -8,9 +8,17 @@ set targetDirectoryPath [lindex $argv 5]
 
 create_project -force -part $partName $projectName $targetDirectoryPath
 
-add_files -quiet -fileset sources_1   -norecurse [glob -nocomplain $sourceDirectoryPath/$coreName/*.v]
-add_files -quiet -fileset sim_1       -norecurse [glob -nocomplain $sourceDirectoryPath/$coreName/*tb.sv]
-add_files -quiet -fileset sim_1       -norecurse [glob -nocomplain $sourceDirectoryPath/$coreName/*tb.wcfg]
+set fileset_source_1 [glob -nocomplain $sourceDirectoryPath/$coreName/*.*v]
+set fileset_sim_1 [glob -nocomplain $sourceDirectoryPath/$coreName/*_tb.*v]
+
+set x {}
+foreach elem $fileset_source_1 {dict set x $elem 1}
+foreach elem $fileset_sim_1 {dict unset x $elem}
+set fileset_source_1 [dict keys $x]
+
+add_files -quiet -fileset sources_1   -norecurse $fileset_source_1
+add_files -quiet -fileset sim_1       -norecurse $fileset_sim_1
+add_files -quiet -fileset sim_1       -norecurse [glob -nocomplain $sourceDirectoryPath/$coreName/*_tb.wcfg]
 
 ipx::package_project -import_files -root_dir $targetDirectoryPath/$coreName
 

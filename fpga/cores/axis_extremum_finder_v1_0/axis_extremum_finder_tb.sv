@@ -2,15 +2,15 @@
 
 module axis_extremum_finder_tb #
 (
-    parameter integer           AXIS_TDATA_WIDTH    = 32
+    parameter integer             AXIS_TDATA_WIDTH    = 32
 );
 
-    reg                         aclk                = 0;
-    reg                         aresetn             = 0;
-    reg [4:0]                   log_count           = 0;
-    reg [2:0]                   shift               = 0;
-    reg [AXIS_TDATA_WIDTH-1:0]  S_AXIS_tdata        = 0;
-    reg                         S_AXIS_tvalid       = 1;
+    logic                         aclk                = 0;
+    logic                         aresetn             = 0;
+    logic [4:0]                   log_count           = 0;
+    logic [2:0]                   shift               = 0;
+    logic [AXIS_TDATA_WIDTH-1:0]  S_AXIS_tdata        = 0;
+    logic                         S_AXIS_tvalid       = 1;
  
     axis_extremum_finder DUT (
         .aclk(aclk),

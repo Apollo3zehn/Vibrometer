@@ -2,16 +2,16 @@
 
 module axis_throttler_tb #
 (
-     parameter integer              AXIS_TDATA_WIDTH    = 32
+     parameter integer                AXIS_TDATA_WIDTH    = 32
 );
 
-    reg                             aclk                = 0;
-    reg                             aresetn             = 0;
-    reg [4:0]                       log_throttle        = 3;
+    logic                             aclk                = 0;
+    logic                             aresetn             = 0;
+    logic [4:0]                       log_throttle        = 3;
     
-    reg                             M_AXIS_tready       = 1;
-    reg                             S_AXIS_tvalid       = 0;
-    reg [AXIS_TDATA_WIDTH-1:0]      S_AXIS_tdata        = 0;
+    logic                             M_AXIS_tready       = 1;
+    logic                             S_AXIS_tvalid       = 0;
+    logic [AXIS_TDATA_WIDTH-1:0]      S_AXIS_tdata        = 0;
 
     axis_throttler DUT (
         .aclk(aclk),

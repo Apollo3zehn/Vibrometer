@@ -25,14 +25,14 @@ module axis_differentiator #
 );
     genvar                                  i;
     
-    reg  signed [AXIS_TDATA_WIDTH-1:0]      shift1,                 shift1_next;
-    reg  signed [AXIS_TDATA_WIDTH-1:0]      shift2,                 shift2_next;
-    reg  signed [AXIS_TDATA_WIDTH-1:0]      shift3,                 shift3_next;
-    reg  signed [AXIS_TDATA_WIDTH-1:0]      result,                 result_next;
-    reg  signed [AXIS_TDATA_WIDTH-1:0]      shift_register[4:0],    shift_register_next[4:0];
+    logic  signed [AXIS_TDATA_WIDTH-1:0]    shift1,                 shift1_next;
+    logic  signed [AXIS_TDATA_WIDTH-1:0]    shift2,                 shift2_next;
+    logic  signed [AXIS_TDATA_WIDTH-1:0]    shift3,                 shift3_next;
+    logic  signed [AXIS_TDATA_WIDTH-1:0]    result,                 result_next;
+    logic  signed [AXIS_TDATA_WIDTH-1:0]    shift_register[4:0],    shift_register_next[4:0];
 
-    wire signed [AXIS_TDATA_WIDTH:0]        sum1;                   // size = AXIS_TDATA_WIDTH + 1
-    wire signed [AXIS_TDATA_WIDTH:0]        sum2;                   // size = AXIS_TDATA_WIDTH + 1
+    wire   signed [AXIS_TDATA_WIDTH:0]      sum1;                   // size = AXIS_TDATA_WIDTH + 1
+    wire   signed [AXIS_TDATA_WIDTH:0]      sum2;                   // size = AXIS_TDATA_WIDTH + 1
 
     assign sum1             = shift_register[4] - shift_register[0];
     assign sum2             = shift_register[1] - shift_register[3];    
@@ -42,7 +42,7 @@ module axis_differentiator #
     assign S_AXIS_tready    = aresetn;
 
     for (i = 0; i < 5 ; i = i + 1) begin
-        always @(posedge aclk) begin
+        always_ff @(posedge aclk) begin
             if (~aresetn)
                 shift_register[i] <= 0;
             else
@@ -50,7 +50,7 @@ module axis_differentiator #
         end       
     end
 
-    always @(posedge aclk) begin
+    always_ff @(posedge aclk) begin
         if (~aresetn) begin
             shift1    <= 0;
             shift2    <= 0;
@@ -65,7 +65,7 @@ module axis_differentiator #
     end     
 
     for (i = 1; i < 5 ; i = i + 1) begin
-        always @* begin 
+        always_comb begin  
             if (S_AXIS_tvalid)
                 shift_register_next[i] = shift_register[i - 1];
             else
@@ -73,7 +73,7 @@ module axis_differentiator #
         end
     end
 
-    always @* begin
+    always_comb begin 
         shift1_next                 = shift1;
         shift2_next                 = shift2;
         shift3_next                 = shift3;

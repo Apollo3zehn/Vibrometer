@@ -30,12 +30,12 @@ module axis_position_tracker #
                                                 low             = 2'b01, 
                                                 high            = 2'b10;              
 
-    reg  [M_AXIS_TDATA_WIDTH-1:0]               position,       position_next;
-    reg  [1:0]                                  state,          state_next;                
-    reg  [S_AXIS_TDATA_WIDTH/2-1:0]             center;
+    logic  [M_AXIS_TDATA_WIDTH-1:0]             position,       position_next;
+    logic  [1:0]                                state,          state_next;                
+    logic  [S_AXIS_TDATA_WIDTH/2-1:0]           center;
     
-    wire [S_AXIS_TDATA_WIDTH/2-1:0]             signal_a;
-    wire [S_AXIS_TDATA_WIDTH/2-1:0]             signal_b;
+    wire   [S_AXIS_TDATA_WIDTH/2-1:0]           signal_a;
+    wire   [S_AXIS_TDATA_WIDTH/2-1:0]           signal_b;
  
     assign S_AXIS_tready                        = aresetn;
     assign M_AXIS_tvalid                        = aresetn;
@@ -44,7 +44,7 @@ module axis_position_tracker #
     assign signal_a                             = S_AXIS_tdata[(S_AXIS_TDATA_WIDTH/2)-1:0];
     assign signal_b                             = S_AXIS_tdata[S_AXIS_TDATA_WIDTH-1:S_AXIS_TDATA_WIDTH/2];
 
-    always @(posedge aclk) begin
+    always_ff @(posedge aclk) begin
         if (~aresetn) begin
             position        <= 0;
             state           <= idle;
@@ -54,7 +54,7 @@ module axis_position_tracker #
         end
     end
       
-    always @* begin
+    always_comb begin 
         position_next       = position;
         state_next          = state;
     

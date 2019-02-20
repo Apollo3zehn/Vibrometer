@@ -5,8 +5,8 @@ import axi_4_axi_vip_0_0_pkg::*;
 
 module axi_4_master_tb();
     
-    reg aclk    = 0;
-    reg aresetn = 0;
+    logic aclk    = 0;
+    logic aresetn = 0;
     
     axi_4_wrapper DUT
     (

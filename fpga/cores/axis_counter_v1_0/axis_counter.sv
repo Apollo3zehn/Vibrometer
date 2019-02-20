@@ -16,13 +16,13 @@ module axis_counter #
     output wire [AXIS_TDATA_WIDTH-1:0]          M_AXIS_tdata
 );
 
-    reg  [COUNTER_WIDTH-1:0]                    data, data_next;
+    logic  [COUNTER_WIDTH-1:0]                  data, data_next;
 
     assign M_AXIS_tvalid                        = aresetn;
     assign M_AXIS_tdata                         = data;
     assign counter                              = data;
 
-    always @(posedge aclk) begin
+    always_ff @(posedge aclk) begin
         if (~aresetn) begin
             data            <= 0;
         end else begin
@@ -30,7 +30,7 @@ module axis_counter #
         end
     end
       
-    always @* begin
+    always_comb begin 
         data_next           = data;
 
         if (M_AXIS_tready) begin
