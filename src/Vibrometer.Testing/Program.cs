@@ -21,7 +21,7 @@ namespace Vibrometer.Testing
             while (!exit)
             {
                 Console.Clear();
-                Console.WriteLine($"[Y] - load Bitstream");
+                Console.WriteLine($"[Y] - load bitstream");
                 Console.WriteLine($"[Z] - set defaults");
 
                 Console.WriteLine();
@@ -308,22 +308,22 @@ namespace Vibrometer.Testing
         {
             double min = 0;
             double max = SystemParameters.CLOCK_RATE;
-            double value = _api.SignalGenerator.PhaseSignal / ApiInfo.Instance[ApiParameter.SG_PhaseSignal].Size * SystemParameters.CLOCK_RATE;
+            double value = _api.SignalGenerator.PhaseSignal / Math.Pow(2, ApiInfo.Instance[ApiParameter.SG_PhaseSignal].Size) * SystemParameters.CLOCK_RATE;
 
             Program.PrintDialogFloat(ApiParameter.SG_PhaseSignal, ref value, min, max, "Hz");
 
-            _api.SignalGenerator.PhaseSignal = (uint)(value * ApiInfo.Instance[ApiParameter.SG_PhaseSignal].Size / SystemParameters.CLOCK_RATE);
+            _api.SignalGenerator.PhaseSignal = (uint)(value * Math.Pow(2, ApiInfo.Instance[ApiParameter.SG_PhaseSignal].Size) / SystemParameters.CLOCK_RATE);
         }
 
         private static void SG_Set_Phase_Carrier()
         {
             double min = 0;
             double max = SystemParameters.CLOCK_RATE;
-            double value = _api.SignalGenerator.PhaseCarrier / ApiInfo.Instance[ApiParameter.SG_PhaseCarrier].Size * SystemParameters.CLOCK_RATE;
+            double value = _api.SignalGenerator.PhaseCarrier / Math.Pow(2, ApiInfo.Instance[ApiParameter.SG_PhaseCarrier].Size) * SystemParameters.CLOCK_RATE;
 
             Program.PrintDialogFloat(ApiParameter.SG_PhaseCarrier, ref value, min, max, "Hz");
 
-            _api.SignalGenerator.PhaseCarrier = (uint)(value * ApiInfo.Instance[ApiParameter.SG_PhaseCarrier].Size / SystemParameters.CLOCK_RATE);
+            _api.SignalGenerator.PhaseCarrier = (uint)(value * Math.Pow(2, ApiInfo.Instance[ApiParameter.SG_PhaseCarrier].Size) / SystemParameters.CLOCK_RATE);
         }
 
         private static void DA_Toggle_Switch()
