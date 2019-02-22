@@ -50,11 +50,6 @@ namespace Vibrometer.WebServer
                 });
             });
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(name: "default", template: "{controller}/{action}/{id?}");
-            });
-
             app.UseBlazor<WebClient.Program>();
         }
     }
