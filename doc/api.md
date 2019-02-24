@@ -22,9 +22,9 @@ Filter              0x4123_0000
     [5:1]           log_throttle            RW
 
 Fourier_Transform   0x4124_0000
-    [0:0]           enable                  RW      
+    [0:0]           enable                  RW
     [5:1]           log_count_averages      RW
-    [10:6]          log_throttle            RW      
+    [10:6]          log_throttle            RW
 
 RAM_Writer          0x4125_0000
     [0:0]           enable                  RW
@@ -35,4 +35,4 @@ RAM_Writer          0x4125_0000
     [31:0]          read_buffer             RO
     [31:0]          address                 WO
 
-AXIS_Switch         0x43C0_0000                    see AXI4-Stream Switch documentation
+AXIS_Switch         0x43C0_0000             RW    see AXI-4 Stream Switch documentation
