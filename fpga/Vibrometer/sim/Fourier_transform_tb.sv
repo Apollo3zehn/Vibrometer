@@ -39,7 +39,7 @@ module Fourier_transform_tb #
     initial begin
 
         $sformat(file_path_in, "%s/../Fourier_Transform_in.dat", `__FILE__);
-        $sformat(file_path_out, "%s/../Fourier_Transform_out.dat", `__FILE__);
+        $sformat(file_path_out, "%s/../../../../artifacts/Fourier_Transform_out.dat", `__FILE__);
 
         file_handle_in  = $fopen(file_path_in, "r");
         file_handle_out = $fopen(file_path_out, "w");
