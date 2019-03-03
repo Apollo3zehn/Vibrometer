@@ -4,7 +4,7 @@ graph LR
     PT(fa:fa-chart-line position tracking)
     FI(fa:fa-filter filter)
     FT(fa:fa-random Fourier transform)
-    AS((AXI-4 stream switch))
+    AS((AXI4-Stream switch))
     RW(fa:fa-memory RAM writer)
 
     DA --> PT
