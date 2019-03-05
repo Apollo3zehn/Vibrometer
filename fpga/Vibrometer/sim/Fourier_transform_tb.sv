@@ -2,29 +2,29 @@
 
 module Fourier_transform_tb #
 (
-    parameter integer                   AXIS_TDATA_WIDTH_IN        = 16,
-    parameter integer                   AXIS_TDATA_WIDTH_OUT       = 32
+    parameter integer                       AXIS_TDATA_WIDTH_IN     = 16,
+    parameter integer                       AXIS_TDATA_WIDTH_OUT    = 32
 );
 
-    string                              file_path_in;
-    string                              file_path_out;
+    string                                  file_path_in;
+    string                                  file_path_out;
 
-    integer                             file_handle_in;
-    integer                             file_handle_out;
+    integer                                 file_handle_in;
+    integer                                 file_handle_out;
     
-    `define NULL                        0    
+    `define NULL                            0    
 
-    logic                                 aclk                    = 0;
-    logic                                 aresetn                 = 0;
-    logic  [31:0]                         GPIO                    = 0;
-    logic  [AXIS_TDATA_WIDTH_IN-1:0]      value                   = 0;
-    logic                                 S_AXIS_filter_tvalid    = 1;
-    logic                                 M_AXIS_fft_tready       = 1;
-    logic  [(AXIS_TDATA_WIDTH_OUT)-1:0]   M_AXIS_fft_tdata        = 0;
+    logic                                   aclk                    = 0;
+    logic                                   aresetn                 = 0;
+    logic  [31:0]                           GPIO                    = 0;
+    logic  [AXIS_TDATA_WIDTH_IN-1:0]        value                   = 0;
+    logic                                   S_AXIS_filter_tvalid    = 1;
+    logic                                   M_AXIS_fft_tready       = 1;
+    logic  [(AXIS_TDATA_WIDTH_OUT)-1:0]     M_AXIS_fft_tdata        = 0;
  
-    wire [AXIS_TDATA_WIDTH_IN-1:0]      S_AXIS_filter_tdata;
+    wire [AXIS_TDATA_WIDTH_IN-1:0]          S_AXIS_filter_tdata;
  
-    assign S_AXIS_filter_tdata          = value;
+    assign S_AXIS_filter_tdata              = value;
 
     Fourier_Transform_imp_188Q41O DUT (
         .aclk(aclk),
@@ -59,7 +59,7 @@ module Fourier_transform_tb #
 
         repeat (6) @(posedge aclk);
             // 10-6 log_throttle, 5-1 log_count_averages, 0 enable
-            GPIO            <= 32'b00000000_00000000_00000000_10000101;
+            GPIO            <= 32'b00000000_00000000_00000000_00000101;
     end
 
     always_ff @(posedge aclk) begin
