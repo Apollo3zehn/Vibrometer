@@ -12,12 +12,12 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="3244000001fs"></ZoomEndTime>
-      <Cursor1Time time="0fs"></Cursor1Time>
+      <ZoomStartTime time="258000000fs"></ZoomStartTime>
+      <ZoomEndTime time="1708000001fs"></ZoomEndTime>
+      <Cursor1Time time="800000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="196"></NameColumnWidth>
+      <NameColumnWidth column_width="192"></NameColumnWidth>
       <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="4" />
@@ -136,6 +136,26 @@
          <obj_property name="ObjectShortName">writing</obj_property>
          <obj_property name="CustomSignalColor">#FFA500</obj_property>
          <obj_property name="UseCustomSignalColor">true</obj_property>
+      </wvobject>
+      <wvobject fp_name="/ram_writer_tb/DUT/proc_sys_reset/mb_reset" type="logic">
+         <obj_property name="ElementShortName">mb_reset</obj_property>
+         <obj_property name="ObjectShortName">mb_reset</obj_property>
+      </wvobject>
+      <wvobject fp_name="/ram_writer_tb/DUT/proc_sys_reset/bus_struct_reset" type="array">
+         <obj_property name="ElementShortName">bus_struct_reset[0:0]</obj_property>
+         <obj_property name="ObjectShortName">bus_struct_reset[0:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/ram_writer_tb/DUT/proc_sys_reset/peripheral_reset" type="array">
+         <obj_property name="ElementShortName">peripheral_reset[0:0]</obj_property>
+         <obj_property name="ObjectShortName">peripheral_reset[0:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/ram_writer_tb/DUT/proc_sys_reset/interconnect_aresetn" type="array">
+         <obj_property name="ElementShortName">interconnect_aresetn[0:0]</obj_property>
+         <obj_property name="ObjectShortName">interconnect_aresetn[0:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/ram_writer_tb/DUT/proc_sys_reset/peripheral_aresetn" type="array">
+         <obj_property name="ElementShortName">peripheral_aresetn[0:0]</obj_property>
+         <obj_property name="ObjectShortName">peripheral_aresetn[0:0]</obj_property>
       </wvobject>
    </wvobject>
 </wave_config>
