@@ -1,5 +1,7 @@
 # FPGA-based Vibrometer
 
+![glowing fiber](doc/banner.jpg)
+
 The vibrometer consist of three major parts to enable the high-speed vibration measurement: (1) the fiber interferometer, (2) the FPGA based data processing unit and (3) the user interface. The fiber interferometer is required to make use of the underlying physical principles, i.e interference and the Doppler effect. The conversion from light to a measurable electrical signal is done by an Avalanche photodiode which is capable of detecting also lowest light intensities. The FPGA measures the amplified photodiode signal and performs the computationally intensive post processing in real time. The last part - the user interface - visualizes the measurement data and allows to control the vibrometer, i.e. loading the FPGA bitstream and tune different parameters that affect the processing.
 
 ## Interferometer
