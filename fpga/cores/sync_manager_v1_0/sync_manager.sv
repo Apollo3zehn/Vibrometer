@@ -92,7 +92,6 @@ module sync_manager #
         
         // if s2mm read transfer was successful, increase read_count
         if (reading) begin
-
             // if read_count has reached the maximum, assign a new buffer
             if (read_count + 1 >= length) begin
                 read_count_next     = 0;
