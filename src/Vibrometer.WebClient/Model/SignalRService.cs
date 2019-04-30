@@ -1,4 +1,5 @@
 ﻿using Blazor.Extensions;
+using Microsoft.JSInterop;
 using System;
 using System.Threading.Tasks;
 using Vibrometer.Infrastructure;
@@ -7,10 +8,19 @@ namespace Vibrometer.WebClient.Model
 {
     public class SignalRService
     {
+        #region Fields
+
+        public IJSRuntime _jsRuntime;
+
+        #endregion
+
         #region Constructors
 
-        public SignalRService(AppStateViewModel state)
+        public SignalRService(AppStateViewModel state, IJSRuntime jsRuntime)
         {
+            _jsRuntime = jsRuntime;
+            _jsRuntime.InvokeAsync<object>("OnLoaded");
+
             this.Connection = this.BuildHubConnection();
 
             this.Connection.OnClose(e =>
@@ -80,7 +90,7 @@ namespace Vibrometer.WebClient.Model
             return new HubConnectionBuilder()
                  .WithUrl("/vibrometerhub")
                  .AddMessagePackProtocol()
-                 .Build();
+                 .Build(_jsRuntime);
         }
 
         #endregion

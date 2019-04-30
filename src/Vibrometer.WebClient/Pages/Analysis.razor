@@ -1,6 +1,7 @@
 ﻿@page "/analysis"
 @inject AppStateViewModel state
 @inject SignalRService signalR
+@inject IJSRuntime  jsRuntime
 @implements IDisposable
 
 @using System.ComponentModel
@@ -191,7 +192,7 @@
                     data2 = new List<ChartPoint>();
                 }
 
-                await JSRuntime.Current.InvokeAsync<object>("Vibrometer.UpdateChartData", "chart", data1, data2);
+                await jsRuntime.InvokeAsync<object>("Vibrometer.UpdateChartData", "chart", data1, data2);
             }
             else if (e.PropertyName == nameof(state.FpgaSettings))
             {
@@ -244,12 +245,12 @@
                 throw new ArgumentException();
         }
 
-        await JSRuntime.Current.InvokeAsync<object>("Vibrometer.InitializeChart", "chart", state.Summary.XMin, state.Summary.XMax, xLabel, this.ChartSettings);
+        await jsRuntime.InvokeAsync<object>("Vibrometer.InitializeChart", "chart", state.Summary.XMin, state.Summary.XMax, xLabel, this.ChartSettings);
     }
 
     private async Task UpdateChartLimits()
     {
-        await JSRuntime.Current.InvokeAsync<object>("Vibrometer.UpdateChartLimits", "chart", this.ChartSettings);
+        await jsRuntime.InvokeAsync<object>("Vibrometer.UpdateChartLimits", "chart", this.ChartSettings);
     }
 
     private async void SelectSource(ApiSource source)

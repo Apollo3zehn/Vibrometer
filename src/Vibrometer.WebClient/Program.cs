@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Blazor.Hosting;
-using Microsoft.JSInterop;
 
 namespace Vibrometer.WebClient
 {
@@ -10,8 +9,6 @@ namespace Vibrometer.WebClient
             Program.CreateHostBuilder(args)
                    .Build()
                    .Run();
-
-            JSRuntime.Current.InvokeAsync<object>("OnLoaded");
         }
 
         public static IWebAssemblyHostBuilder CreateHostBuilder(string[] args) =>

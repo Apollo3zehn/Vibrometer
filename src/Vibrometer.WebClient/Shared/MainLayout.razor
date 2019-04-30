@@ -1,8 +1,7 @@
-﻿@using Vibrometer.WebClient.Model
-
-@inherits BlazorLayoutComponent
+﻿@inherits LayoutComponentBase
 @inject SignalRService signalR
 @inject AppStateViewModel state
+@inject IJSRuntime jsRuntime
 
 <div class="wrapper">
 
@@ -72,7 +71,7 @@
 
         try
         {
-            bitstreamBase64 = await JSRuntime.Current.InvokeAsync<string>("Vibrometer.ReadFile", "bitstreamUpload2", true);
+            bitstreamBase64 = await jsRuntime.InvokeAsync<string>("Vibrometer.ReadFile", "bitstreamUpload2", true);
             await signalR.Connection.InvokeAsync("LoadBitstream", bitstreamBase64);
         }
         catch (Exception ex)
