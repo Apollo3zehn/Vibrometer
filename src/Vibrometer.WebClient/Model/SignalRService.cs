@@ -87,10 +87,10 @@ namespace Vibrometer.WebClient.Model
 
         private HubConnection BuildHubConnection()
         {
-            return new HubConnectionBuilder()
+            return new HubConnectionBuilder(_jsRuntime)
                  .WithUrl("/vibrometerhub")
                  .AddMessagePackProtocol()
-                 .Build(_jsRuntime);
+                 .Build();
         }
 
         #endregion
