@@ -3,7 +3,7 @@
   <Import Project="./build/Vibrometer.props" />
 
   <PropertyGroup>
-    <PackageLicenseUrl Condition="$(LicenseUrl) == ''">https://github.com/Vibrometer/Vibrometer/blob/master/LICENSE.md</PackageLicenseUrl>
+    <PackageLicenseExpression Condition="$(PackageLicenseExpression) == ''">LGPL-3.0-only</PackageLicenseExpression>
     <PackageProjectUrl Condition="$(ProjectUrl) == ''">https://github.com/Vibrometer/Vibrometer</PackageProjectUrl>
   </PropertyGroup>
 
