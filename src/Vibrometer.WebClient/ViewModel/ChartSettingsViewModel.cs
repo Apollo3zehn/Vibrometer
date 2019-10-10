@@ -40,12 +40,14 @@ namespace Vibrometer.WebClient.ViewModel
             {
                 if (value > this.YMax)
                 {
-                    base.SetProperty(ref _model.YMin, this.YMax);
+                    _model.YMin = this.YMax;
                 }
                 else
                 {
-                    base.SetProperty(ref _model.YMin, value);
+                    _model.YMin = value;
                 }
+
+                base.RaisePropertyChanged();
             }
         }
 
@@ -59,12 +61,14 @@ namespace Vibrometer.WebClient.ViewModel
             {
                 if (value < this.YMin)
                 {
-                    base.SetProperty(ref _model.YMax, this.YMin);
+                    _model.YMax = this.YMin;
                 }
                 else
                 {
-                    base.SetProperty(ref _model.YMax, value);
+                    _model.YMax = value;
                 }
+
+                base.RaisePropertyChanged();
             }
         }
 
@@ -76,7 +80,8 @@ namespace Vibrometer.WebClient.ViewModel
             }
             set
             {
-                base.SetProperty(ref _model.LimitMode, (int)value);
+                _model.LimitMode = (int)value;
+                base.RaisePropertyChanged();
             }
         }
 

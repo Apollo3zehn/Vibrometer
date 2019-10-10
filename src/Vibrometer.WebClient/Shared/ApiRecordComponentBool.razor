@@ -13,11 +13,11 @@
         <div class="form-group bmd-form-group">
             @if (this.Value)
             {
-                <button class="btn btn-sm btn-success" onclick="@(() => this.OnValueChanged?.Invoke(this.Record.Parameter, !this.Value))">Enabled</button>
+                <button class="btn btn-sm btn-success" @onclick="() => this.OnValueChanged?.Invoke(this.Record.Parameter, !this.Value)">Enabled</button>
             }
             else
             {
-                <button class="btn btn-sm btn-danger" onclick="@(() => this.OnValueChanged?.Invoke(this.Record.Parameter, !this.Value))">Disabled</button>
+                <button class="btn btn-sm btn-danger" @onclick="() => this.OnValueChanged?.Invoke(this.Record.Parameter, !this.Value)">Disabled</button>
             }
         </div>
     </div>
@@ -26,11 +26,11 @@
 @functions
 {
     [Parameter]
-    private bool Value { get; set; }
+    public bool Value { get; set; }
 
     [Parameter]
-    private ApiRecord Record { get; set; }
+    public ApiRecord Record { get; set; }
 
     [Parameter]
-    private Action<ApiParameter, bool> OnValueChanged { get; set; }
+    public Action<ApiParameter, bool> OnValueChanged { get; set; }
 }

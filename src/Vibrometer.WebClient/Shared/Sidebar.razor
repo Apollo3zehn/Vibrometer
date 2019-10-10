@@ -28,11 +28,11 @@
                 <span class="btn btn-raised btn-round btn-outline-info btn-file @((!state.IsConnected || !state.IsBitstreamLoaded) ? "disabled" : "")">
                     <i class="material-icons text_align-center visible-on-sidebar-regular">cloud_upload</i>
                     <span class="fileinput-new ml-1">Load</span>
-                    <input type="file" onchange="@UploadVibFile" id="vibFileUpload" accept=".vib.json" />
+                    <input type="file" @onchange="this.UploadVibFile" id="vibFileUpload" accept=".vib.json" />
                 </span>
             </div>
             <div class="text-center mx-1">
-                <span class="btn btn-raised btn-round btn-outline-info btn-file" onclick="@this.DownloadVibFile">
+                <span class="btn btn-raised btn-round btn-outline-info btn-file" @onclick="this.DownloadVibFile">
                     <i class="material-icons text_align-center visible-on-sidebar-regular">cloud_download</i>
                     <span class="fileinput-new ml-1">Save</span>
                 </span>
@@ -46,7 +46,7 @@
 
 @functions
 {      
-    protected override void OnInit()
+    protected override void OnInitialized()
     {
         state.PropertyChanged += (sender, e) =>
         {
@@ -56,10 +56,10 @@
             }
         };
 
-        base.OnInit();
+        base.OnInitialized();
     }
 
-    private async void UploadVibFile(UIChangeEventArgs e)
+    private async void UploadVibFile(ChangeEventArgs e)
     {
         try
         {
@@ -74,6 +74,6 @@
 
     private void DownloadVibFile()
     {
-        jsRuntime.InvokeAsync<AppState>("Vibrometer.WriteVibFile", state.Model);
+        jsRuntime.InvokeVoidAsync("Vibrometer.WriteVibFile", state.Model);
     }
 }

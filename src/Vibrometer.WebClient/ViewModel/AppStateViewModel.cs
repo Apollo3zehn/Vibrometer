@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Vibrometer.Infrastructure;
 using Vibrometer.Infrastructure.API;
@@ -65,7 +66,9 @@ namespace Vibrometer.WebClient.Model
             set
             {
                 this.Summary = new SettingsSummary(value);
-                base.SetProperty(ref _model.FpgaSettings, value);
+
+                _model.FpgaSettings = value;
+                base.RaisePropertyChanged();
             }
         }
 

@@ -193,9 +193,9 @@ window.Vibrometer = {
             }
         });
     },
-    WriteVibFile: function (fpgaSettings)
+    WriteVibFile: function (appState, abcd)
     {
-        var json = JSON.stringify(fpgaSettings, null, 2);
+        var json = JSON.stringify(appState, null, 2);
 
         var blob = new Blob([json], {
             type: "text/plain;charset=utf-8"

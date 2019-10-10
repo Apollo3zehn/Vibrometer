@@ -4,15 +4,6 @@ namespace Vibrometer.WebClient.Model
 {
     public class ChartSettings
     {
-        #region Fields
-
-        public double YMin;
-        public double YMax;
-        public int Source;
-        public int LimitMode;
-
-        #endregion
-
         #region Constructors
 
         public ChartSettings()
@@ -28,6 +19,16 @@ namespace Vibrometer.WebClient.Model
             this.Source = (int)source;
             this.LimitMode = (int)limitMode;
         }
+
+        #endregion
+
+        #region Properties
+
+        // These are properties to allow proper (de)serialization in the browser.
+        public double YMin { get; set; }
+        public double YMax { get; set; }
+        public int Source { get; set; }
+        public int LimitMode { get; set; }
 
         #endregion
     }

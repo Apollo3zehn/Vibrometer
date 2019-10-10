@@ -19,7 +19,7 @@ namespace Vibrometer.WebClient.Model
         public SignalRService(AppStateViewModel state, IJSRuntime jsRuntime)
         {
             _jsRuntime = jsRuntime;
-            _jsRuntime.InvokeAsync<object>("OnLoaded");
+            _jsRuntime.InvokeVoidAsync("OnLoaded");
 
             this.Connection = this.BuildHubConnection();
 

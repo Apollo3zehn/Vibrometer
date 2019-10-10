@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,7 +23,7 @@ namespace Vibrometer.WebServer
                 options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]
                 {
                     MediaTypeNames.Application.Octet,
-                    WasmMediaTypeNames.Application.Wasm,
+                    "application/wasm"
                 });
             });
 
@@ -40,18 +39,21 @@ namespace Vibrometer.WebServer
             if (env.EnvironmentName == "Development")
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBlazorDebugging();
             }
 
-            app.UseSignalR(routes =>
+            app.UseStaticFiles();
+            app.UseClientSideBlazorFiles<WebClient.Startup>();
+
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapHub<VibrometerHub>("/vibrometerhub", options =>
+                endpoints.MapHub<VibrometerHub>("/vibrometerhub", options =>
                 {
                     options.ApplicationMaxBufferSize = 3 * 1024 * 1024; // to send the bitstream (see this issue: https://github.com/aspnet/SignalR/issues/2266#issuecomment-389143453)
                 });
+                endpoints.MapFallbackToClientSideBlazor<WebClient.Startup>("index.html");
             });
-
-            app.UseBlazor<WebClient.Program>();
         }
     }
 }

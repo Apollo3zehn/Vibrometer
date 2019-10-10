@@ -1,5 +1,5 @@
 {
-  "fpgaSettings": {
+  "FpgaSettings": {
     "aS_Source": 4,
     "sG_FmEnabled": true,
     "sG_ShiftCarrier": 0,
@@ -18,36 +18,36 @@
     "rW_LogLength": 8,
     "rW_LogThrottle": 0
   },
-  "chartSettingsSet": [
+  "ChartSettingsSet": [
     {
-      "yMin": 0,
-      "yMax": 0,
-      "source": 0,
-      "limitMode": 1
+      "YMin": 0,
+      "YMax": 0,
+      "Source": 0,
+      "LimitMode": 1
     },
     {
-      "yMin": -8192,
-      "yMax": 8191,
-      "source": 1,
-      "limitMode": 4
+      "YMin": -8192,
+      "YMax": 8191,
+      "Source": 1,
+      "LimitMode": 4
     },
     {
-      "yMin": -2147483648,
-      "yMax": 2147483647,
-      "source": 2,
-      "limitMode": 1
+      "YMin": -2147483648,
+      "YMax": 2147483647,
+      "Source": 2,
+      "LimitMode": 1
     },
     {
-      "yMin": -32768,
-      "yMax": 32767,
-      "source": 3,
-      "limitMode": 1
+      "YMin": -32768,
+      "YMax": 32767,
+      "Source": 3,
+      "LimitMode": 1
     },
     {
-      "yMin": 0,
-      "yMax": 32767,
-      "source": 4,
-      "limitMode": 1
+      "YMin": 0,
+      "YMax": 32767,
+      "Source": 4,
+      "LimitMode": 1
     }
   ]
 }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using System;
+using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Vibrometer.API;
 using Vibrometer.Infrastructure;
@@ -144,8 +146,22 @@ namespace Vibrometer.WebServer
             });
         }
 
-        public Task ApplyConfiguration(FpgaSettings fpgaSettings)
+        public Task ApplyConfiguration(Dictionary<string, object> fpgaSettingsDict)
         {
+            /* This procedure is required because BlazorExtensions.SignalR probably uses the browser's serializer 
+             * to call the JS version of origianl SignalR. This call produces camel case data. Afterwards it is 
+             * put into MessagePack pipeline and sent over the wire to the server which expects pascal case.
+             */
+
+            // get bytes out of dictionary
+            var fpgaSettingsRaw = JsonSerializer.SerializeToUtf8Bytes(fpgaSettingsDict);
+
+            // deserialize these bytes into FpgaSettings instance
+            var fpgaSettings = JsonSerializer.Deserialize<FpgaSettings>(fpgaSettingsRaw, new JsonSerializerOptions() 
+            { 
+                PropertyNameCaseInsensitive = true 
+            });
+
             return Task.Run(() =>
             {
                 _api.SetState(fpgaSettings);

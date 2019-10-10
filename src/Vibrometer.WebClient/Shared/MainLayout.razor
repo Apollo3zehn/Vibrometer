@@ -9,7 +9,7 @@
 
     <div class="main-panel">
 
-        <Navbar />
+        <NavBar />
 
         <div class="content">
             <div class="container-fluid">
@@ -30,11 +30,11 @@
                         <div class="card">
                             <div class="card-body text-center">
                                 <h5 class="card-text">Please confirm that the vibrometer's bitstream is already loaded to avoid any deadlocks.</h5>
-                                <button class="btn btn-rose" onclick="@this.ConfirmBitstreamIsLoaded">Yes, continue!</button>
+                                <button class="btn btn-rose" @onclick="this.ConfirmBitstreamIsLoaded">Yes, continue!</button>
                                 <div class="fileinput text-center mx-1">
                                     <span class="btn btn-outline-secondary btn-file">
                                         <span class="fileinput-new">No, upload now!</span>
-                                        <input type="file" onchange="@UploadBitstream" id="bitstreamUpload2" accept=".bit" />
+                                        <input type="file" @onchange="this.UploadBitstream" id="bitstreamUpload2" accept=".bit" />
                                     </span>
                                 </div>
                             </div>
@@ -54,7 +54,7 @@
 
 @functions
 {
-    protected override void OnInit()
+    protected override void OnInitialized()
     {
         state.PropertyChanged += (sender, e) =>
         {
@@ -80,7 +80,7 @@
         }
     }
 
-    private async void ConfirmBitstreamIsLoaded()
+    public async void ConfirmBitstreamIsLoaded()
     {
         await signalR.Connection.InvokeAsync("UpdateBitstreamState", true);
     }

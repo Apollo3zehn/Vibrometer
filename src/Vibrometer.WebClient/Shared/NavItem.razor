@@ -1,7 +1,6 @@
 ﻿@using Vibrometer.WebClient.Model
-@using Microsoft.AspNetCore.Blazor.Services
 
-@inject IUriHelper UriHelper
+@inject NavigationManager NavigationManager
 
 <li class="nav-item @((this.IsSelected ? "active" : string.Empty))">
 
@@ -44,21 +43,23 @@
 
     private string _routeAbsolute;
 
-    bool IsSelected { get; set; }
-    [Parameter] PageDescription PageDescription { get; set; }
+    public bool IsSelected { get; set; }
 
-    protected override void OnInit()
+    [Parameter]
+    public PageDescription PageDescription { get; set; }
+
+    protected override void OnInitialized()
     {
-        _routeAbsolute = this.UriHelper.ToAbsoluteUri(this.PageDescription.Route).AbsoluteUri;
+        _routeAbsolute = this.NavigationManager.ToAbsoluteUri(this.PageDescription.Route).AbsoluteUri;
 
-        this.IsSelected = _routeAbsolute == this.UriHelper.GetAbsoluteUri();
-        this.UriHelper.OnLocationChanged += UriHelper_OnLocationChanged;
+        this.IsSelected = _routeAbsolute == this.NavigationManager.ToAbsoluteUri(this.NavigationManager.Uri).AbsoluteUri;
+        this.NavigationManager.LocationChanged += UriHelper_LocationChanged;
 
     }
 
-    private void UriHelper_OnLocationChanged(object sender, string e)
+    private void UriHelper_LocationChanged(object sender, LocationChangedEventArgs e)
     {
-        this.IsSelected = _routeAbsolute == e;
+        this.IsSelected = _routeAbsolute == e.Location;
         this.StateHasChanged();
     }
 }

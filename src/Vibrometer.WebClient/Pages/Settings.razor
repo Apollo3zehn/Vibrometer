@@ -17,19 +17,19 @@
                     <div class="nav-tabs-wrapper">
                         <ul class="nav nav-tabs" data-tabs="tabs">
                             <li class="nav-item">
-                                <a class="nav-link @((this.SelectedGroup == SettingsGroup.ADC_DAC ? "active" : ""))" style="cursor:pointer" onclick="@(() => SelectGroup(SettingsGroup.ADC_DAC))">
+                                <a class="nav-link @((this.SelectedGroup == SettingsGroup.ADC_DAC ? "active" : ""))" style="cursor:pointer" @onclick="() => SelectGroup(SettingsGroup.ADC_DAC)">
                                     <i class="material-icons">graphic_eq</i> ADC / DAC
                                     <div class="ripple-container"></div>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link @((this.SelectedGroup == SettingsGroup.Processing ? "active" : ""))" style="cursor:pointer" onclick="@(() => SelectGroup(SettingsGroup.Processing))">
+                                <a class="nav-link @((this.SelectedGroup == SettingsGroup.Processing ? "active" : ""))" style="cursor:pointer" @onclick="() => SelectGroup(SettingsGroup.Processing)">
                                     <i class="material-icons">memory</i> Processing
                                     <div class="ripple-container"></div>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link @((this.SelectedGroup == SettingsGroup.System ? "active" : ""))" style="cursor:pointer" onclick="@(() => SelectGroup(SettingsGroup.System))">
+                                <a class="nav-link @((this.SelectedGroup == SettingsGroup.System ? "active" : ""))" style="cursor:pointer" @onclick="() => SelectGroup(SettingsGroup.System)">
                                     <i class="material-icons">settings</i> System
                                     <div class="ripple-container"></div>
                                 </a>
@@ -51,21 +51,21 @@
                                                      Description="The DAC is used to generate test signals. In default operating mode, this component is driven by a DDS compiler that generates a sine (channel A) and a cosine (channel B). With frequency modulation mode these signals are modulated with an additional signal." />
                                     <ApiRecordComponentBool Record="ApiInfo.Instance[ApiParameter.SG_FmEnabled]"
                                                             Value="@state.FpgaSettings.SG_FmEnabled"
-                                                            OnValueChanged="@OnValueChangedBool" />
+                                                            OnValueChanged="this.OnValueChangedBool" />
                                     @if (state.FpgaSettings.SG_FmEnabled)
                                     {
                                         <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.SG_ShiftCarrier]"
                                                             Value="@state.FpgaSettings.SG_ShiftCarrier"
-                                                            OnValueChanged="@OnValueChanged" />
+                                                            OnValueChanged="this.OnValueChanged" />
                                         <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.SG_PhaseSignal]"
                                                             Value="@state.FpgaSettings.SG_PhaseSignal"
-                                                            OnValueChanged="@OnValueChanged" />
+                                                            OnValueChanged="this.OnValueChanged" />
                                     }
                                     else
                                     {
                                         <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.SG_PhaseCarrier]"
                                                             Value="@state.FpgaSettings.SG_PhaseCarrier"
-                                                            OnValueChanged="@OnValueChanged" />
+                                                            OnValueChanged="this.OnValueChanged" />
                                     }
 
                                     <!--ADC-->
@@ -73,7 +73,7 @@
                                                      Description="The ADC is the main data source of the vibrometer. It is driven by an 125 MHz oscillator and consists of the two 14-bit channels A and B." />
                                     <ApiRecordComponentBool Record="ApiInfo.Instance[ApiParameter.DA_SwitchEnabled]"
                                                             Value="@state.FpgaSettings.DA_SwitchEnabled"
-                                                            OnValueChanged="@OnValueChangedBool" />
+                                                            OnValueChanged="this.OnValueChangedBool" />
 
                                     break;
 
@@ -84,13 +84,13 @@
                                                      Description="The position tracker module receives its input data from the ADC. It consists of an 'extremum finder' that constantly monitors the signal levels and the position tracker itself which is simply counting the signal waves. If the input signal of channel B is shifted by 90 deg it is also capable to distinguish different directions." />
                                     <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.PT_LogScale]"
                                                         Value="@state.FpgaSettings.PT_LogScale"
-                                                        OnValueChanged="@OnValueChanged" />
+                                                        OnValueChanged="this.OnValueChanged" />
                                     <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.PT_LogCountExtremum]"
                                                         Value="@state.FpgaSettings.PT_LogCountExtremum"
-                                                        OnValueChanged="@OnValueChanged" />
+                                                        OnValueChanged="this.OnValueChanged" />
                                     <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.PT_ShiftExtremum]"
                                                         Value="@state.FpgaSettings.PT_ShiftExtremum"
-                                                        OnValueChanged="@OnValueChanged" />
+                                                        OnValueChanged="this.OnValueChanged" />
                                     <ExtremumFinderComponent />
 
                                     <!--Filter-->
@@ -98,24 +98,24 @@
                                                      Description="This module consists of an differentiator that is required if the 90° shifted signal (signal B) is not available to determine the count direction." />
                                     <ApiRecordComponentBool Record="ApiInfo.Instance[ApiParameter.FI_Enabled]"
                                                             Value="@state.FpgaSettings.FI_Enabled"
-                                                            OnValueChanged="@OnValueChangedBool" />
+                                                            OnValueChanged="this.OnValueChangedBool" />
                                     <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.FI_LogThrottle]"
                                                         Value="@state.FpgaSettings.FI_LogThrottle"
-                                                        OnValueChanged="@OnValueChanged" />
+                                                        OnValueChanged="this.OnValueChanged" />
 
                                     <!--Fourier Transform-->
                                     <ApiRecordHeader DisplayName="Fourier Transform"
                                                      Description="Every 265 data points, a Fourier transform is calculated and averaged. The resulting dataset is pushed regularly to the RAM writer module." />
                                     <ApiRecordComponentBool Record="ApiInfo.Instance[ApiParameter.FT_Enabled]"
                                                             Value="@state.FpgaSettings.FT_Enabled"
-                                                            OnValueChanged="@OnValueChangedBool" />
+                                                            OnValueChanged="this.OnValueChangedBool" />
                                     <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.FT_LogCountAverages]"
                                                         Value="@state.FpgaSettings.FT_LogCountAverages"
-                                                        OnValueChanged="@OnValueChanged" />
+                                                        OnValueChanged="this.OnValueChanged" />
 
                                     <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.FT_LogThrottle]"
                                                         Value="@state.FpgaSettings.FT_LogThrottle"
-                                                        OnValueChanged="@OnValueChanged" />
+                                                        OnValueChanged="this.OnValueChanged" />
 
                                     break;
 
@@ -131,7 +131,7 @@
                                                 <span class="btn btn-raised btn-round btn-info btn-file">
                                                     <i class="material-icons text_align-center visible-on-sidebar-regular">cloud_upload</i>
                                                     <span class="fileinput-new ml-1">Load bitstream</span>
-                                                    <input type="file" onchange="@UploadBitstream" id="bitstreamUpload" accept=".bit" />
+                                                    <input type="file" @onchange="this.UploadBitstream" id="bitstreamUpload" accept=".bit" />
                                                 </span>
                                             </div>
                                         </div>
@@ -142,23 +142,23 @@
                                                      Description="The AXIS switch allows the data streams of the ADC, position tracker, filter and Fourier Transform to be written into the RAM." />
                                     <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.AS_Source]"
                                                         Value="@state.FpgaSettings.AS_Source"
-                                                        OnValueChanged="@OnValueChanged" />
+                                                        OnValueChanged="this.OnValueChanged" />
 
                                     <!--RAM Writer-->
                                     <ApiRecordHeader DisplayName="RAM Writer"
                                                      Description="The RAM writer consists of a sync manager module and the RAM writer itself. The sync manager handles the buffer management to ensure there is always a buffer for reading and for writing available." />
                                     <ApiRecordComponentBool Record="ApiInfo.Instance[ApiParameter.RW_Enabled]"
                                                             Value="@state.FpgaSettings.RW_Enabled"
-                                                            OnValueChanged="@OnValueChangedBool" />
+                                                            OnValueChanged="this.OnValueChangedBool" />
                                     <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.RW_LogLength]"
                                                         Value="@state.FpgaSettings.RW_LogLength"
-                                                        OnValueChanged="@OnValueChanged" />
+                                                        OnValueChanged="this.OnValueChanged" />
 
                                     @if ((ApiSource)state.FpgaSettings.AS_Source != ApiSource.FourierTransform)
                                     {
                                         <ApiRecordComponent Record="ApiInfo.Instance[ApiParameter.RW_LogThrottle]"
                                                             Value="@state.FpgaSettings.RW_LogThrottle"
-                                                            OnValueChanged="@OnValueChanged" />
+                                                            OnValueChanged="this.OnValueChanged" />
                                     }
 
                                     break;
@@ -261,7 +261,7 @@
     private NumberFormatInfo NFI { get; set; }
     private PropertyChangedEventHandler StateChangedHandler;
 
-    protected override void OnInit()
+    protected override void OnInitialized()
     {
         _suspend = false;
 

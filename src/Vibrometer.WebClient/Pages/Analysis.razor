@@ -17,7 +17,7 @@
                         <ul class="nav nav-tabs w-100" data-tabs="tabs">
                             @foreach (ApiSource source in Enum.GetValues(typeof(ApiSource)).Cast<ApiSource>().Skip(1))
                             {
-                                <li class="nav-item" onclick="@(() => this.SelectSource(source))">
+                                <li class="nav-item" @onclick="() => this.SelectSource(source)">
                                     <a class="nav-link @((ApiSource)state.FpgaSettings.AS_Source == source ? "active" : "")" style="cursor:pointer">
                                         <i class="material-icons">show_chart</i> @state.ChartSettingsMap[source].Title
                                     </a>
@@ -25,7 +25,7 @@
                             }
                             <li class="nav-item ml-auto">
                                 <a class="nav-link" style="cursor:pointer">
-                                    <i class="material-icons" onclick="@this.ToggleRun">@(this.Run ? "pause_circle_filled" : "play_arrow")</i>
+                                    <i class="material-icons" @onclick="this.ToggleRun">@(this.Run ? "pause_circle_filled" : "play_arrow")</i>
                                 </a>
                             </li>
                         </ul>
@@ -85,7 +85,7 @@
                                                 <label class="form-check-label">
                                                     <input type="radio"
                                                            checked="@(this.ChartSettings.LimitMode == limitMode)"
-                                                           onclick="@(() => this.ChartSettings.LimitMode = limitMode)" />
+                                                           @onclick="() => this.ChartSettings.LimitMode = limitMode" />
                                                     @Utilities.GetEnumLocalization((ChartLimitMode)limitMode, typeof(EnumerationDescription))
                                                 </label>
                                             }
@@ -100,13 +100,13 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Min:</span>
                                     </div>
-                                    <input type="text" class="form-control mr-2" placeholder="Lower limit ..." bind="@this.ChartSettings.YMin" />
+                                    <input type="text" class="form-control mr-2" placeholder="Lower limit ..." @bind="this.ChartSettings.YMin" />
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Max:</span>
                                     </div>
-                                    <input type="text" class="form-control" placeholder="Upper limit ..." bind="@this.ChartSettings.YMax" />
+                                    <input type="text" class="form-control" placeholder="Upper limit ..." @bind="this.ChartSettings.YMax" />
                                     <button type="button" class="btn btn-outline-secondary btn-sm ml-4"
-                                            onclick="@this.ChartSettings.Reset">
+                                            @onclick="this.ChartSettings.Reset">
                                         Reset
                                     </button>
                                 </div>
@@ -134,7 +134,7 @@
         }
     }
 
-    protected override void OnInit()
+    protected override void OnInitialized()
     {
         _initialized = false;
 
@@ -192,7 +192,7 @@
                     data2 = new List<ChartPoint>();
                 }
 
-                await jsRuntime.InvokeAsync<object>("Vibrometer.UpdateChartData", "chart", data1, data2);
+                await jsRuntime.InvokeVoidAsync("Vibrometer.UpdateChartData", "chart", data1, data2);
             }
             else if (e.PropertyName == nameof(state.FpgaSettings))
             {
@@ -211,7 +211,7 @@
         this.Run = true;
     }
 
-    protected override async Task OnAfterRenderAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!_initialized)
         {
@@ -245,12 +245,12 @@
                 throw new ArgumentException();
         }
 
-        await jsRuntime.InvokeAsync<object>("Vibrometer.InitializeChart", "chart", state.Summary.XMin, state.Summary.XMax, xLabel, this.ChartSettings);
+        await jsRuntime.InvokeVoidAsync("Vibrometer.InitializeChart", "chart", state.Summary.XMin, state.Summary.XMax, xLabel, this.ChartSettings);
     }
 
     private async Task UpdateChartLimits()
     {
-        await jsRuntime.InvokeAsync<object>("Vibrometer.UpdateChartLimits", "chart", this.ChartSettings);
+        await jsRuntime.InvokeVoidAsync("Vibrometer.UpdateChartLimits", "chart", this.ChartSettings);
     }
 
     private async void SelectSource(ApiSource source)

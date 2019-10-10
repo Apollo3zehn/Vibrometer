@@ -6,13 +6,6 @@ namespace Vibrometer.WebClient.Model
 {
     public class AppState
     {
-        #region Field
-
-        public FpgaSettings FpgaSettings;
-        public List<ChartSettings> ChartSettingsSet;
-
-        #endregion
-
         #region Constructors
 
         public AppState()
@@ -28,6 +21,14 @@ namespace Vibrometer.WebClient.Model
                 new ChartSettings(ApiSource.FourierTransform, ChartLimitMode.ZeroToMax)
             };
         }
+
+        #endregion
+
+        #region Properties
+
+        // These are properties to allow proper (de)serialization in the browser.
+        public FpgaSettings FpgaSettings { get; set; }
+        public List<ChartSettings> ChartSettingsSet { get; set; }
 
         #endregion
     }
