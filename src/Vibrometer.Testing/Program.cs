@@ -382,7 +382,15 @@ namespace Vibrometer.Testing
 
             Console.ReadKey(true);
             cts.Cancel();
-            task.Wait();
+
+            try
+            {
+                task.Wait();
+            }
+            catch (Exception ex) when (ex.InnerException.GetType() == typeof(TaskCanceledException))
+            {
+                //
+            }
         }
 
         private static void FI_Set_LogThrottle()
@@ -548,7 +556,15 @@ namespace Vibrometer.Testing
 
             Console.ReadKey(true);
             cts.Cancel();
-            task.Wait();
+
+            try
+            {
+                task.Wait();
+            }
+            catch (Exception ex) when (ex.InnerException.GetType() == typeof(TaskCanceledException))
+            {
+                //
+            }
         }
     }
 }
