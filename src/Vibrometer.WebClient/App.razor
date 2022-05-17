@@ -1,4 +1,11 @@
-﻿<Router AppAssembly="@typeof(Program).Assembly">
+﻿@inject HubConnection HubConnection
+@inject IJSRuntime JSRuntime
+@inject AppStateViewModel State
+
+@using Microsoft.AspNetCore.SignalR.Client
+
+
+<Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
     </Found>
@@ -8,3 +15,31 @@
         </LayoutView>
     </NotFound>
 </Router>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await JSRuntime.InvokeVoidAsync("OnLoaded");
+
+        HubConnection.On<FpgaData>("SendFpgaData", fpgaData =>
+        {
+            State.FpgaData = fpgaData;
+            return Task.CompletedTask;
+        });
+
+        HubConnection.On<FpgaSettings>("SendFpgaSettings", fpgaSettings =>
+        {
+            State.FpgaSettings = fpgaSettings;
+            return Task.CompletedTask;
+        });
+
+        HubConnection.On<bool>("SendBitstreamState", bitstreamState =>
+        {
+            State.IsBitstreamLoaded = bitstreamState;
+            return Task.CompletedTask;
+        });
+
+        await HubConnection.StartAsync();
+        State.FpgaSettings = await HubConnection.InvokeAsync<FpgaSettings>("GetFpgaSettings");
+    }
+}

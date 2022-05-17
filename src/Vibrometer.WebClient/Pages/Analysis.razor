@@ -1,10 +1,11 @@
 ﻿@page "/analysis"
 @inject AppStateViewModel state
-@inject SignalRService signalR
+@inject HubConnection HubConnection
 @inject IJSRuntime  jsRuntime
 @implements IDisposable
 
 @using System.ComponentModel
+@using Microsoft.AspNetCore.SignalR.Client
 
 <h1 class="display-4">Analysis</h1>
 
@@ -255,7 +256,7 @@
 
     private async void SelectSource(ApiSource source)
     {
-        await signalR.Connection.InvokeAsync("UpdateSetting", ApiParameter.AS_Source.ToString(), (int)source);
+        await HubConnection.InvokeAsync("UpdateSetting", ApiParameter.AS_Source.ToString(), (int)source);
     }
 
     private void ToggleRun()
