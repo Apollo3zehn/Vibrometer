@@ -23,7 +23,7 @@ namespace Vibrometer.API
         {
             int fd;
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 fd = Syscall.open("/dev/mem", OpenFlags.O_RDWR);
 
@@ -34,13 +34,13 @@ namespace Vibrometer.API
                 Syscall.close(fd);
             }
 
-            this.AxisSwitch = new AxisSwitch(_SWITCH);
-            this.SignalGenerator = new SignalGenerator(_GPIO + SystemParameters.GPIO_SIGNAL_GENERATOR);
-            this.DataAcquisition = new DataAcquisition(_GPIO + SystemParameters.GPIO_DATA_ACQUISITION);
-            this.PositionTracker = new PositionTracker(_GPIO + SystemParameters.GPIO_POSITION_TRACKER);
-            this.Filter = new Filter(_GPIO + SystemParameters.GPIO_FILTER);
-            this.FourierTransform = new FourierTransform(_GPIO + SystemParameters.GPIO_FOURIER_TRANSFORM);
-            this.RamWriter = new RamWriter(_GPIO + SystemParameters.GPIO_RAM_WRITER);
+            AxisSwitch = new AxisSwitch(_SWITCH);
+            SignalGenerator = new SignalGenerator(_GPIO + SystemParameters.GPIO_SIGNAL_GENERATOR);
+            DataAcquisition = new DataAcquisition(_GPIO + SystemParameters.GPIO_DATA_ACQUISITION);
+            PositionTracker = new PositionTracker(_GPIO + SystemParameters.GPIO_POSITION_TRACKER);
+            Filter = new Filter(_GPIO + SystemParameters.GPIO_FILTER);
+            FourierTransform = new FourierTransform(_GPIO + SystemParameters.GPIO_FOURIER_TRANSFORM);
+            RamWriter = new RamWriter(_GPIO + SystemParameters.GPIO_RAM_WRITER);
         }
 
         #endregion
@@ -62,73 +62,67 @@ namespace Vibrometer.API
         public void SetDefaults()
         {
             // source
-            this.AxisSwitch.Source = ApiSource.FourierTransform;
+            AxisSwitch.Source = ApiSource.FourierTransform;
 
             // 1000 Hz
-            this.SignalGenerator.PhaseCarrier = (uint)(1000 * ApiInfo.Instance[ApiParameter.SG_PhaseCarrier].Size / SystemParameters.CLOCK_RATE);
+            SignalGenerator.PhaseCarrier = (uint)(1000 * ApiInfo.Instance[ApiParameter.SG_PhaseCarrier].Size / SystemParameters.CLOCK_RATE);
 
             // approx. 1s
-            this.PositionTracker.LogCountExtremum = 27;
+            PositionTracker.LogCountExtremum = 27;
 
             // central value +- max / (2^4)
-            this.PositionTracker.ShiftExtremum = 4;
+            PositionTracker.ShiftExtremum = 4;
 
             // throttle data by factor 2^12 = 4096 to get into the kHz range
-            //this.Filter.LogThrottle = 12;
+            //Filter.LogThrottle = 12;
 
             // calculate the average of 2^2 = 4 FFTs
-            this.FourierTransform.LogCountAverages = 2;
+            FourierTransform.LogCountAverages = 2;
             
             // TODO: TBD
-            this.FourierTransform.LogThrottle = 14;
+            FourierTransform.LogThrottle = 14;
 
             // physical RAM address
-            this.RamWriter.Address = SystemParameters.DATA_BASE;
+            RamWriter.Address = SystemParameters.DATA_BASE;
 
             // buffer length = 2^8 = 256 => 256 * 4 byte = 1024 byte
-            this.RamWriter.LogLength = 8;
+            RamWriter.LogLength = 8;
 
             // clear ram
-            this.ClearRam();
+            ClearRam();
 
             // enable RAM writer
-            this.RamWriter.Enabled = true;
+            RamWriter.Enabled = true;
 
             // enable Fourier Transform
-            this.FourierTransform.Enabled = true;
+            FourierTransform.Enabled = true;
         }
 
-        public int[] GetBuffer()
+        public void FillBuffer(Span<int> buffer)
         {
-            int length;
             int address;
             int offset;
-            int[] buffer;
             Random random;
 
-            this.RamWriter.RequestEnabled = true;
+            RamWriter.RequestEnabled = true;
 
-            length = (int)Math.Pow(2, this.RamWriter.LogLength);
-
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                address = (int)this.RamWriter.ReadBuffer;
+                address = (int)RamWriter.ReadBuffer;
 
                 if (address == 0)
-                {
-                    return new int[length];
-                }
+                    return;
 
                 offset = address - SystemParameters.DATA_BASE;
 
                 unsafe
                 {
-                    buffer = new Span<int>(IntPtr.Add(_DATA, offset).ToPointer(), length).ToArray();
+                    var source = new Span<int>(IntPtr.Add(_DATA, offset).ToPointer(), buffer.Length);
+                    source.CopyTo(buffer);
                 }
             }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                buffer = new int[length];
                 random = new Random();
 
                 for (int i = 0; i < buffer.Length; i++)
@@ -141,9 +135,7 @@ namespace Vibrometer.API
                 throw new PlatformNotSupportedException();
             }
 
-            this.RamWriter.RequestEnabled = false;
-
-            return buffer;
+            RamWriter.RequestEnabled = false;
         }
 
         public void ClearRam()
@@ -152,20 +144,20 @@ namespace Vibrometer.API
             bool enabled;
             Span<byte> buffer;
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                byteCount = (int)Math.Pow(2, this.RamWriter.LogLength) * SystemParameters.BYTE_COUNT * SystemParameters.BUFFER_COUNT;
-                enabled = this.RamWriter.Enabled;
-                this.RamWriter.Enabled = false;
+                byteCount = (int)Math.Pow(2, RamWriter.LogLength) * SystemParameters.BYTE_COUNT * SystemParameters.BUFFER_COUNT;
+                enabled = RamWriter.Enabled;
+                RamWriter.Enabled = false;
 
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
                     unsafe
                     {
                         buffer = new Span<byte>((byte*)_DATA, byteCount);
                     }
                 }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     buffer = new Span<byte>(new byte[byteCount]);
                 }
@@ -175,7 +167,7 @@ namespace Vibrometer.API
                 }
 
                 buffer.Clear();
-                this.RamWriter.Enabled = enabled;
+                RamWriter.Enabled = enabled;
             }
         }
 
@@ -183,7 +175,7 @@ namespace Vibrometer.API
         {
             using (var sourceFileStream = File.Open(filePath, FileMode.Open, FileAccess.Read))
             {
-                this.InternalLoadBitstream(sourceFileStream);
+                InternalLoadBitstream(sourceFileStream);
             }
         }
 
@@ -191,7 +183,7 @@ namespace Vibrometer.API
         {
             using (var sourceFileStream = new MemoryStream(bitstream))
             {
-                this.InternalLoadBitstream(sourceFileStream);
+                InternalLoadBitstream(sourceFileStream);
             }
         }
 
@@ -199,7 +191,7 @@ namespace Vibrometer.API
         {
             ApiProxy.IsEnabled = false;
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 using (var targetFileStream = File.Open("/dev/xdevcfg", FileMode.Open, FileAccess.Write))
                 {
@@ -214,70 +206,70 @@ namespace Vibrometer.API
         {
             return new FpgaSettings()
             {
-                AS_Source = unchecked((int)this.AxisSwitch.Source),
-                SG_FmEnabled = this.SignalGenerator.FmEnabled,
-                SG_ShiftCarrier = unchecked((int)this.SignalGenerator.ShiftCarrier),
-                SG_PhaseSignal = unchecked((int)this.SignalGenerator.PhaseSignal),
-                SG_PhaseCarrier = unchecked((int)this.SignalGenerator.PhaseCarrier),
-                DA_SwitchEnabled = this.DataAcquisition.SwitchEnabled,
-                PT_LogScale = unchecked((int)this.PositionTracker.LogScale),
-                PT_LogCountExtremum = unchecked((int)this.PositionTracker.LogCountExtremum),
-                PT_ShiftExtremum = unchecked((int)this.PositionTracker.ShiftExtremum),
-                FI_Enabled = this.Filter.Enabled,
-                FI_LogThrottle = unchecked((int)this.Filter.LogThrottle),
-                FT_Enabled = this.FourierTransform.Enabled,
-                FT_LogCountAverages = unchecked((int)this.FourierTransform.LogCountAverages),
-                FT_LogThrottle = unchecked((int)this.FourierTransform.LogThrottle),
-                RW_Enabled = this.RamWriter.Enabled,
-                RW_LogLength = unchecked((int)this.RamWriter.LogLength),
-                RW_LogThrottle = unchecked((int)this.RamWriter.LogThrottle)
+                AS_Source = unchecked((int)AxisSwitch.Source),
+                SG_FmEnabled = SignalGenerator.FmEnabled,
+                SG_ShiftCarrier = unchecked((int)SignalGenerator.ShiftCarrier),
+                SG_PhaseSignal = unchecked((int)SignalGenerator.PhaseSignal),
+                SG_PhaseCarrier = unchecked((int)SignalGenerator.PhaseCarrier),
+                DA_SwitchEnabled = DataAcquisition.SwitchEnabled,
+                PT_LogScale = unchecked((int)PositionTracker.LogScale),
+                PT_LogCountExtremum = unchecked((int)PositionTracker.LogCountExtremum),
+                PT_ShiftExtremum = unchecked((int)PositionTracker.ShiftExtremum),
+                FI_Enabled = Filter.Enabled,
+                FI_LogThrottle = unchecked((int)Filter.LogThrottle),
+                FT_Enabled = FourierTransform.Enabled,
+                FT_LogCountAverages = unchecked((int)FourierTransform.LogCountAverages),
+                FT_LogThrottle = unchecked((int)FourierTransform.LogThrottle),
+                RW_Enabled = RamWriter.Enabled,
+                RW_LogLength = unchecked((int)RamWriter.LogLength),
+                RW_LogThrottle = unchecked((int)RamWriter.LogThrottle)
             };
         }
 
         public void SetState(FpgaSettings fpgaSettings)
         {
-            this.InternalSetStateSafe(fpgaSettings.RW_Enabled, fpgaSettings.FT_Enabled, () =>
+            InternalSetStateSafe(fpgaSettings.RW_Enabled, fpgaSettings.FT_Enabled, () =>
             {
-                this.AxisSwitch.Source = (ApiSource)fpgaSettings.AS_Source;
-                this.SignalGenerator.FmEnabled = fpgaSettings.SG_FmEnabled;
-                this.SignalGenerator.ShiftCarrier = unchecked((uint)fpgaSettings.SG_ShiftCarrier);
-                this.SignalGenerator.PhaseSignal = unchecked((uint)fpgaSettings.SG_PhaseSignal);
-                this.SignalGenerator.PhaseCarrier = unchecked((uint)fpgaSettings.SG_PhaseCarrier);
-                this.DataAcquisition.SwitchEnabled = fpgaSettings.DA_SwitchEnabled;
-                this.PositionTracker.LogScale = unchecked((uint)fpgaSettings.PT_LogScale);
-                this.PositionTracker.LogCountExtremum = unchecked((uint)fpgaSettings.PT_LogCountExtremum);
-                this.PositionTracker.ShiftExtremum = unchecked((uint)fpgaSettings.PT_ShiftExtremum);
-                this.Filter.Enabled = fpgaSettings.FI_Enabled;
-                this.Filter.LogThrottle = unchecked((uint)fpgaSettings.FI_LogThrottle);
-                this.FourierTransform.LogCountAverages = unchecked((uint)fpgaSettings.FT_LogCountAverages);
-                this.FourierTransform.LogThrottle = unchecked((uint)fpgaSettings.FT_LogThrottle);
-                this.RamWriter.LogLength = unchecked((uint)fpgaSettings.RW_LogLength);
-                this.RamWriter.LogThrottle = unchecked((uint)fpgaSettings.RW_LogThrottle);
+                AxisSwitch.Source = (ApiSource)fpgaSettings.AS_Source;
+                SignalGenerator.FmEnabled = fpgaSettings.SG_FmEnabled;
+                SignalGenerator.ShiftCarrier = unchecked((uint)fpgaSettings.SG_ShiftCarrier);
+                SignalGenerator.PhaseSignal = unchecked((uint)fpgaSettings.SG_PhaseSignal);
+                SignalGenerator.PhaseCarrier = unchecked((uint)fpgaSettings.SG_PhaseCarrier);
+                DataAcquisition.SwitchEnabled = fpgaSettings.DA_SwitchEnabled;
+                PositionTracker.LogScale = unchecked((uint)fpgaSettings.PT_LogScale);
+                PositionTracker.LogCountExtremum = unchecked((uint)fpgaSettings.PT_LogCountExtremum);
+                PositionTracker.ShiftExtremum = unchecked((uint)fpgaSettings.PT_ShiftExtremum);
+                Filter.Enabled = fpgaSettings.FI_Enabled;
+                Filter.LogThrottle = unchecked((uint)fpgaSettings.FI_LogThrottle);
+                FourierTransform.LogCountAverages = unchecked((uint)fpgaSettings.FT_LogCountAverages);
+                FourierTransform.LogThrottle = unchecked((uint)fpgaSettings.FT_LogThrottle);
+                RamWriter.LogLength = unchecked((uint)fpgaSettings.RW_LogLength);
+                RamWriter.LogThrottle = unchecked((uint)fpgaSettings.RW_LogThrottle);
             });
         }
 
         public void SetStateSafe(Action action)
         {
-            this.InternalSetStateSafe(this.RamWriter.Enabled, this.FourierTransform.Enabled, action);
+            InternalSetStateSafe(RamWriter.Enabled, FourierTransform.Enabled, action);
         }
 
         private void InternalSetStateSafe(bool ramWriter_enabled, bool fourierTransform_enabled, Action action)
         {
-            this.FourierTransform.Enabled = false;
-            this.RamWriter.Enabled = false;
+            FourierTransform.Enabled = false;
+            RamWriter.Enabled = false;
 
             action?.Invoke();
 
-            this.ClearRam();
+            ClearRam();
 
-            if (this.AxisSwitch.Source == ApiSource.FourierTransform)
+            if (AxisSwitch.Source == ApiSource.FourierTransform)
             {
-                this.RamWriter.LogThrottle = 0;
+                RamWriter.LogThrottle = 0;
             }
             
-            this.FourierTransform.Enabled = fourierTransform_enabled;
-            this.RamWriter.RequestEnabled = false;
-            this.RamWriter.Enabled = ramWriter_enabled;
+            FourierTransform.Enabled = fourierTransform_enabled;
+            RamWriter.RequestEnabled = false;
+            RamWriter.Enabled = ramWriter_enabled;
         }
 
         #endregion

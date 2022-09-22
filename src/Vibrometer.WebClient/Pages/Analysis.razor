@@ -153,6 +153,7 @@
 
                 data1 = null;
                 data2 = null;
+                var data = state.FpgaData.Buffer.ToArray();
 
                 switch ((ApiSource)state.FpgaSettings.AS_Source)
                 {
@@ -161,22 +162,22 @@
                         break;
 
                     case ApiSource.Raw:
-                        data1 = state.FpgaData.Buffer.Select((value, i) => new ChartPoint(i * state.Summary.Step, unchecked((short)(value & 0x0000FFFF)))).ToList();
-                        data2 = state.FpgaData.Buffer.Select((value, i) => new ChartPoint(i * state.Summary.Step, unchecked((short)(value >> 16)))).ToList();
+                        data1 = data.Select((value, i) => new ChartPoint(i * state.Summary.Step, unchecked((short)(value & 0x0000FFFF)))).ToList();
+                        data2 = data.Select((value, i) => new ChartPoint(i * state.Summary.Step, unchecked((short)(value >> 16)))).ToList();
                         break;
 
                     case ApiSource.Position:
-                        data1 = state.FpgaData.Buffer.Select((value, i) => new ChartPoint(i * state.Summary.Step, value)).ToList();
+                        data1 = data.Select((value, i) => new ChartPoint(i * state.Summary.Step, value)).ToList();
                         break;
 
                     case ApiSource.Filter:
-                        data1 = state.FpgaData.Buffer.Select((value, i) => new ChartPoint(i * state.Summary.Step, unchecked((short)(value & 0x0000FFFF)))).ToList();
+                        data1 = data.Select((value, i) => new ChartPoint(i * state.Summary.Step, unchecked((short)(value & 0x0000FFFF)))).ToList();
                         break;
 
                     case ApiSource.FourierTransform:
 
-                        var real = state.FpgaData.Buffer.Select(value => unchecked((short)(value & 0x0000FFFF)));
-                        var imag = state.FpgaData.Buffer.Select(value => unchecked((short)(value >> 16)));
+                        var real = data.Select(value => unchecked((short)(value & 0x0000FFFF)));
+                        var imag = data.Select(value => unchecked((short)(value >> 16)));
                         var ampl = real.Zip(imag, (x, y) => Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2)));
                         var ampl_fft_shift = ampl.Skip(SystemParameters.FFT_LENGTH / 2).Concat(ampl.Take(SystemParameters.FFT_LENGTH / 2));
                         var count = ampl_fft_shift.Count();
@@ -189,9 +190,7 @@
                 }
 
                 if (data2 is null)
-                {
                     data2 = new List<ChartPoint>();
-                }
 
                 await jsRuntime.InvokeVoidAsync("Vibrometer.UpdateChartData", "chart", data1, data2);
             }
