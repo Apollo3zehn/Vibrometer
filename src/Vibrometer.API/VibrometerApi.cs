@@ -23,7 +23,7 @@ namespace Vibrometer.API
         {
             int fd;
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 fd = Syscall.open("/dev/mem", OpenFlags.O_RDWR);
 
@@ -110,7 +110,7 @@ namespace Vibrometer.API
 
             length = (int)Math.Pow(2, this.RamWriter.LogLength);
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 address = (int)this.RamWriter.ReadBuffer;
 
@@ -126,7 +126,7 @@ namespace Vibrometer.API
                     buffer = new Span<int>(IntPtr.Add(_DATA, offset).ToPointer(), length).ToArray();
                 }
             }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 buffer = new int[length];
                 random = new Random();
@@ -152,20 +152,20 @@ namespace Vibrometer.API
             bool enabled;
             Span<byte> buffer;
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 byteCount = (int)Math.Pow(2, this.RamWriter.LogLength) * SystemParameters.BYTE_COUNT * SystemParameters.BUFFER_COUNT;
                 enabled = this.RamWriter.Enabled;
                 this.RamWriter.Enabled = false;
 
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     unsafe
                     {
                         buffer = new Span<byte>((byte*)_DATA, byteCount);
                     }
                 }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
                     buffer = new Span<byte>(new byte[byteCount]);
                 }
@@ -199,7 +199,7 @@ namespace Vibrometer.API
         {
             ApiProxy.IsEnabled = false;
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 using (var targetFileStream = File.Open("/dev/xdevcfg", FileMode.Open, FileAccess.Write))
                 {

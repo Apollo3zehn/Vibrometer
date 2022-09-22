@@ -69,8 +69,7 @@ namespace Vibrometer.WebServer
             });
 
             // Run
-            var baseUrl = "https://0.0.0.0:8443";
-            app.Run(baseUrl);
+            app.Run();
         }
     }
 }

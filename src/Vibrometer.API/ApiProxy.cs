@@ -22,7 +22,7 @@ namespace Vibrometer.API
         {
             ApiProxy.IsEnabled = true;
 
-            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 // TODO: free array
                 fakeArray = Marshal.AllocHGlobal(ApiProxy.FAKE_BUFFER_SIZE * SystemParameters.BYTE_COUNT);
@@ -119,7 +119,7 @@ namespace Vibrometer.API
 
             realAddress = address;
 
-            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 if (group == ApiGroup.AxisSwitch)
                 {
