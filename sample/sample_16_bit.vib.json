@@ -1,0 +1,53 @@
+{
+  "FpgaSettings": {
+    "aS_Source": 4,
+    "sG_FmEnabled": true,
+    "sG_ShiftCarrier": 0,
+    "sG_PhaseSignal": 215,
+    "sG_PhaseCarrier": 5073000,
+    "dA_SwitchEnabled": false,
+    "pT_LogScale": 0,
+    "pT_LogCountExtremum": 24,
+    "pT_ShiftExtremum": 3,
+    "fI_Enabled": true,
+    "fI_LogThrottle": 16,
+    "fT_Enabled": true,
+    "fT_LogCountAverages": 0,
+    "fT_LogThrottle": 0,
+    "rW_Enabled": true,
+    "rW_LogLength": 10,
+    "rW_LogThrottle": 0
+  },
+  "ChartSettingsSet": [
+    {
+      "YMin": 0,
+      "YMax": 0,
+      "Source": 0,
+      "LimitMode": 1
+    },
+    {
+      "YMin": -8192,
+      "YMax": 8191,
+      "Source": 1,
+      "LimitMode": 4
+    },
+    {
+      "YMin": -2147483648,
+      "YMax": 2147483647,
+      "Source": 2,
+      "LimitMode": 1
+    },
+    {
+      "YMin": -32768,
+      "YMax": 32767,
+      "Source": 3,
+      "LimitMode": 1
+    },
+    {
+      "YMin": 0,
+      "YMax": 32767,
+      "Source": 4,
+      "LimitMode": 1
+    }
+  ]
+}

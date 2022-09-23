@@ -4,7 +4,7 @@ namespace Vibrometer.Infrastructure
 {
     public struct FpgaData
     {
-        public FpgaData(int lowerThreshold, int upperThreshold, Memory<int> buffer)
+        public FpgaData(int lowerThreshold, int upperThreshold, int[] buffer)
         {
             this.LowerThreshold = lowerThreshold;
             this.UpperThreshold = upperThreshold;
@@ -13,6 +13,6 @@ namespace Vibrometer.Infrastructure
 
         public int LowerThreshold { get; set; }
         public int UpperThreshold { get; set; }
-        public Memory<int> Buffer { get; set; }
+        public int[] Buffer { get; set; }
     }
 }

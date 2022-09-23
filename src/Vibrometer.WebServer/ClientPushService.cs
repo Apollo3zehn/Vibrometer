@@ -31,6 +31,8 @@ namespace Vibrometer.WebServer
 
             _updateBufferContentTimer = new Timer() { AutoReset = true, Enabled = true, Interval = TimeSpan.FromMilliseconds(500).TotalMilliseconds };
             _updateBufferContentTimer.Elapsed += this.OnUpdateBufferContent;
+
+            Task.Run(() => PushFastAsync());
         }
 
         #endregion
@@ -41,7 +43,7 @@ namespace Vibrometer.WebServer
         {
             int lowerTreshold;
             int upperThreshold;
-
+            
             (lowerTreshold, upperThreshold) = _api.PositionTracker.Threshold;
 
             if (_api.RamWriter.Enabled)
@@ -49,51 +51,66 @@ namespace Vibrometer.WebServer
                 Task.Run(async () =>
                 {
                     var length = (int)Math.Pow(2, _api.RamWriter.LogLength);
-                    using var memoryOwner = MemoryPool<int>.Shared.Rent(length);
-                    var memory = memoryOwner.Memory;
+                    var buffer = ArrayPool<int>.Shared.Rent(length);
 
-                    lock (_lock)
-                    {
-                        _api.FillBuffer(memory.Span);
-                    }
+                    _api.FillBuffer(buffer);
 
-                    var fpgaData = new FpgaData(lowerTreshold, upperThreshold, memory);
+                    var fpgaData = new FpgaData(lowerTreshold, upperThreshold, buffer);
                     await _hubContext.Clients.All.SendAsync("SendFpgaData", fpgaData);
+
+                    ArrayPool<int>.Shared.Return(buffer);
                 });
             }
         }
 
-        private async Task PushFast()
+        private async Task PushFastAsync()
         {
+            var listener = new TcpListener(IPAddress.Any, 5555);
+            listener.Start();
+
+            Console.WriteLine("Listening on port 5555 ...");
+
             while (true)
             {
-                var listener = new TcpListener(IPAddress.Any, 5555);
                 using var client = listener.AcceptTcpClient();
+
+                Console.WriteLine("Client connected on port 5555.");
+
                 using var networkStream = client.GetStream();
 
-                if (_api.RamWriter.Enabled)
+                while (true)
                 {
-                    var length = (int)Math.Pow(2, _api.RamWriter.LogLength);
-                    using var memoryOwner = MemoryPool<int>.Shared.Rent(length);
-                    var memory = memoryOwner.Memory;
-
-                    try
+                    if (_api.RamWriter.Enabled)
                     {
-                        while (true)
+                        var length = (int)Math.Pow(2, _api.RamWriter.LogLength);
+                        using var memoryOwner = MemoryPool<int>.Shared.Rent(length);
+                        var memory = memoryOwner.Memory;
+
+                        try
                         {
-                            lock (_lock)
+                            while (true)
                             {
-                                _api.FillBuffer(memory.Span);
-                                networkStream.Write(MemoryMarshal.AsBytes(memory.Span));
-                                Task.Delay(50);
+                                lock (_lock)
+                                {
+                                    _api.FillBuffer(memory.Span);
+                                    networkStream.Write(MemoryMarshal.AsBytes(memory.Span));
+                                    Task.Delay(50);
+                                }
                             }
                         }
+                        catch
+                        {
+                            Console.WriteLine("Client disconnected.");
+                            break;
+                        }
                     }
-                    finally
+
+                    else
                     {
-                        listener.Stop();
-                        await Task.Delay(1000);
+                        Console.WriteLine("Waiting for RAM writer to become enabled.");
                     }
+
+                    await Task.Delay(1000);
                 }
             }
         }
