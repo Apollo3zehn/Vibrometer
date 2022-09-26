@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Vibrometer.Infrastructure;
 using Vibrometer.Infrastructure.API;
 

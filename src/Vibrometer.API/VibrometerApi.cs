@@ -1,7 +1,6 @@
 ﻿using Mono.Unix.Native;
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using Vibrometer.Infrastructure;
 using Vibrometer.Infrastructure.API;
 
@@ -21,18 +20,17 @@ namespace Vibrometer.API
 
         public VibrometerApi()
         {
-            int fd;
+            #if LIVE
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                fd = Syscall.open("/dev/mem", OpenFlags.O_RDWR);
+                var fd = Syscall.open("/dev/mem", OpenFlags.O_RDWR);
 
                 _GPIO = Syscall.mmap(IntPtr.Zero, SystemParameters.GPIO_SIZE, MmapProts.PROT_READ | MmapProts.PROT_WRITE, MmapFlags.MAP_SHARED, fd, SystemParameters.GPIO_BASE);
                 _DATA = Syscall.mmap(IntPtr.Zero, SystemParameters.DATA_SIZE, MmapProts.PROT_READ | MmapProts.PROT_WRITE, MmapFlags.MAP_SHARED, fd, SystemParameters.DATA_BASE);
                 _SWITCH = Syscall.mmap(IntPtr.Zero, SystemParameters.SWITCH_SIZE, MmapProts.PROT_READ | MmapProts.PROT_WRITE, MmapFlags.MAP_SHARED, fd, SystemParameters.SWITCH_BASE);
 
                 Syscall.close(fd);
-            }
+
+            #endif
 
             AxisSwitch = new AxisSwitch(_SWITCH);
             SignalGenerator = new SignalGenerator(_GPIO + SystemParameters.GPIO_SIGNAL_GENERATOR);
@@ -100,75 +98,60 @@ namespace Vibrometer.API
 
         public void FillBuffer(Span<int> buffer)
         {
-            int address;
-            int offset;
-            Random random;
-
             RamWriter.RequestEnabled = true;
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                address = (int)RamWriter.ReadBuffer;
+            #if LIVE
+
+                var address = (int)RamWriter.ReadBuffer;
 
                 if (address == 0)
                     return;
 
-                offset = address - SystemParameters.DATA_BASE;
+                var offset = address - SystemParameters.DATA_BASE;
 
                 unsafe
                 {
                     var source = new Span<int>(IntPtr.Add(_DATA, offset).ToPointer(), buffer.Length);
                     source.CopyTo(buffer);
                 }
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                random = new Random();
+
+            #else
+
+                var random = new Random();
 
                 for (int i = 0; i < buffer.Length; i++)
                 {
                     buffer[i] = random.Next(int.MinValue, int.MaxValue);
                 }
-            }
-            else
-            {
-                throw new PlatformNotSupportedException();
-            }
+
+            #endif
 
             RamWriter.RequestEnabled = false;
         }
 
         public void ClearRam()
         {
-            int byteCount;
-            bool enabled;
             Span<byte> buffer;
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                byteCount = (int)Math.Pow(2, RamWriter.LogLength) * SystemParameters.BYTE_COUNT * SystemParameters.BUFFER_COUNT;
-                enabled = RamWriter.Enabled;
-                RamWriter.Enabled = false;
+            var byteCount = (int)Math.Pow(2, RamWriter.LogLength) * SystemParameters.BYTE_COUNT * SystemParameters.BUFFER_COUNT;
+            var enabled = RamWriter.Enabled;
+            RamWriter.Enabled = false;
 
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            #if LIVE
+
+                unsafe
                 {
-                    unsafe
-                    {
-                        buffer = new Span<byte>((byte*)_DATA, byteCount);
-                    }
-                }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                {
-                    buffer = new Span<byte>(new byte[byteCount]);
-                }
-                else
-                {
-                    throw new PlatformNotSupportedException();
+                    buffer = new Span<byte>((byte*)_DATA, byteCount);
                 }
 
-                buffer.Clear();
-                RamWriter.Enabled = enabled;
-            }
+            #else
+
+                buffer = new Span<byte>(new byte[byteCount]);
+
+            #endif
+
+            buffer.Clear();
+            RamWriter.Enabled = enabled;
         }
 
         public void LoadBitstream(string filePath)
@@ -191,13 +174,14 @@ namespace Vibrometer.API
         {
             ApiProxy.IsEnabled = false;
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
+            #if LIVE
+
                 using (var targetFileStream = File.Open("/dev/xdevcfg", FileMode.Open, FileAccess.Write))
                 {
                     sourceFileStream.CopyTo(targetFileStream);
                 }
-            }
+
+            #endif
 
             ApiProxy.IsEnabled = true;
         }

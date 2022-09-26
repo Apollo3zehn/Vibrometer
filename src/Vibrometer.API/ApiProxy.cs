@@ -9,7 +9,11 @@ namespace Vibrometer.API
     {
         #region Fields
 
-        private static IntPtr fakeArray;
+        #if !LIVE
+            private static IntPtr fakeArray;
+        #endif
+
+
         private const int FAKE_BUFFER_SIZE = 100;
         private const int SWITCH_OFFSET = 80; // width = 64 bytes => 64 / 4 => width = 12 * uint32
         private const int GPIO_OFFSET = 8;
@@ -22,8 +26,8 @@ namespace Vibrometer.API
         {
             ApiProxy.IsEnabled = true;
 
-            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
+            #if !LIVE
+
                 // TODO: free array
                 fakeArray = Marshal.AllocHGlobal(ApiProxy.FAKE_BUFFER_SIZE * SystemParameters.BYTE_COUNT);
 
@@ -31,7 +35,8 @@ namespace Vibrometer.API
                 {
                     new Span<uint>(fakeArray.ToPointer(), ApiProxy.FAKE_BUFFER_SIZE).Clear();
                 }
-            }
+
+            #endif
         }
 
         #endregion
@@ -46,44 +51,33 @@ namespace Vibrometer.API
 
         public static void SetValue(ApiParameter parameter, IntPtr address, uint value)
         {
-            ApiRecord record;
-            IntPtr realAddress;
-
-            record = ApiInfo.Instance[parameter];
-            realAddress = ApiProxy.GetAddress(record.Group, address);
+            var record = ApiInfo.Instance[parameter];
+            var realAddress = ApiProxy.GetAddress(record.Group, address);
 
             ApiProxy.InternalSetValue(record, IntPtr.Add(realAddress, record.Offset), value);
         }
 
         public static uint GetValue(ApiParameter parameter, IntPtr address)
         {
-            ApiRecord record;
-            IntPtr realAddress;
-
-            record = ApiInfo.Instance[parameter];
-            realAddress = ApiProxy.GetAddress(record.Group, address);
+            var record = ApiInfo.Instance[parameter];
+            var realAddress = ApiProxy.GetAddress(record.Group, address);
 
             return ApiProxy.InternalGetValue(record.Shift, record.Size, IntPtr.Add(realAddress, record.Offset));
         }
 
         private static void InternalSetValue(ApiRecord record, IntPtr address, uint value)
         {
-            uint storage;
-            uint max;
-
             if (!ApiProxy.IsEnabled)
-            {
                 return;
-            }
 
-            max = (uint)(Math.Pow(2, record.Size) - 1);
+            var max = (uint)(Math.Pow(2, record.Size) - 1);
 
             if (value < record.Min || value > record.Max)
             {
                 throw new ArgumentException(nameof(value));
             }
 
-            storage = ApiProxy.InternalGetValue(0, 32, address);
+            var storage = ApiProxy.InternalGetValue(0, 32, address);
             storage &= ~(max << record.Shift);
             storage |= (value << record.Shift);
 
@@ -96,14 +90,11 @@ namespace Vibrometer.API
         private static uint InternalGetValue(int shift, int size, IntPtr address)
         {
             uint value;
-            uint max;
 
             if (!ApiProxy.IsEnabled)
-            {
                 return 0;
-            }
 
-            max = (uint)(Math.Pow(2, size) - 1);
+            var max = (uint)(Math.Pow(2, size) - 1);
 
             unsafe
             {
@@ -115,16 +106,15 @@ namespace Vibrometer.API
 
         private static IntPtr GetAddress(ApiGroup group, IntPtr address)
         {
-            IntPtr realAddress;
+            var realAddress = address;
 
-            realAddress = address;
+            #if !LIVE
 
-            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
                 if (group == ApiGroup.AxisSwitch)
                 {
                     realAddress = IntPtr.Add(fakeArray, ApiProxy.SWITCH_OFFSET * SystemParameters.BYTE_COUNT);
                 }
+                
                 else
                 {
                     // - # of ports     = 2
@@ -134,7 +124,8 @@ namespace Vibrometer.API
                     // total size per dual port GPIO = 4 * 2 + (8 - 4) = 8 + 4 = 12 bytes
                     realAddress = IntPtr.Add(fakeArray, (int)(group - 1) * (ApiProxy.GPIO_OFFSET + SystemParameters.BYTE_COUNT));
                 }
-            }
+
+            #endif
 
             return realAddress;
         }

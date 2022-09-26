@@ -2,8 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net60</TargetFramework>
-    <!-- <RuntimeIdentifier>win10-x64</RuntimeIdentifier>  -->
-    <RuntimeIdentifier>ubuntu.16.04-arm</RuntimeIdentifier>
+    <!-- <RuntimeIdentifier>ubuntu.16.04-arm</RuntimeIdentifier> -->
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DefineConstants Condition="'$(RuntimeIdentifier)' == 'ubuntu.16.04-arm'">$(DefineConstants);LIVE</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

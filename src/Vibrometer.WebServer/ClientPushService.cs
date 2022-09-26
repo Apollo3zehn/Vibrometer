@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Buffers;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
@@ -19,6 +20,7 @@ namespace Vibrometer.WebServer
         private VibrometerApi _api;
         private Timer _updateBufferContentTimer;
         private IHubContext<VibrometerHub> _hubContext;
+        private List<(TcpClient, NetworkStream)> _clients = new();
 
         #endregion
 
@@ -32,7 +34,9 @@ namespace Vibrometer.WebServer
             _updateBufferContentTimer = new Timer() { AutoReset = true, Enabled = true, Interval = TimeSpan.FromMilliseconds(500).TotalMilliseconds };
             _updateBufferContentTimer.Elapsed += this.OnUpdateBufferContent;
 
-            Task.Run(() => PushFastAsync());
+
+            _ = AcceptTcpClientsAsync();
+            _ = PushFastAsync();
         }
 
         #endregion
@@ -63,55 +67,85 @@ namespace Vibrometer.WebServer
             }
         }
 
-        private async Task PushFastAsync()
+        private async Task AcceptTcpClientsAsync()
         {
             var listener = new TcpListener(IPAddress.Any, 5555);
             listener.Start();
-
             Console.WriteLine("Listening on port 5555 ...");
 
             while (true)
             {
-                using var client = listener.AcceptTcpClient();
+                var client = await listener.AcceptTcpClientAsync();
+                var networkStream = client.GetStream();
 
-                Console.WriteLine("Client connected on port 5555.");
+                Console.WriteLine($"Client {client.Client.RemoteEndPoint.ToString()} connected on port 5555.");
 
-                using var networkStream = client.GetStream();
-
-                while (true)
+                lock (_clients) 
                 {
-                    if (_api.RamWriter.Enabled)
-                    {
-                        var length = (int)Math.Pow(2, _api.RamWriter.LogLength);
-                        using var memoryOwner = MemoryPool<int>.Shared.Rent(length);
-                        var memory = memoryOwner.Memory;
+                    _clients.Add((client, networkStream));
+                }
+            }
+        }
 
-                        try
+        private async Task PushFastAsync()
+        {
+            var clientsToRemove = new List<(TcpClient, NetworkStream)>();
+
+            while (true)
+            {
+                if (_api.RamWriter.Enabled)
+                {
+                    var length = (int)Math.Pow(2, _api.RamWriter.LogLength);
+                    using var memoryOwner = MemoryPool<int>.Shared.Rent(length);
+                    var memory = memoryOwner.Memory;
+
+                    while (true)
+                    {
+                        lock (_lock)
                         {
-                            while (true)
+                            // _api.FillBuffer(memory.Span);
+                            var random = new Random();
+
+                            for (int i = 0; i < memory.Span.Length; i++)
                             {
-                                lock (_lock)
+                                memory.Span[i] = random.Next(0, 10) + 5;
+                            }
+
+                            memory.Span[400] = 15;
+
+                            lock (_clients)
+                            {
+                                foreach (var client in _clients)
                                 {
-                                    _api.FillBuffer(memory.Span);
-                                    networkStream.Write(MemoryMarshal.AsBytes(memory.Span));
-                                    Task.Delay(50);
+                                    try
+                                    {
+                                        client.Item2.Write(MemoryMarshal.AsBytes(memory.Span));
+                                    }
+                                    catch
+                                    {
+                                        Console.WriteLine($"Client {client.Item1.Client.RemoteEndPoint.ToString()} disconnected.");
+                                        client.Item1.Close();
+                                        clientsToRemove.Add(client);
+                                    }
                                 }
+
+                                foreach (var client in clientsToRemove)
+                                {
+                                    _clients.Remove(client);
+                                }
+
+                                clientsToRemove.Clear();
                             }
                         }
-                        catch
-                        {
-                            Console.WriteLine("Client disconnected.");
-                            break;
-                        }
                     }
-
-                    else
-                    {
-                        Console.WriteLine("Waiting for RAM writer to become enabled.");
-                    }
-
-                    await Task.Delay(1000);
                 }
+
+                else
+                {
+                    Console.WriteLine("Waiting for RAM writer to become enabled.");
+                }
+
+                await Task.Delay(1000);
             }
         }
 

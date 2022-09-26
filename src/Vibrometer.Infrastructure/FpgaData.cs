@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Vibrometer.Infrastructure
+﻿namespace Vibrometer.Infrastructure
 {
     public struct FpgaData
     {
