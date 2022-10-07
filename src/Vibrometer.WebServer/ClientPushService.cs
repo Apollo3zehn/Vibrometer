@@ -57,7 +57,10 @@ namespace Vibrometer.WebServer
                     var length = (int)Math.Pow(2, _api.RamWriter.LogLength);
                     var buffer = ArrayPool<int>.Shared.Rent(length);
 
-                    _api.FillBuffer(buffer);
+                    lock (_lock) 
+                    {
+                        _api.FillBuffer(buffer);
+                    }
 
                     var fpgaData = new FpgaData(lowerTreshold, upperThreshold, buffer);
                     await _hubContext.Clients.All.SendAsync("SendFpgaData", fpgaData);
@@ -103,40 +106,34 @@ namespace Vibrometer.WebServer
                     {
                         lock (_lock)
                         {
-                            // _api.FillBuffer(memory.Span);
-                            var random = new Random();
-
-                            for (int i = 0; i < memory.Span.Length; i++)
-                            {
-                                memory.Span[i] = random.Next(0, 10) + 5;
-                            }
-
-                            memory.Span[400] = 15;
-
-                            lock (_clients)
-                            {
-                                foreach (var client in _clients)
-                                {
-                                    try
-                                    {
-                                        client.Item2.Write(MemoryMarshal.AsBytes(memory.Span));
-                                    }
-                                    catch
-                                    {
-                                        Console.WriteLine($"Client {client.Item1.Client.RemoteEndPoint.ToString()} disconnected.");
-                                        client.Item1.Close();
-                                        clientsToRemove.Add(client);
-                                    }
-                                }
-
-                                foreach (var client in clientsToRemove)
-                                {
-                                    _clients.Remove(client);
-                                }
-
-                                clientsToRemove.Clear();
-                            }
+                            _api.FillBuffer(memory.Span);
                         }
+                        
+                        lock (_clients)
+                        {
+                            foreach (var client in _clients)
+                            {
+                                try
+                                {
+                                    client.Item2.Write(MemoryMarshal.AsBytes(memory.Span));
+                                }
+                                catch
+                                {
+                                    Console.WriteLine($"Client {client.Item1.Client.RemoteEndPoint.ToString()} disconnected.");
+                                    client.Item1.Close();
+                                    clientsToRemove.Add(client);
+                                }
+                            }
+
+                            foreach (var client in clientsToRemove)
+                            {
+                                _clients.Remove(client);
+                            }
+
+                            clientsToRemove.Clear();
+                        }
+
+                        // await Task.Delay(millisecondsDelay: 5);
                     }
                 }
 

@@ -180,7 +180,6 @@
                         var imag = data.Select(value => unchecked((short)(value >> 16)));
                         var ampl = real.Zip(imag, (x, y) => Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2)));
                         var ampl_fft_shift = ampl.Skip(SystemParameters.FFT_LENGTH / 2).Concat(ampl.Take(SystemParameters.FFT_LENGTH / 2));
-                        var count = ampl_fft_shift.Count();
 
                         data1 = ampl_fft_shift.Select((value, i) => new ChartPoint(i * state.Summary.Step + state.Summary.XMin, value)).ToList();
                         break;

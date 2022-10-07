@@ -84,6 +84,7 @@ namespace Vibrometer.API
             RamWriter.Address = SystemParameters.DATA_BASE;
 
             // buffer length = 2^8 = 256 => 256 * 4 byte = 1024 byte
+#warning Should be SystemParameters.FftLength?
             RamWriter.LogLength = 8;
 
             // clear ram

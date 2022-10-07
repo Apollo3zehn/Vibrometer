@@ -2,11 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>net60</TargetFramework>
-    <!-- <RuntimeIdentifier>ubuntu.16.04-arm</RuntimeIdentifier> -->
+    <!-- dotnet publish /p:Live=false /p:Model=125-14 -->
+    <!-- dotnet publish /p:Live=false /p:Model=122-16 -->
+
+    <!-- dotnet publish /p:Live=true /p:Model=125-14 -->
+    <!-- dotnet publish /p:Live=true /p:Model=122-16 -->
   </PropertyGroup>
 
-  <PropertyGroup>
-    <DefineConstants Condition="'$(RuntimeIdentifier)' == 'ubuntu.16.04-arm'">$(DefineConstants);LIVE</DefineConstants>
+  <PropertyGroup Condition="'$(Live)' == 'true'">
+    <RuntimeIdentifier>ubuntu.16.04-arm</RuntimeIdentifier>
   </PropertyGroup>
 
   <ItemGroup>
