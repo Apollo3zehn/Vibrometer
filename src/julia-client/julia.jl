@@ -11,35 +11,54 @@ if @isdefined connection
     close(connection)
 end
 
-connection = connect("172.26.48.51", 5555)
+println("Connecting ...")
+connection = connect("172.26.48.172", 5555)
 
-println("Connected!")
+kernelSize = 500
+N = 1024
+buffer = zeros(Int16, N * 2, kernelSize)
+spectrum_buffer = zeros(Float32, N, kernelSize)
 
-kernelSize = 1000
-myLength = 1024
-buffer = zeros(Int16, myLength * 2, kernelSize)
-spectrum_buffer = zeros(Float32, myLength, kernelSize)
-
-x = 0 : 1 : (myLength - 1)
-y = zeros(Float32, myLength)
+x = 0 : 1 : (N - 1)
+y = zeros(Float32, N)
 y_observable = Observable(y)
 
-lines(x, y_observable) |> display
+println("Plotting ...")
 
-limits!(0, myLength, 0, 30000)
+lines(x, y_observable, axis=(; xlabel="Frequency / Hz", ylabel="Amplitude / dBm", limits=(0, N, -120, 0))) |> display
+
+println("Looping ...")
 
 while true
 
     for i in 1 : kernelSize
         column = @view buffer[:, i]
         read!(connection, column)
-        real_imag = reshape(column, 2, :)
-        real = convert(Vector{Float32}, real_imag[1, :])
-        imag = convert(Vector{Float32}, real_imag[2, :])
-        spectrum_buffer[:, i] = sqrt.(real.^2 + imag.^2)
-    end
 
-    println("Update")
+        # real and imaginary parts combined
+        real_imag = reshape(column, 2, :)
+
+        # real part
+        real = convert(Vector{Float32}, real_imag[1, :])
+
+        # imaginary part
+        imag = convert(Vector{Float32}, real_imag[2, :])
+
+        # amplitude
+        ampl = sqrt.(real.^2 + imag.^2) ./ N * 2
+        
+        # scale to Vpp
+        vpp = ampl .* 0.5 ./ 2^16
+
+        # rms
+        rms = vpp ./ sqrt(2)
+
+        # dBm
+        dBm = 20 * log10.(rms ./ sqrt(50 * 0.0001))
+
+        # result
+        spectrum_buffer[:, i] = dBm
+    end
 
     # raw, kernelSize = 1
     #y_observable[] = spectrum_buffer[:, 1]

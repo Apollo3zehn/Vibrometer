@@ -5,14 +5,12 @@
         public const int BUFFER_COUNT = 4;
         public const int BYTE_COUNT = 4;
 
-#if MODEL_125_14
-        public const int CLOCK_RATE = 125000000;
-        public const int FFT_LENGTH = 256;
-#endif
-
 #if MODEL_122_16
         public const int CLOCK_RATE = 122000000;
         public const int FFT_LENGTH = 1024;
+#else
+        public const int CLOCK_RATE = 125000000;
+        public const int FFT_LENGTH = 256;
 #endif
 
         public const int DATA_BASE = 0x1E00_0000;
